@@ -7,3 +7,7 @@ navbar:
       href: index.html
     - text: "About Me"
       href: about.html
+output : 
+  html_document :
+    theme: default 
+    css: style.css
