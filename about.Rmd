@@ -1,5 +1,8 @@
----
-title: "About Me"
----
-
-Why I am awesome.
+−−−
+title: "AboutMe"
+−−−
+− __Name:__ YOUR_NAME
+− __Ocupation : __ " Student "
+− __Hobbies:__ Learning data analytics .
+Here is a super cool photo .
+! [ ] ( FILE_NAME_OF_YOUR_PHOTO_IN_THE_REPO_FOLDER. jpg ) { width=50%}
