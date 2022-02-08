@@ -270,16 +270,8 @@ $(document).ready(function () {
 <div id="us-county-map-of-climate-change-belief-in-2018" class="section level2">
 <h2>US county map of climate change belief in 2018</h2>
 <p>  <strong>Estimated percentage who think that global warming is caused mostly by human activities</strong></p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
-## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   2.1.1     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(ggthemes)
+<pre class="r"><code>library(tidyverse)
+library(ggthemes)
 
 cc_belief_county &lt;- read.table(
   &#39;https://bcecon.github.io/cc_belief_county.csv&#39;,
