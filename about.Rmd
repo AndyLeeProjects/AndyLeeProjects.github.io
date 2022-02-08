@@ -2,8 +2,8 @@
 title: "About Me"
 ---
 
-− __Name:__ Andy Lee
-− __Ocupation : __ " Student "
-− __Hobbies:__ Learning data analytics .
-Here is a super cool photo .
-! [ ] (home.job){width=50%}
+− __Name:__ Andy Lee <br>
+− __Ocupation : __ " Student " <br>
+− __Hobbies:__ Learning data analytics. <br>
+Here is a super cool photo. <br>
+! [ ] (home.jpg){width=50%}
