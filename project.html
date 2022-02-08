@@ -16,7 +16,7 @@
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -280,7 +280,10 @@ cc_belief_county &lt;- read.table(
   stringsAsFactor = TRUE
 )
 
-# US county map of climate change opinion
+# Example
+ggplot(mpg) + geom_point(aes(x = cty, y = hwy))</code></pre>
+<p><img src="project_files/figure-html/unnamed-chunk-1-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># US county map of climate change opinion
 legend_title &lt;- &quot;&quot;
 ggplot(data = cc_belief_county) +
   geom_polygon(aes(long, lat, group = group, 
@@ -290,7 +293,7 @@ ggplot(data = cc_belief_county) +
   scale_fill_gradient(legend_title, low=&#39;lightblue&#39;, high=&#39;hotpink&#39;) +
   theme_map() + theme(legend.position=&quot;right&quot;) +
   labs(caption = &quot;Data source: Yale Climate Change Communication&quot;)</code></pre>
-<p><img src="project_files/figure-html/unnamed-chunk-1-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><img src="project_files/figure-html/unnamed-chunk-1-2.png" width="1600px" style="display: block; margin: auto;" /></p>
 </div>
 
 

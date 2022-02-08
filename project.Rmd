@@ -22,6 +22,9 @@ cc_belief_county <- read.table(
   stringsAsFactor = TRUE
 )
 
+# Example
+ggplot(mpg) + geom_point(aes(x = cty, y = hwy))
+
 # US county map of climate change opinion
 legend_title <- ""
 ggplot(data = cc_belief_county) +
