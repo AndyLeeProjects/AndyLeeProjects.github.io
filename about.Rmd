@@ -6,4 +6,6 @@ title: "About Me"
 − __Ocupation : __ " Student "  
 − __Hobbies:__ Learning data analytics.  
 Here is a super cool photo.  
-! [Home photo] ('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/home.jpg'){width=50%}
+![] (/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/home.jpg){width=50%}
+
+
