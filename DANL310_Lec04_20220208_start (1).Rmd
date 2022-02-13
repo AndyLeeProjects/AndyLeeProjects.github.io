@@ -117,11 +117,13 @@ gapminder
 ggplot(data = gapminder,
        mapping = aes(x = gdpPercap, y = lifeExp))
 
+p + geom_line(aes(group=country)) + facet_wrap(~ continent)
 ```
 
 
 ## Make a Plot
 
 ```{r}
-
+p <- ggplot(data = gapminder, mapping = aes(x = year, y = gdpPercap))
+p + geom_line()
 ```
