@@ -3,9 +3,8 @@ title: "About Me"
 ---
 
 − __Name:__ Andy Lee  
-− __Ocupation : __ " Student "  
-− __Hobbies:__ Learning data analytics.  
-Here is a super cool photo.  
-![] (/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/home.jpg){width=50%}
+− __Major : __ Mathematics  
+  
+![] (/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/home.jpg){width=20%}
 
 
