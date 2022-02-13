@@ -1,5 +1,5 @@
 ---
 title: "Personal Website"
 ---
-
-[Go to Andy's Website] (https://www.andyleeproject.com/)
+  
+[Go to Andy's Website](https://www.andyleeproject.com/)
