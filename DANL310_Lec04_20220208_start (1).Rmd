@@ -127,3 +127,111 @@ p + geom_line(aes(group=country)) + facet_wrap(~ continent)
 p <- ggplot(data = gapminder, mapping = aes(x = year, y = gdpPercap))
 p + geom_line()
 ```
+```{r}
+library(gss_sm)
+glimpse(gss_sm) # survey data - Nation
+
+p <- ggplot(data = gss_sm,
+            mapping = aes(x=age, y = childs))
+
+p + geom_point(alpha=.2)+
+  geom_smooth()+
+  facet_grid(sex ~ race)
+
+
+```
+```{r}
+# Geom_bar
+p <- ggplot(data = gss_sm,
+            mapping = aes(x = bigregion))
+p + geom_bar()
+
+p + geom_bar(mapping = aes(y = ..prop.., group =1))
+
+```
+```{r}
+table(gss_sm$religion)
+
+p <- ggplot(data = gss_sm,
+            mapping = aes(x = religion, fill = religion)) # instead of color = religion, fill religion works better
+p + geom_bar() + guides(fill = "none") # removes the legend
+
+```
+
+```{r}
+# Frequency plots the lightly awkward way
+p <- ggplot(data = gss_sm,
+            mapping = aes(x=bigregion, fill = religion))
+p + geom_bar() # Hard to compare with one another
+p + geom_bar(position = 'fill') # Easier this way since it demonstrates the proportion
+
+p + geom_bar(position = "dodge",
+             mapping = aes(y=..prop.., group = religion))
+
+# Religion throughout different regions (facet wrap)
+p <- ggplot(data = gss_sm,
+            mapping = aes(x = religion))
+p + geom_bar(position = "dodge",
+             mapping = aes(y = ..prop.., group = bigregion)) +
+    facet_wrap(~ bigregion, ncol = 1)
+```
+```{r}
+# Midwest demographics
+
+glimpse(midwest)
+
+p <- ggplot(data = midwest,
+            mapping = aes(x = area))
+p + geom_histogram(bins = 10, fill = 'orange') # Always set the number of bins
+p + geom_density()
+
+```
+
+```{r}
+# Histograms and Density functions
+oh_wi <- c("OH", "WI")
+
+p <- ggplot(data = subset(midwest, subset = state %in% oh_wi),
+            mapping = aes(x = percollege, fill = state))
+p + geom_histogram(alpha = 0.4, bins = 20)
+
+```
+
+```{r}
+p <- ggplot(data = midwest,
+            mapping = aes(x = area, fill = state, color = state))
+p + geom_density(alpha = 0.3)
+```
+```{r}
+oh_wi <- c("OH", "WI")
+p <- ggplot(data = subset(midwest, subset = state %in% oh_wi),
+            mapping = aes(x = area, fill = state, color = state))
+
+p + geom_density(alpha = 0.3) # original
+p + geom_density(alpha = 0.3, mapping = (aes(y = ..scaled..))) # adds scale 
+```
+
+```{r}
+# Avoid transformations when necessary
+
+p <- ggplot(data = titanic,
+            mapping = aes(x = fate, y = percent, fill = sex))
+
+p + geom_bar(position = "dodge", stat = "identity") + theme(legend.position = "top")
+   # stat = identity: It means not to change the actual value
+```
+```{r}
+# OECD Data
+
+p <- ggplot(data = oecd_sum,
+            mapping = aes(x = year, y = diff, fill = hi_lo))
+p + geom_col() + guides( fill = "none" ) + 
+  labs(x = NULL, y = "Difference in Years",
+       title = "The US Life Expectancy Gap",
+       subtitle = "Difference between US and OECD
+                   average life expectancies, 1960-2015",
+       caption = "Data: OECD. After a chart by Christopher Ingraham,
+                  Washington Post, December 27th 2017.")
+  # Default for geom_col: stat = identity
+```
+
