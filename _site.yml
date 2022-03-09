@@ -10,7 +10,7 @@ navbar:
     - text: "project"
       href: project.html
     - text: "Happiness Project"
-      href: project_hap.html
+      href: project_main.html
   html_document :
     theme: cosmo 
     css: style.css
