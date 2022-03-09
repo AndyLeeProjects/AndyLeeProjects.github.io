@@ -128,7 +128,7 @@ p <- ggplot(data = gapminder, mapping = aes(x = year, y = gdpPercap))
 p + geom_line()
 ```
 ```{r}
-library(gss_sm)
+
 glimpse(gss_sm) # survey data - Nation
 
 p <- ggplot(data = gss_sm,

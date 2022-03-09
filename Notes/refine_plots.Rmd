@@ -1,0 +1,277 @@
+---
+title: "Refine Plots"
+author: "Andy"
+date: "3/3/2022"
+output: html_document
+---
+```{r}
+library(tidyverse)
+library(socviz)
+library(ggthemes)
+library(ggridges)
+library(ggrepel) # New
+library(RColorBrewer) # New
+library(dichromat)
+
+theme_set(theme_minimal()) # Makes the plots nicer
+```
+ 
+```{r}
+# Color Brewer: https://bcdanl.github.io/DANL310_Lec11_20220303.html#6
+# Color table in R: brewer.pal.info
+
+```
+ 
+ 
+```{r}
+p <- ggplot(data = organdata,
+            mapping = aes(x = roads, y = donors, color = world))
+
+p + geom_point(size = 2) + scale_color_brewer(palette = "Set2") +
+    theme(legend.position = "top")
+```
+ 
+```{r}
+# Pastel2
+
+p <- ggplot(data = organdata,
+            mapping = aes(x = roads, y = donors, color = world))
+
+p + geom_point(size = 2) + scale_color_brewer(palette = "Pastel2") +
+    theme(legend.position = "top")
+```
+ 
+```{r}
+# Dark2
+
+p <- ggplot(data = organdata,
+            mapping = aes(x = roads, y = donors, color = world))
+
+p + geom_point(size = 2) + scale_color_brewer(palette = "Dark2") +
+    theme(legend.position = "top")
+```
+ 
+ 
+```{r}
+# Hex colors assigned 
+p <- ggplot(data = organdata,
+            mapping = aes(x = roads, y = donors, color = world))
+
+p + geom_point(size = 2) + 
+  scale_color_manual(values = c("#3c6ff8", "#afd68d", "#8467ad", "#82857f")) +
+  theme_minimal() + theme(legend.position = "top") # Theme minimal & legend
+```
+ 
+```{r}
+# Colorblind friendly 
+
+Default <- brewer.pal(5, "Set2")
+types <- c("deutan", "protan", "tritan")
+names(types) <- c("Deuteronopia", "Protanopia", "Tritanopia")
+
+color_table <- types %>%
+    purrr::map(~ dichromat(Default, .x)) %>%
+    as_tibble() %>%
+    add_column(Default, .before = TRUE)
+
+color_table
+color_comp(color_table)
+
+```
+ 
+```{r}
+# Color blind friendly colors
+display.brewer.all(n=NULL, type="all", select=NULL, exact.n=TRUE, colorblindFriendly=TRUE)
+
+# brewer.pal.info
+```
+ 
+```{r}
+party_colors <- c("#2E74C0", "#CB454A") # DEM Blue and REP Red
+
+p0 <- ggplot(data = subset(county_data,
+                           flipped == "No"),
+             mapping = aes(x = pop, y = black/100) )
+
+p1 <- p0 + geom_point(alpha = 0.15, color = "gray50") +
+    scale_x_log10(labels=scales::comma) # Add commas within the numbers
+p1
+```
+
+```{r}
+
+p2 <- p1 + geom_point(data = subset(county_data,
+                                    flipped == "Yes"),
+                      mapping = aes(x = pop, y = black/100,
+                                    color = partywinner16)) +
+    scale_color_manual(values = party_colors)
+
+p2
+```
+
+```{r}
+# Change it into a percentage (y-axis)
+p3 <- p2 + scale_y_continuous(labels=scales::percent) +
+    labs(color = "County flipped to ... ",
+         x = "County Population (log scale)",
+         y = "Percent Black Population",
+         title = "Flipped counties, 2016",
+         caption = "Counties in gray did not flip.")
+
+p3
+
+```
+
+ 
+```{r}
+p4 <- p3 + geom_text_repel(data = subset(county_data,
+                                      flipped == "Yes" &
+                                      black  > 25),
+                           mapping = aes(x = pop,
+                                   y = black/100,
+                                   label = state), size = 2)
+
+p4 + theme_minimal() +
+    theme(legend.position="top")
+```
+ 
+```{r}
+# Consider these theme packages
+
+# theme	theme
+# theme_grey()	theme_gray()
+# theme_bw()	theme_linedraw()
+# theme_light()	theme_dark()
+# theme_minimal()	theme_classic()
+# theme_void()	theme_test()
+
+```
+ 
+```{r}
+theme_set(theme_economist())
+p4 + theme(legend.position="top")
+
+```
+ 
+ 
+```{r}
+theme_set(theme_wsj())
+p4 + theme(plot.title = element_text(size = rel(0.6)),
+           legend.title = element_text(size = rel(0.35)),
+           plot.caption = element_text(size = rel(0.35)),
+           legend.position = "top")
+
+```
+ 
+```{r}
+# install.packages("cowplot")
+library(cowplot)
+theme_set(theme_cowplot())
+p4 + theme(legend.position="top")
+
+```
+ 
+```{r}
+# Change font and color
+
+p4 + theme(legend.position = "top",
+           plot.title = element_text(size=rel(2),
+                                     lineheight=.5,
+                                     family="Times",
+                                     face="bold.italic",
+                                     colour="orange"),
+           axis.text.x = element_text(size=rel(1.1),
+                                      family="Courier",
+                                      face="bold",
+                                      color="purple"))
+```
+ 
+```{r}
+# element_blank(): We can also use element_blank() to remove a number of elements by naming them and making them disappear.
+
+
+p4 + theme(legend.position = "top",
+           plot.title = element_text(size=rel(2),
+                                     lineheight=.5,
+                                     family="Times",
+                                     face="bold.italic",
+                                     colour="orange"),
+           axis.text.x = element_blank())
+```
+ 
+```{r}
+yrs <- c(seq(1972, 1988, 4), 1993, seq(1996, 2016, 4))
+
+mean_age <- gss_lon %>%
+    filter(age %nin% NA && year %in% yrs) %>%
+    group_by(year) %>%
+    summarize(xbar = round(mean(age, na.rm = TRUE), 0))
+
+mean_age$y <- 0.3 # to position the age as a text label. 
+
+yr_labs <- data.frame(x = 85, y = 0.8,
+                      year = yrs)
+```
+ 
+```{r}
+p <- ggplot(data = subset(gss_lon, year %in% yrs),
+            mapping = aes(x = age))
+p1 <- p + geom_density(fill = "black", color = FALSE,
+                       alpha = 0.9, mapping = aes(y = ..scaled..)) +
+    geom_vline(data = subset(mean_age, year %in% yrs),
+               aes(xintercept = xbar), color = "white", size = 0.5) +
+    geom_text(data = subset(mean_age, year %in% yrs),
+              aes(x = xbar, y = y, label = xbar), nudge_x = 7.5,
+              color = "white", size = 3.5, hjust = 1) +
+    geom_text(data = subset(yr_labs, year %in% yrs),
+              aes(x = x, y = y, label = year)) +
+    facet_grid(year ~ ., switch = "y")
+p1
+```
+ 
+```{r}
+p2a <- p1 + theme(plot.title = element_text(size = 16),
+           axis.text.x= element_text(size = 12),
+           axis.line.x = NULL,
+           axis.title.y=element_blank(),
+           axis.text.y=element_blank(),
+           axis.ticks.y = element_blank(),
+           strip.background = element_blank(),
+           strip.text.y = element_blank(),
+           panel.grid.major = element_blank(),
+           panel.grid.minor = element_blank()) +
+  labs(x = "Age",
+       y = NULL,
+       title = "Age Distribution of\nGSS Respondents")
+p2a
+```
+ 
+```{r}
+p <- ggplot(data = gss_lon,
+            mapping = aes(x = age, y = factor(year, levels = rev(unique(year)),
+                                     ordered = TRUE)))
+p2b <- p + geom_density_ridges(alpha = 0.6, fill = "lightblue", scale = 1.5) +
+    scale_x_continuous(breaks = c(25, 50, 75)) +
+    scale_y_discrete(expand = c(0.01, 0)) + 
+    labs(x = "Age", y = NULL,
+         title = "Age Distribution of\nGSS Respondents") +
+    theme_ridges() +
+    theme(title = element_text(size = 16, face = "bold"))
+p2b
+```
+
+```{r}
+library(gridExtra)
+grid.arrange(p2a, p2b, nrow = 1)   # sub-figures
+```
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

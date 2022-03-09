@@ -1,0 +1,82 @@
+---
+title: "Happiness Project"
+author: "Andy"
+date: "3/8/2022"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+library(socviz)
+library(lubridate)
+library(geofacet)
+library(ggthemes)
+library(ggrepel)
+library(ggridges)
+library(plyr)
+```
+
+
+## Read Data
+
+```{r}
+# Read Data
+h15 <- read_csv("2015.csv")
+h15 <- h15 %>%
+  mutate(Year = 2015)
+h16 <- read_csv("2016.csv")  
+h16 <- h16 %>%
+  mutate(Year = 2016) 
+
+h17 <- read_csv("2017.csv")  
+h17 <- h17 %>%
+  mutate(Year = 2017)
+names(h17) <- str_replace_all(names(h17),'[.]', " ")
+names(h17) <- str_replace_all(names(h17),'  ', " ")
+colnames(h17)
+
+
+h18 <- read_csv("2018.csv")  
+h18 <- h18 %>%
+  mutate(Year = 2018)
+h19 <- read_csv("2019.csv")  
+h19 <- h19 %>%
+  mutate(Year = 2019)
+
+common_names <- intersect(colnames(h15), colnames(h16),colnames(h17)
+                          ,colnames(h18),colnames(h19))
+
+
+# for (i in 16:19){
+#   file_name <- paste0("20", as.character(i), ".csv")
+#   temp <- read_csv(file_name)
+#   happiness_dat <- rbind.fill.matrix(happiness_dat, temp)
+#}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
