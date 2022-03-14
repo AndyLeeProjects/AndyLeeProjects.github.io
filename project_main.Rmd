@@ -20,7 +20,7 @@ library(plyr)
 
 ## Read Data
 
-```{r}
+```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 12, fig.height = 6, fig.asp = .75, fig.align='center'}
 # Read Data
 h15 <- read_csv("2015.csv")
 h15 <- h15 %>%
@@ -44,8 +44,8 @@ h19 <- read_csv("2019.csv")
 h19 <- h19 %>%
   mutate(Year = 2019)
 
-common_names <- intersect(colnames(h15), colnames(h16),colnames(h17)
-                          ,colnames(h18),colnames(h19))
+#common_names <- intersect(colnames(h15), colnames(h16),colnames(h17)
+#                          ,colnames(h18),colnames(h19))
 
 
 # for (i in 16:19){
