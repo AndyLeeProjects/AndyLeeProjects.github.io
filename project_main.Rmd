@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-```{r}
+```{r, echo=FALSE}
 library(tidyverse)
 library(socviz)
 library(lubridate)

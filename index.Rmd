@@ -1,7 +1,9 @@
 ---
 title: "Jaehyung Lee"
 ---
-
+  
+  
 ## Projects
+***
 * Happiness Project
 * Self-Evaluation Project
