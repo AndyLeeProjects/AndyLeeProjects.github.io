@@ -5,8 +5,8 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "About Me"
-      href: about.html
+    - text: "My Website"
+      href: https://www.andyleeproject.com/
     - text: "project"
       href: project.html
     - text: "Happiness Project"

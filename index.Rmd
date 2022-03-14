@@ -1,5 +1,7 @@
 ---
-title: "Personal Website"
+title: "Jaehyung Lee"
 ---
-  
-[Go to Andy's Website](https://www.andyleeproject.com/)
+
+## Projects
+* Happiness Project
+* Self-Evaluation Project
