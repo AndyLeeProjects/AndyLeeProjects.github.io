@@ -4,6 +4,6 @@ title: "Projects"
   
 ***  
 
-* [Happiness Project](https://alin-96.github.io/project_main.html)
-* [Self-Evaluation Project](https://alin-96.github.io/project.html)
+* <font size = "3" color = "blue">[Happiness Project](https://alin-96.github.io/project_main.html)</font>
+* <font size = "3" color = "blue">[Self-Evaluation Project](https://alin-96.github.io/project.html)</font>
 
