@@ -515,9 +515,6 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
-<pre><code>## Warning: Removed 3 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p><br></p>
 </div>
@@ -533,16 +530,12 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
-<pre><code>## Warning: Removed 1 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level2">
 <h2>Testing Normality</h2>
-<pre class="r"><code>################################## Normality ##################################
-library(dplyr)
+<pre class="r"><code>library(dplyr)
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
 <pre><code>## # A tibble: 10 × 21

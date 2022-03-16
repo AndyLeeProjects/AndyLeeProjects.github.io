@@ -151,7 +151,7 @@ summary(work_finished_all)
 
 ## Actual vs Prediction Visualization for Work_done (all_dat)
 
-```{r}
+```{r, warning=FALSE}
 all_dat$pred_work_finished <- predict(work_finished_all, newdata = all_dat)
 
 # Explanatory variable: work_finished
@@ -171,7 +171,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 
 ## Actual vs Prediction Residual Visualization for Work_done (all_dat)
 
-```{r}
+```{r, warning=FALSE}
 # graph for legibility# Plot of residual error as a function of prediction
 ggplot(data = all_dat, aes(x = pred_work_finished,
                            y = pred_work_finished - work_finished)) +
@@ -190,7 +190,6 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 ## Testing Normality
 
 ```{r}
-################################## Normality ##################################
 library(dplyr)
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)
