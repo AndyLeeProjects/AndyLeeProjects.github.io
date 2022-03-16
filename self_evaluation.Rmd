@@ -10,19 +10,18 @@ library(tidyverse)
 library(gridExtra)
 ```
 
-## Read Data
+<br>  
+
+
+## Read Data & Manipulation
 
 ```{r}
+
 all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
 # all_dat = read.csv('D:/Spring 2022/Project/all_dat.csv')
 morning_rt = read.csv('/Volumes/Programming/personal/progress/morning_routine.csv')
 
-```
 
-
-## Data Manipualation
-
-```{r}
 colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
                        'Screen_time','Created','Date','Drink','Key_words',
                        'Meditation','Mentality','Satisfaction',
@@ -38,9 +37,9 @@ all_dat <- all_dat %>%
               # we lag(shift by 1) because we want the day after
   tibble()
   
-  # Same for morning routine
+# Same for morning routine
 morning_rt <- morning_rt %>%
-  select(Date, everything(), -X,-level_0,-index) %>%
+  dplyr::select(Date, everything(), -X,-level_0,-index) %>%
   mutate(Date = strptime(as.character(morning_rt$Date), "%m/%d/%Y"),
          Date = format(Date, "%m/%d/%Y")) %>%
   tibble()
@@ -59,6 +58,9 @@ multiple_dat = filter(all_dat, Productivity!=0)
 
 all_dat
 ```
+
+  
+<br>  
 
 
 ## Visualization
@@ -95,6 +97,9 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
   #geom_bar(aes(morning_thoughts_check, fill = push_up_check))
 ```
 
+  
+<br>  
+
 
 ## Linear Regression
 
@@ -124,6 +129,9 @@ summary(multiple_all)
 
 ```
 
+  
+<br>  
+
 
 ## Linear Regression Summary for Work_done (all_dat)
 
@@ -137,6 +145,9 @@ work_finished_all <- lm(work_finished ~ Multiple + Phone_pickups + Screen_time +
                         data = all_dat)
 summary(work_finished_all)
 ```
+  
+<br>  
+
 
 ## Actual vs Prediction Visualization for Work_done (all_dat)
 
@@ -154,6 +165,9 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
                    ylim = c(0, 1) )  # Limits the range of the
 
 ```
+  
+<br>  
+
 
 ## Actual vs Prediction Residual Visualization for Work_done (all_dat)
 
@@ -169,6 +183,8 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
   ylab("residual error (prediction - actual)")
 
 ```
+
+<br>  
 
 
 ## Testing Normality
@@ -189,8 +205,11 @@ dplyr::sample_n(all_dat, 10)
 shapiro.test(all_dat$Total)
 
 ```
+<br>  
 
-##  Determining Distributions
+  
+  
+##  Determining Distributions  
 * Multiple(fit.normal)
 
 ```{r}

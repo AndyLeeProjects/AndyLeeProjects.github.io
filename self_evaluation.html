@@ -249,7 +249,7 @@ $(document).ready(function () {
   <a href="https://www.andyleeproject.com/">My Website</a>
 </li>
 <li>
-  <a href="project.html">project</a>
+  <a href="self_evaluation.html">Self Evaluation Project</a>
 </li>
 <li>
   <a href="project_main.html">Happiness Project</a>
@@ -273,30 +273,17 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
-## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   2.1.1     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(gridExtra)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;gridExtra&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     combine</code></pre>
-<div id="read-data" class="section level2">
-<h2>Read Data</h2>
+<pre class="r"><code>library(tidyverse)
+library(gridExtra)</code></pre>
+<p><br></p>
+<div id="read-data-manipulation" class="section level2">
+<h2>Read Data &amp; Manipulation</h2>
 <pre class="r"><code>all_dat = read.csv(&#39;/Volumes/Programming/Spring 2022/project/all_dat.csv&#39;)
 # all_dat = read.csv(&#39;D:/Spring 2022/Project/all_dat.csv&#39;)
-morning_rt = read.csv(&#39;/Volumes/Programming/personal/progress/morning_routine.csv&#39;)</code></pre>
-</div>
-<div id="data-manipualation" class="section level2">
-<h2>Data Manipualation</h2>
-<pre class="r"><code>colnames(all_dat) &lt;- c(&#39;X&#39;, &#39;Name&#39;,&#39;Finished&#39;,&#39;Multiple&#39;,&#39;Phone_pickups&#39;,
+morning_rt = read.csv(&#39;/Volumes/Programming/personal/progress/morning_routine.csv&#39;)
+
+
+colnames(all_dat) &lt;- c(&#39;X&#39;, &#39;Name&#39;,&#39;Finished&#39;,&#39;Multiple&#39;,&#39;Phone_pickups&#39;,
                        &#39;Screen_time&#39;,&#39;Created&#39;,&#39;Date&#39;,&#39;Drink&#39;,&#39;Key_words&#39;,
                        &#39;Meditation&#39;,&#39;Mentality&#39;,&#39;Satisfaction&#39;,
                        &#39;Reading&#39;,&#39;Productivity&#39;,&#39;Rise_time&#39;,&#39;Run&#39;,&#39;Social&#39;,
@@ -311,9 +298,9 @@ all_dat &lt;- all_dat %&gt;%
               # we lag(shift by 1) because we want the day after
   tibble()
   
-  # Same for morning routine
+# Same for morning routine
 morning_rt &lt;- morning_rt %&gt;%
-  select(Date, everything(), -X,-level_0,-index) %&gt;%
+  dplyr::select(Date, everything(), -X,-level_0,-index) %&gt;%
   mutate(Date = strptime(as.character(morning_rt$Date), &quot;%m/%d/%Y&quot;),
          Date = format(Date, &quot;%m/%d/%Y&quot;)) %&gt;%
   tibble()
@@ -328,7 +315,26 @@ dat_date =  filter(all_dat, Date!=0) # Exclude wrong date format
 
 # Only include multiple-related(social, tech, satisfaction, overall, etc)
   # Multiple data length: 53
-multiple_dat = filter(all_dat, Productivity!=0)</code></pre>
+multiple_dat = filter(all_dat, Productivity!=0)
+
+all_dat</code></pre>
+<pre><code>## # A tibble: 460 × 20
+##    Date    Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation Mentality
+##    &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 9/17/20        8        7            56         390    NA 0                  0         0
+##  2 9/18/20       11        3           125         211     0 0                  0         0
+##  3 9/22/20       13        5            57         271     0 0                  7         0
+##  4 9/23/20       16        4           102         223     0 0                 10         0
+##  5 9/24/20       11        4            80         309     0 0                  6         0
+##  6 9/25/20       13        5            97         252     0 0                 13         0
+##  7 9/26/20       11        4            51         237     0 0                  8         0
+##  8 9/27/20        6        4            60         338     0 0                  0         0
+##  9 9/28/20        9        5            82         257     0 0                 10         0
+## 10 9/29/20        6        5           123         326     0 0                 10         0
+## # … with 450 more rows, and 11 more variables: Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
+## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;,
+## #   Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, Tot_diff &lt;dbl&gt;</code></pre>
+<p><br></p>
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
@@ -359,19 +365,13 @@ p8 &lt;- ggplot(data = all_dat, alpha=.5)+
 grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
 <pre><code>## Warning: Removed 3 rows containing non-finite values (stat_density).</code></pre>
 <pre><code>## Warning: Removed 1 rows containing non-finite values (stat_density).</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-3-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#ggplot(data = all_morning_rt)+
   #geom_bar(aes(morning_thoughts_check, fill = push_up_check))</code></pre>
+<p><br></p>
 </div>
 <div id="linear-regression" class="section level2">
 <h2>Linear Regression</h2>
-<pre class="r"><code># Click below to see more about lm() summary function
-# https://www.learnbymarketing.com/tutorials/explaining-the-lm-summary-in-r/#:~:text=Summary%20in%20R-,Explaining%20the%20lm()%20Summary%20in%20R,the%20error%20of%20the%20model.
-
-meditation_all &lt;- lm(Meditation ~ Multiple+ Phone_pickups+ Screen_time+ Drink+
-                       Reading+ Rise_time+ Total_todo + Total + work_finished, 
-                     data = all_dat)
-summary(meditation_all)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = Meditation ~ Multiple + Phone_pickups + Screen_time + 
@@ -401,12 +401,6 @@ summary(meditation_all)</code></pre>
 ##   (4 observations deleted due to missingness)
 ## Multiple R-squared:  0.6503, Adjusted R-squared:  0.6432 
 ## F-statistic: 92.13 on 9 and 446 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code># Multiple data length: 53
-multiple_tail &lt;- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
-                      Reading+ Rise_time+ Total_todo + 
-                      work_finished + Total, 
-                    data = multiple_dat)
-summary(multiple_tail)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = Multiple ~ Phone_pickups + Screen_time + Drink + 
@@ -435,11 +429,6 @@ summary(multiple_tail)</code></pre>
 ## Residual standard error: 0.4941 on 53 degrees of freedom
 ## Multiple R-squared:  0.7557, Adjusted R-squared:  0.7142 
 ## F-statistic: 18.21 on 9 and 53 DF,  p-value: 2.588e-13</code></pre>
-<pre class="r"><code># Multiple data all
-multiple_all &lt;- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
-                     Reading+ Rise_time+ Run + Total_todo + Total , 
-                   data = all_dat)
-summary(multiple_all)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = Multiple ~ Phone_pickups + Screen_time + Drink + 
@@ -469,9 +458,10 @@ summary(multiple_all)</code></pre>
 ##   (1 observation deleted due to missingness)
 ## Multiple R-squared:  0.5554, Adjusted R-squared:  0.5465 
 ## F-statistic: 62.31 on 9 and 449 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><br></p>
 </div>
-<div id="linear-regression-for-work_done-all_dat" class="section level2">
-<h2>Linear Regression for Work_done (all_dat)</h2>
+<div id="linear-regression-summary-for-work_done-all_dat" class="section level2">
+<h2>Linear Regression Summary for Work_done (all_dat)</h2>
 <pre class="r"><code>#################### Linear Regression Work_done (all_dat) #####################
 
 # Work done 
@@ -509,6 +499,10 @@ summary(work_finished_all)</code></pre>
 ##   (4 observations deleted due to missingness)
 ## Multiple R-squared:  0.6349, Adjusted R-squared:  0.6275 
 ## F-statistic: 86.18 on 9 and 446 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><br></p>
+</div>
+<div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2">
+<h2>Actual vs Prediction Visualization for Work_done (all_dat)</h2>
 <pre class="r"><code>all_dat$pred_work_finished &lt;- predict(work_finished_all, newdata = all_dat)
 
 # Explanatory variable: work_finished
@@ -525,6 +519,10 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 <pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
 <pre><code>## Warning: Removed 3 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level2">
+<h2>Actual vs Prediction Residual Visualization for Work_done (all_dat)</h2>
 <pre class="r"><code># graph for legibility# Plot of residual error as a function of prediction
 ggplot(data = all_dat, aes(x = pred_work_finished,
                            y = pred_work_finished - work_finished)) +
@@ -538,21 +536,8 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 <pre><code>## Warning: Removed 4 rows containing non-finite values (stat_smooth).</code></pre>
 <pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
 <pre><code>## Warning: Removed 1 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-2.png" width="672" /> ## Residual Plot for Work_done (all_dat)</p>
-<pre class="r"><code># Plot of residual error as a function of prediction
-ggplot(data = all_dat, aes(x = pred_work_finished,
-                           y = pred_work_finished - work_finished)) +
-  geom_point(alpha = 0.2, color = &quot;darkgray&quot;) +
-  geom_smooth(color = &quot;darkblue&quot;) +
-  geom_line(aes(x = pred_work_finished,
-                y = 0),   # Plotting the line, y = 0
-            color = &quot;red&quot;, linetype = 2) +
-  ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
-<pre><code>## Warning: Removed 1 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><br></p>
 </div>
 <div id="testing-normality" class="section level2">
 <h2>Testing Normality</h2>
@@ -561,22 +546,21 @@ library(dplyr)
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
 <pre><code>## # A tibble: 10 × 21
-##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
-##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
-##  1 08/11…        5      3             144         167     0 0                  0
-##  2 10/17…       15      3             123         200     0 0                 14
-##  3 01/10…       10      3.6            98          84     0 0                 15
-##  4 1/12/…        9      3              74         304     0 0                 15
-##  5 1/31/…        4      3              61         440     0 0                  0
-##  6 12/21…        8      3.6           107         314     0 0                  0
-##  7 02/20…       15      4              97         132     0 0                 15
-##  8 01/26…       10      4             126         149     0 0                 15
-##  9 01/03…        5      2.6            80         308     0 0                 10
-## 10 12/16…        8      3.4            97         201     0 0                 15
-## # … with 13 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
-## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
-## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, Tot_diff &lt;dbl&gt;,
-## #   pred_work_finished &lt;dbl&gt;</code></pre>
+##    Date     Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation Mentality
+##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 08/11/2…        5      3             144         167     0 0                  0         0
+##  2 10/17/2…       15      3             123         200     0 0                 14         0
+##  3 01/10/2…       10      3.6            98          84     0 0                 15         3
+##  4 1/12/21         9      3              74         304     0 0                 15         0
+##  5 1/31/21         4      3              61         440     0 0                  0         0
+##  6 12/21/2…        8      3.6           107         314     0 0                  0         4
+##  7 02/20/2…       15      4              97         132     0 0                 15         0
+##  8 01/26/2…       10      4             126         149     0 0                 15         4
+##  9 01/03/2…        5      2.6            80         308     0 0                 10         3
+## 10 12/16/2…        8      3.4            97         201     0 0                 15         3
+## # … with 12 more variables: Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
+## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;,
+## #   work_finished &lt;dbl&gt;, Tot_diff &lt;dbl&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).
@@ -590,18 +574,15 @@ shapiro.test(all_dat$Total)</code></pre>
 ## 
 ## data:  all_dat$Total
 ## W = 0.94244, p-value = 2.305e-12</code></pre>
+<p><br></p>
 </div>
 <div id="determining-distributions" class="section level2">
 <h2>Determining Distributions</h2>
-<pre class="r"><code>library(fitdistrplus)</code></pre>
-<pre><code>## Loading required package: MASS</code></pre>
-<pre><code>## 
-## Attaching package: &#39;MASS&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     select</code></pre>
-<pre><code>## Loading required package: survival</code></pre>
-<pre class="r"><code>library(logspline)
+<ul>
+<li>Multiple(fit.normal)</li>
+</ul>
+<pre class="r"><code>library(fitdistrplus)
+library(logspline)
 
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
@@ -636,178 +617,15 @@ descdist(wf, discrete = FALSE)</code></pre>
 ## estimated sd:  0.2281393 
 ## estimated skewness:  -1.071785 
 ## estimated kurtosis:  3.677092</code></pre>
-<pre class="r"><code>fit.beta &lt;- fitdist(wf, &#39;beta&#39;, method = &quot;mme&quot;) 
+<pre class="r"><code>#fit.beta &lt;- fitdist(wf, &#39;beta&#39;, method = &quot;mme&quot;) 
   # method = &quot;mme&quot;: Moment matching estimation consists in equalizing theoretical
   #                 and empirical moments. 
-fit.gamma &lt;- fitdist(all_dat$Screen_time, &quot;gamma&quot;)
+#fit.gamma &lt;- fitdist(all_dat$Screen_time, &quot;gamma&quot;)
 fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
-plot(fit.beta)</code></pre>
+#plot(fit.beta)
+#plot(fit.gamma)
+plot(fit.normal)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-4.png" width="672" /></p>
-<pre class="r"><code>plot(fit.gamma)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-5.png" width="672" /></p>
-<pre class="r"><code>plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-6.png" width="672" /></p>
-<pre class="r"><code># mean square error
-  # test how fitted those are to each distributions
-
-# 1. Generate 𝑀 samples of size 𝑛 from the estimated distribution.
-# 2. For each sample obtain KS statistics using the estimated distribution as theoretical
-# Links
-  # Finding Distributions: https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best
-  # Kolmogorov-Smirnov test simulation: https://stats.stackexchange.com/questions/126539/testing-whether-data-follows-t-distribution/126552#126552
-n.sims &lt;- 5e4
-
-stats &lt;- replicate(n.sims, {      
-  r &lt;- rgamma(n = length(all_dat$Screen_time)
-                  , shape= fit.gamma$estimate[&quot;shape&quot;]
-                  , rate = fit.gamma$estimate[&quot;rate&quot;])
-  estfit.gamma &lt;- fitdist(r, &quot;gamma&quot;)
-  as.numeric(ks.test(r
-                     , &quot;pgamma&quot;
-                     , shape= estfit.gamma$estimate[&quot;shape&quot;]
-                     , rate = estfit.gamma$estimate[&quot;rate&quot;])$statistic
-  )      
-})
-
-plot(ecdf(stats), las = 1, main = &quot;KS-test statistic simulation (CDF)&quot;, 
-     col = &quot;darkorange&quot;, lwd = 1.7)
-grid()</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-7.png" width="672" /></p>
-<pre class="r"><code>fit &lt;- logspline(stats)
-1 - plogspline(ks.test(all_dat$Screen_time
-                       , &quot;pgamma&quot;
-                       , shape= fit.gamma$estimate[&quot;shape&quot;]
-                       , rate = fit.gamma$estimate[&quot;rate&quot;])$statistic
-               , fit
-)</code></pre>
-<pre><code>## Warning in ks.test(all_dat$Screen_time, &quot;pgamma&quot;, shape =
-## fit.gamma$estimate[&quot;shape&quot;], : ties should not be present for the Kolmogorov-
-## Smirnov test</code></pre>
-<pre><code>## [1] 0.002386435</code></pre>
-</div>
-<div id="linear-regression-work_done-morning_rt" class="section level2">
-<h2>Linear Regression Work_done (morning_rt)</h2>
-<pre class="r"><code># all_morning_rt
-work_finished_morning &lt;- lm(work_finished ~ Multiple + Phone_pickups + Screen_time + 
-                          Drink + Meditation + Reading + Rise_time + Run + 
-                          Total_todo+ total_checked + before_sleep_check +
-                          rise_time_check + morning_thoughts_check + 
-                          push_up_check,
-                        data = all_morning_rt)
-summary(work_finished_morning)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = work_finished ~ Multiple + Phone_pickups + Screen_time + 
-##     Drink + Meditation + Reading + Rise_time + Run + Total_todo + 
-##     total_checked + before_sleep_check + rise_time_check + morning_thoughts_check + 
-##     push_up_check, data = all_morning_rt)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.23382 -0.08199 -0.00102  0.08312  0.29517 
-## 
-## Coefficients:
-##                              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                 0.3041264  0.0950382   3.200  0.00178 ** 
-## Multiple                    0.0781475  0.0161364   4.843 4.06e-06 ***
-## Phone_pickups              -0.0004891  0.0003991  -1.226  0.22287    
-## Screen_time                -0.0001586  0.0001548  -1.025  0.30775    
-## Drink                      -0.0830239  0.0294097  -2.823  0.00562 ** 
-## Meditation                  0.0098193  0.0020790   4.723 6.67e-06 ***
-## Reading                     0.0030342  0.0015658   1.938  0.05512 .  
-## Rise_time                  -0.0003726  0.0001591  -2.342  0.02093 *  
-## Run                         0.1153711  0.1318312   0.875  0.38334    
-## Total_todo                 -0.0024622  0.0041106  -0.599  0.55036    
-## total_checked              -0.0143343  0.0256906  -0.558  0.57797    
-## before_sleep_checkTrue      0.1233314  0.0437884   2.817  0.00572 ** 
-## rise_time_checkTrue         0.0619427  0.0413233   1.499  0.13664    
-## morning_thoughts_checkTrue  0.0638839  0.0486259   1.314  0.19156    
-## push_up_checkTrue           0.0461442  0.0500391   0.922  0.35839    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.1126 on 114 degrees of freedom
-##   (12 observations deleted due to missingness)
-## Multiple R-squared:  0.8119, Adjusted R-squared:  0.7888 
-## F-statistic: 35.14 on 14 and 114 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>all_morning_rt$pred_work_finished &lt;- predict(work_finished_morning, newdata = all_morning_rt)
-
-# Explanatory variable: work_finished_morning
-ggplot(data = all_morning_rt, aes(x = pred_work_finished, y = work_finished)) +
-  geom_point(alpha = 0.5, color = &quot;darkgray&quot;) +
-  geom_smooth(color = &quot;darkblue&quot;) +
-  geom_line(aes(x = work_finished,
-                y = work_finished),   # Plotting the line, y = x
-            color = &quot;red&quot;, linetype = 2) +
-  coord_cartesian( xlim = c(0, 1),
-                   ylim = c(0, 1) )  # Limits the range of the</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 12 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 12 rows containing missing values (geom_point).</code></pre>
-<pre><code>## Warning: Removed 12 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<pre class="r"><code># graph for legibility
-
-
-# Plot of residual error as a function of prediction
-ggplot(data = all_morning_rt, aes(x = pred_work_finished,
-                           y = pred_work_finished - work_finished)) +
-  geom_point(alpha = 0.2, color = &quot;darkgray&quot;) +
-  geom_smooth(color = &quot;darkblue&quot;) +
-  geom_line(aes(x = pred_work_finished,
-                y = 0),   # Plotting the line, y = 0
-            color = &quot;red&quot;, linetype = 2) +
-  ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 12 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 12 rows containing missing values (geom_point).</code></pre>
-<pre><code>## Warning: Removed 12 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
-<pre><code>## Warning in eval(family$initialize): non-integer #successes in a binomial glm!</code></pre>
-<pre><code>## 
-## Call:
-## glm(formula = work_finished ~ Multiple + Phone_pickups + Screen_time + 
-##     Drink + Meditation + Reading + Rise_time + Run + Total_todo, 
-##     family = binomial(link = &quot;logit&quot;), data = all_dat)
-## 
-## Deviance Residuals: 
-##      Min        1Q    Median        3Q       Max  
-## -0.82207  -0.21693   0.01743   0.27739   0.94820  
-## 
-## Coefficients:
-##                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)   -2.0852121  1.0293710  -2.026 0.042794 *  
-## Multiple       0.5910096  0.1530542   3.861 0.000113 ***
-## Phone_pickups  0.0003745  0.0041112   0.091 0.927418    
-## Screen_time    0.0002108  0.0010290   0.205 0.837706    
-## Drink         -0.2396393  0.1816785  -1.319 0.187159    
-## Meditation     0.0637461  0.0185569   3.435 0.000592 ***
-## Reading        0.0172408  0.0094019   1.834 0.066689 .  
-## Rise_time     -0.0008559  0.0013753  -0.622 0.533748    
-## Run           -0.5168363  1.0710626  -0.483 0.629419    
-## Total_todo     0.0412355  0.0459177   0.898 0.369169    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 128.806  on 455  degrees of freedom
-## Residual deviance:  49.521  on 446  degrees of freedom
-##   (4 observations deleted due to missingness)
-## AIC: 312.24
-## 
-## Number of Fisher Scoring iterations: 5</code></pre>
-<pre><code>##         factor     AME     SE       z      p   lower  upper
-##          Drink -0.0394 0.0296 -1.3287 0.1839 -0.0975 0.0187
-##     Meditation  0.0105 0.0029  3.5906 0.0003  0.0048 0.0162
-##       Multiple  0.0971 0.0237  4.0917 0.0000  0.0506 0.1437
-##  Phone_pickups  0.0001 0.0007  0.0911 0.9274 -0.0013 0.0014
-##        Reading  0.0028 0.0015  1.8512 0.0641 -0.0002 0.0058
-##      Rise_time -0.0001 0.0002 -0.6231 0.5332 -0.0006 0.0003
-##            Run -0.0849 0.1759 -0.4829 0.6292 -0.4297 0.2598
-##    Screen_time  0.0000 0.0002  0.2048 0.8377 -0.0003 0.0004
-##     Total_todo  0.0068 0.0075  0.9003 0.3680 -0.0080 0.0215</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="self_evaluation_files/figure-html/unnamed-chunk-11-2.png" width="672" /><img src="self_evaluation_files/figure-html/unnamed-chunk-11-3.png" width="672" /></p>
 </div>
 
 
