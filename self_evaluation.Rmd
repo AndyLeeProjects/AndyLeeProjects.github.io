@@ -57,7 +57,7 @@ dat_date =  filter(all_dat, Date!=0) # Exclude wrong date format
   # Multiple data length: 53
 multiple_dat = filter(all_dat, Productivity!=0)
 
-
+all_dat
 ```
 
 
@@ -98,7 +98,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
 
 ## Linear Regression
 
-```{r}
+```{r, echo=FALSE}
 
 # Click below to see more about lm() summary function
 # https://www.learnbymarketing.com/tutorials/explaining-the-lm-summary-in-r/#:~:text=Summary%20in%20R-,Explaining%20the%20lm()%20Summary%20in%20R,the%20error%20of%20the%20model.
@@ -125,7 +125,7 @@ summary(multiple_all)
 ```
 
 
-## Linear Regression for Work_done (all_dat)
+## Linear Regression Summary for Work_done (all_dat)
 
 ```{r}
 #################### Linear Regression Work_done (all_dat) #####################
@@ -136,7 +136,11 @@ work_finished_all <- lm(work_finished ~ Multiple + Phone_pickups + Screen_time +
                           Total_todo,
                         data = all_dat)
 summary(work_finished_all)
+```
 
+## Actual vs Prediction Visualization for Work_done (all_dat)
+
+```{r}
 all_dat$pred_work_finished <- predict(work_finished_all, newdata = all_dat)
 
 # Explanatory variable: work_finished
@@ -148,6 +152,12 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
             color = "red", linetype = 2) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the
+
+```
+
+## Actual vs Prediction Residual Visualization for Work_done (all_dat)
+
+```{r}
 # graph for legibility# Plot of residual error as a function of prediction
 ggplot(data = all_dat, aes(x = pred_work_finished,
                            y = pred_work_finished - work_finished)) +
@@ -158,24 +168,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = "red", linetype = 2) +
   ylab("residual error (prediction - actual)")
 
-
-
 ```
-## Residual Plot for Work_done (all_dat)
-
-```{r}
-# Plot of residual error as a function of prediction
-ggplot(data = all_dat, aes(x = pred_work_finished,
-                           y = pred_work_finished - work_finished)) +
-  geom_point(alpha = 0.2, color = "darkgray") +
-  geom_smooth(color = "darkblue") +
-  geom_line(aes(x = pred_work_finished,
-                y = 0),   # Plotting the line, y = 0
-            color = "red", linetype = 2) +
-  ylab("residual error (prediction - actual)")
-
-```
-
 
 
 ## Testing Normality
@@ -198,6 +191,7 @@ shapiro.test(all_dat$Total)
 ```
 
 ##  Determining Distributions
+* Multiple(fit.normal)
 
 ```{r}
 
@@ -212,146 +206,13 @@ descdist(all_dat$Screen_time, discrete = FALSE)
 wf <- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)
 
-fit.beta <- fitdist(wf, 'beta', method = "mme") 
+#fit.beta <- fitdist(wf, 'beta', method = "mme") 
   # method = "mme": Moment matching estimation consists in equalizing theoretical
   #                 and empirical moments. 
-fit.gamma <- fitdist(all_dat$Screen_time, "gamma")
+#fit.gamma <- fitdist(all_dat$Screen_time, "gamma")
 fit.normal <- fitdist(all_dat$Multiple, "norm")
-plot(fit.beta)
-plot(fit.gamma)
+#plot(fit.beta)
+#plot(fit.gamma)
 plot(fit.normal)
-
-# mean square error
-  # test how fitted those are to each distributions
-
-# 1. Generate 𝑀 samples of size 𝑛 from the estimated distribution.
-# 2. For each sample obtain KS statistics using the estimated distribution as theoretical
-# Links
-  # Finding Distributions: https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best
-  # Kolmogorov-Smirnov test simulation: https://stats.stackexchange.com/questions/126539/testing-whether-data-follows-t-distribution/126552#126552
-n.sims <- 5e4
-
-stats <- replicate(n.sims, {      
-  r <- rgamma(n = length(all_dat$Screen_time)
-                  , shape= fit.gamma$estimate["shape"]
-                  , rate = fit.gamma$estimate["rate"])
-  estfit.gamma <- fitdist(r, "gamma")
-  as.numeric(ks.test(r
-                     , "pgamma"
-                     , shape= estfit.gamma$estimate["shape"]
-                     , rate = estfit.gamma$estimate["rate"])$statistic
-  )      
-})
-
-plot(ecdf(stats), las = 1, main = "KS-test statistic simulation (CDF)", 
-     col = "darkorange", lwd = 1.7)
-grid()
-
-fit <- logspline(stats)
-1 - plogspline(ks.test(all_dat$Screen_time
-                       , "pgamma"
-                       , shape= fit.gamma$estimate["shape"]
-                       , rate = fit.gamma$estimate["rate"])$statistic
-               , fit
-)
-
 ```
-
-
-## Linear Regression Work_done (morning_rt)
-
-```{r}
-# all_morning_rt
-work_finished_morning <- lm(work_finished ~ Multiple + Phone_pickups + Screen_time + 
-                          Drink + Meditation + Reading + Rise_time + Run + 
-                          Total_todo+ total_checked + before_sleep_check +
-                          rise_time_check + morning_thoughts_check + 
-                          push_up_check,
-                        data = all_morning_rt)
-summary(work_finished_morning)
-
-all_morning_rt$pred_work_finished <- predict(work_finished_morning, newdata = all_morning_rt)
-
-# Explanatory variable: work_finished_morning
-ggplot(data = all_morning_rt, aes(x = pred_work_finished, y = work_finished)) +
-  geom_point(alpha = 0.5, color = "darkgray") +
-  geom_smooth(color = "darkblue") +
-  geom_line(aes(x = work_finished,
-                y = work_finished),   # Plotting the line, y = x
-            color = "red", linetype = 2) +
-  coord_cartesian( xlim = c(0, 1),
-                   ylim = c(0, 1) )  # Limits the range of the
-# graph for legibility
-
-
-# Plot of residual error as a function of prediction
-ggplot(data = all_morning_rt, aes(x = pred_work_finished,
-                           y = pred_work_finished - work_finished)) +
-  geom_point(alpha = 0.2, color = "darkgray") +
-  geom_smooth(color = "darkblue") +
-  geom_line(aes(x = pred_work_finished,
-                y = 0),   # Plotting the line, y = 0
-            color = "red", linetype = 2) +
-  ylab("residual error (prediction - actual)")
-
-```
-
-
-```{r, echo = FALSE}
-'''
-
-############################# Logistic Regression ##############################
-# Logistic Regression For Categorical variable
-
-model <- glm(work_finished ~ Multiple + Phone_pickups + Screen_time + 
-                     Drink + Meditation + Reading + Rise_time + Run + 
-                     Total_todo,
-                   data = all_dat, family = binomial(link = "logit"))
-
-summary(model)
-library(margins)
-m <- margins(model)
-ame_result <- summary(m)
-ame_result
-# How to interpret the AME values
-# -> Percentage point rather than percentage
-#   -> GESTREC3< 37 weeks  0.0450 : Indicates that if babies are
-#      prematurely born, they are 4.5% point more likely to be at Risk.
-
-
-
-# We can average the marginal effects across the training data 
-  #(average marginal effect, or AME).
-ggplot(data = ame_result) +
-  geom_point(aes(factor , AME)) +
-  geom_errorbar(aes(x = factor, ymin = lower, ymax = upper),
-                width = .5) + geom_hline ( yintercept = 0) +
-  theme_minimal ( ) +
-  theme(axis.text.x = element_text(angle = 90))
-
-# Predict using logistic Regression
-all_dat$log_pred_work_finished <- predict(model, newdata=all_dat, type = "response")
-
-#ggplot()+geom_density(data= filter(train, atRisk==TRUE), aes(x = pred, color = ’TRUE’))+
-#  geom_density(data = filter(train, atRisk == FALSE), aes(x = pred , vcolor = ’FALSE ’ ) )+
-#  scale_color_discrete ( " atRisk " )
-
-
-
-
-
-################################# Time Series ##################################
-work_finished <- ts(all_dat$work_finished, frequency=365, start=c(2020,9))
-plot.ts(work_finished)
-
-total_diff <- ts(all_dat$Tot_diff, frequency=365, start=c(2020,9))
-plot.ts(total_diff)
-
-
-
-'''
-
-```
-
-
 
