@@ -370,6 +370,9 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
 </div>
 <div id="linear-regression" class="section level2">
 <h2>Linear Regression</h2>
+<p><br></p>
+<div id="meditation-with-all_dat" class="section level3">
+<h3>Meditation with all_dat</h3>
 <pre><code>## 
 ## Call:
 ## lm(formula = Meditation ~ Multiple + Phone_pickups + Screen_time + 
@@ -399,6 +402,18 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
 ##   (4 observations deleted due to missingness)
 ## Multiple R-squared:  0.6503, Adjusted R-squared:  0.6432 
 ## F-statistic: 92.13 on 9 and 446 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><br></p>
+</div>
+<div id="multiple-with-multiple_dat" class="section level3">
+<h3>Multiple with multiple_dat</h3>
+<ul>
+<li>Multiple data length: 50 +</li>
+</ul>
+<pre class="r"><code>multiple_tail &lt;- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
+                      Reading+ Rise_time+ Total_todo + 
+                      work_finished + Total, 
+                    data = multiple_dat)
+summary(multiple_tail)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = Multiple ~ Phone_pickups + Screen_time + Drink + 
@@ -427,6 +442,18 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
 ## Residual standard error: 0.4941 on 53 degrees of freedom
 ## Multiple R-squared:  0.7557, Adjusted R-squared:  0.7142 
 ## F-statistic: 18.21 on 9 and 53 DF,  p-value: 2.588e-13</code></pre>
+<p><br></p>
+</div>
+<div id="multiple-with-all_dat" class="section level3">
+<h3>Multiple with all_dat</h3>
+<ul>
+<li>Multiple data length: 450 +</li>
+</ul>
+<pre class="r"><code># Multiple data all
+multiple_all &lt;- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
+                     Reading+ Rise_time+ Run + Total_todo + Total , 
+                   data = all_dat)
+summary(multiple_all)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = Multiple ~ Phone_pickups + Screen_time + Drink + 
@@ -457,6 +484,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
 ## Multiple R-squared:  0.5554, Adjusted R-squared:  0.5465 
 ## F-statistic: 62.31 on 9 and 449 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
+</div>
 </div>
 <div id="linear-regression-summary-for-work_done-all_dat" class="section level2">
 <h2>Linear Regression Summary for Work_done (all_dat)</h2>
@@ -513,7 +541,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level2">
@@ -528,7 +556,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level2">
@@ -578,7 +606,7 @@ library(logspline)
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
 descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  1   max:  7 
@@ -588,7 +616,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated skewness:  -0.2439422 
 ## estimated kurtosis:  3.080442</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
@@ -599,7 +627,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated kurtosis:  6.826972</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-3.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-3.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  0   max:  1 
@@ -616,7 +644,7 @@ fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
 #plot(fit.beta)
 #plot(fit.gamma)
 plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-4.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-4.png" width="672" /></p>
 </div>
 
 

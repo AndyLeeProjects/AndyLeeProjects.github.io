@@ -102,7 +102,9 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
 
 
 ## Linear Regression
+<br>  
 
+### Meditation with all_dat
 ```{r, echo=FALSE}
 
 # Click below to see more about lm() summary function
@@ -113,20 +115,31 @@ meditation_all <- lm(Meditation ~ Multiple+ Phone_pickups+ Screen_time+ Drink+
                      data = all_dat)
 summary(meditation_all)
 
-# Multiple data length: 53
+```
+
+<br>  
+
+### Multiple with multiple_dat
+* Multiple data length: 50 + 
+```{r}
 multiple_tail <- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
                       Reading+ Rise_time+ Total_todo + 
                       work_finished + Total, 
                     data = multiple_dat)
 summary(multiple_tail)
 
+```
+
+<br>  
+
+### Multiple with all_dat
+* Multiple data length: 450 + 
+```{r}
 # Multiple data all
 multiple_all <- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
                      Reading+ Rise_time+ Run + Total_todo + Total , 
                    data = all_dat)
 summary(multiple_all)
-
-
 ```
 
   
