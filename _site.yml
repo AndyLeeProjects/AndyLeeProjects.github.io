@@ -7,8 +7,8 @@ navbar:
       href: index.html
     - text: "My Website"
       href: https://www.andyleeproject.com/
-    - text: "project"
-      href: project.html
+    - text: "Self Evaluation Project"
+      href: self_evaluation.html
     - text: "Happiness Project"
       href: project_main.html
   html_document :
