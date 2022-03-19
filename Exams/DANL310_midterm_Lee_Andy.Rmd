@@ -156,7 +156,7 @@ tech_stock_trading <- read_csv(
 
 ggplot(tech_stock_trading)+
   geom_smooth(aes(x = Date, y = Volume))+
-  geom_smooth(aes(x = Date, y = Close*100), color = red) +
+  geom_smooth(aes(x = Date, y = Close*100), color = 'red') +
   facet_wrap(~company)
 
   

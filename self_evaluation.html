@@ -273,27 +273,9 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
-## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   2.1.1     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(gridExtra)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;gridExtra&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     combine</code></pre>
-<pre class="r"><code>library(lubridate)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;lubridate&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     date, intersect, setdiff, union</code></pre>
+<pre class="r"><code>library(lubridate)
+library(gridExtra)
+library(tidyverse)</code></pre>
 <p><br></p>
 <div id="read-data-manipulation" class="section level3">
 <h3>Read Data &amp; Manipulation</h3>
@@ -311,7 +293,7 @@ colnames(all_dat) &lt;- c(&#39;X&#39;, &#39;Name&#39;,&#39;Finished&#39;,&#39;Mu
 # Remove unnecessary columns &amp; Modify some columns #new
 all_dat &lt;- all_dat %&gt;%
   dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %&gt;%
-  mutate(work_finished = round(Finished/Total_todo,4),
+  dplyr::mutate(work_finished = round(Finished/Total_todo,4),
          Drink = lag(Drink),
          Total = Total*100)%&gt;%
   tibble()
@@ -319,7 +301,7 @@ all_dat &lt;- all_dat %&gt;%
 
 # Same for morning routine #new
 morning_rt &lt;- morning_rt %&gt;%
-  mutate(Date = strptime(as.character(morning_rt$Date), &quot;%m/%d/%Y&quot;),
+  dplyr::mutate(Date = strptime(as.character(morning_rt$Date), &quot;%m/%d/%Y&quot;),
          Date = format(Date, &quot;%m/%d/%Y&quot;),
          morning_phone = rise_time_check, # modify column name 
          night_phone = before_sleep_check) %&gt;%
@@ -329,14 +311,14 @@ morning_rt &lt;- morning_rt %&gt;%
 
 # merge morning_rt with all_dat
 all_morning_rt &lt;- merge(morning_rt, all_dat,by=&quot;Date&quot;, all.x=T) %&gt;%
-  mutate(Date = mdy(Date),
+  dplyr::mutate(Date = mdy(Date),
          work_finished_mr_exc = 
            round((Finished-total_checked)/(Total_todo-6),4)) %&gt;%
             # work_finished_mr_exc: this variable excludes morning routine 
             #         tasks for more accurate statistical analysis. 
   
-  select(-c(rise_time_min)) %&gt;% # redundant
-  filter(work_finished_mr_exc &lt;= 1 &amp; work_finished_mr_exc &gt;0) %&gt;%
+  dplyr::select(-c(rise_time_min)) %&gt;% # redundant
+  dplyr::filter(work_finished_mr_exc &lt;= 1 &amp; work_finished_mr_exc &gt;0) %&gt;%
   arrange(desc(Date))
 view(all_morning_rt)
 
@@ -346,26 +328,7 @@ dat_date =  filter(all_dat, Date!=0) # Exclude wrong date format
 
 # Only include multiple-related(social, tech, satisfaction, overall, etc)
   # Multiple data length: 53
-multiple_dat = filter(all_dat, Productivity!=0)
-
-all_dat</code></pre>
-<pre><code>## # A tibble: 469 × 19
-##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
-##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
-##  1 9/17/…        8        7            56         390    NA 0                  0
-##  2 9/18/…       11        3           125         211     0 0                  0
-##  3 9/22/…       13        5            57         271     0 0                  7
-##  4 9/23/…       16        4           102         223     0 0                 10
-##  5 9/24/…       11        4            80         309     0 0                  6
-##  6 9/25/…       13        5            97         252     0 0                 13
-##  7 9/26/…       11        4            51         237     0 0                  8
-##  8 9/27/…        6        4            60         338     0 0                  0
-##  9 9/28/…        9        5            82         257     0 0                 10
-## 10 9/29/…        6        5           123         326     0 0                 10
-## # … with 459 more rows, and 11 more variables: Mentality &lt;dbl&gt;,
-## #   Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;,
-## #   Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;,
-## #   work_finished &lt;dbl&gt;</code></pre>
+multiple_dat = filter(all_dat, Productivity!=0)</code></pre>
 <p><br></p>
 </div>
 <div id="distribution-for-the-main-variables" class="section level3">
@@ -402,8 +365,8 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
 <div id="how-important-is-my-morning-routine" class="section level2">
 <h2>How important is my Morning Routine?</h2>
 <p><br></p>
-<div id="test-how-many-checked-morning-routines-affect-total" class="section level3">
-<h3>Test how many checked morning routines affect Total %</h3>
+<div id="test-how-many-checked-morning-routines-affect-the-outcome-of-the-day" class="section level3">
+<h3>Test how many checked morning routines affect the outcome of the day</h3>
 <ul>
 <li>The morning routine tasks:
 <ul>
@@ -415,19 +378,20 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
 <li>Morning journal</li>
 </ul></li>
 </ul>
-<pre class="r"><code># see how number of morning routine checks affects the Total %
+<pre class="r"><code>
+# see how number of morning routine checks affects the Total %
 ggplot(filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(Total))+
   facet_wrap(~total_checked)+
   labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>
 # see how number of morning routine checks affects the total todo lists checked
 ggplot(filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
-  labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+  labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-2.png" width="1600px" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="linear-regression" class="section level3">
@@ -627,22 +591,21 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
 <pre><code>## # A tibble: 10 × 20
-##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
-##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
-##  1 08/11…        5      3             144         167     0 0                  0
-##  2 10/17…       15      3             123         200     0 0                 14
-##  3 01/10…       10      3.6            98          84     0 0                 15
-##  4 1/12/…        9      3              74         304     0 0                 15
-##  5 1/31/…        4      3              61         440     0 0                  0
-##  6 12/21…        8      3.6           107         314     0 0                  0
-##  7 02/20…       15      4              97         132     0 0                 15
-##  8 01/26…       10      4             126         149     0 0                 15
-##  9 01/03…        5      2.6            80         308     0 0                 10
-## 10 12/16…        8      3.4            97         201     0 0                 15
-## # … with 12 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
-## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
-## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;,
-## #   pred_work_finished &lt;dbl&gt;</code></pre>
+##    Date     Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation Mentality
+##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 08/11/2…        5      3             144         167     0 0                  0         0
+##  2 10/17/2…       15      3             123         200     0 0                 14         0
+##  3 01/10/2…       10      3.6            98          84     0 0                 15         3
+##  4 1/12/21         9      3              74         304     0 0                 15         0
+##  5 1/31/21         4      3              61         440     0 0                  0         0
+##  6 12/21/2…        8      3.6           107         314     0 0                  0         4
+##  7 02/20/2…       15      4              97         132     0 0                 15         0
+##  8 01/26/2…       10      4             126         149     0 0                 15         4
+##  9 01/03/2…        5      2.6            80         308     0 0                 10         3
+## 10 12/16/2…        8      3.4            97         201     0 0                 15         3
+## # … with 11 more variables: Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
+## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;,
+## #   work_finished &lt;dbl&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).

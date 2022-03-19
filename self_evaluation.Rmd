@@ -6,9 +6,9 @@ output: html_document
 ---
 
 ```{r, results='hide'}
-library(tidyverse)
-library(gridExtra)
 library(lubridate)
+library(gridExtra)
+library(tidyverse)
 ```
 
 <br>  
@@ -31,7 +31,7 @@ colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
 
 # Remove unnecessary columns & Modify some columns #new
 all_dat <- all_dat %>%
-  dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
+  select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
   mutate(work_finished = round(Finished/Total_todo,4),
          Drink = lag(Drink),
          Total = Total*100)%>%
@@ -69,7 +69,6 @@ dat_date =  filter(all_dat, Date!=0) # Exclude wrong date format
   # Multiple data length: 53
 multiple_dat = filter(all_dat, Productivity!=0)
 
-all_dat
 ```
 
   
@@ -125,7 +124,8 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
   + Meditation
   + Reading
   + Morning journal 
-```{r, warning=FALSE, collapse=TRUE}
+```{r, collapse=TRUE, out.width = "1600px", fig.width = 12, fig.height = 6, fig.asp = .75, fig.align='center', warning = FALSE}
+
 # see how number of morning routine checks affects the Total %
 ggplot(filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(Total))+
@@ -136,7 +136,7 @@ ggplot(filter(all_morning_rt, total_checked != 0)) +
 ggplot(filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
-  labs(title = "Morning Routine checked & \nTotal %")
+  labs(title = "Morning Routine checked & \n todo lists finished(excluding morning routine tasks)")
 ```
 
 <br>  
