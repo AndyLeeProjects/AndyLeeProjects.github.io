@@ -5,15 +5,16 @@ date: "3/15/2022"
 output: html_document
 ---
 
-```{r}
+```{r, results='hide'}
 library(tidyverse)
 library(gridExtra)
+library(lubridate)
 ```
 
 <br>  
 
 
-## Read Data & Manipulation
+### Read Data & Manipulation
 
 ```{r}
 
@@ -28,25 +29,37 @@ colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
                        'Reading','Productivity','Rise_time','Run','Social',
                        'Tech','Total','Total_todo','Work_done')
 
-# Remove unnecessary columns & Modify some columns
+# Remove unnecessary columns & Modify some columns #new
 all_dat <- all_dat %>%
   dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
   mutate(work_finished = round(Finished/Total_todo,4),
          Drink = lag(Drink),
-         Tot_diff = lag(Total)-Total) %>% # Make a work_finished variable
-              # we lag(shift by 1) because we want the day after
+         Total = Total*100)%>%
   tibble()
-  
-# Same for morning routine
+
+
+# Same for morning routine #new
 morning_rt <- morning_rt %>%
-  dplyr::select(Date, everything(), -X,-level_0,-index) %>%
   mutate(Date = strptime(as.character(morning_rt$Date), "%m/%d/%Y"),
-         Date = format(Date, "%m/%d/%Y")) %>%
+         Date = format(Date, "%m/%d/%Y"),
+         morning_phone = rise_time_check, # modify column name 
+         night_phone = before_sleep_check) %>%
+  select(Date, everything(), -c(X, level_0, index, 
+                                rise_time_check, before_sleep_check)) %>%
   tibble()
 
 # merge morning_rt with all_dat
 all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
+  mutate(Date = mdy(Date),
+         work_finished_mr_exc = 
+           round((Finished-total_checked)/(Total_todo-6),4)) %>%
+            # work_finished_mr_exc: this variable excludes morning routine 
+            #         tasks for more accurate statistical analysis. 
+  
+  select(-c(rise_time_min)) %>% # redundant
+  filter(work_finished_mr_exc <= 1 & work_finished_mr_exc >0) %>%
   arrange(desc(Date))
+view(all_morning_rt)
 
 
 # Drop Name & Created column
@@ -63,7 +76,7 @@ all_dat
 <br>  
 
 
-## Visualization
+### Distribution for the main variables
 
 ```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 12, fig.height = 6, fig.asp = .75, fig.align='center', warning = FALSE}
 
@@ -93,18 +106,46 @@ p8 <- ggplot(data = all_dat, alpha=.5)+
   
 grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
 
-#ggplot(data = all_morning_rt)+
-  #geom_bar(aes(morning_thoughts_check, fill = push_up_check))
 ```
 
   
 <br>  
-
-
-## Linear Regression
 <br>  
 
-### Meditation with all_dat
+
+## How important is my Morning Routine? 
+
+<br>  
+
+### Test how many checked morning routines affect the outcome of the day
+* The morning routine tasks:
+  + Not touching my phone for at least 30 minutes the night before
+  + Not touching my phone for an hour after I wake up
+  + Exercise 
+  + Meditation
+  + Reading
+  + Morning journal 
+```{r, warning=FALSE, collapse=TRUE}
+# see how number of morning routine checks affects the Total %
+ggplot(filter(all_morning_rt, total_checked != 0)) + 
+  geom_density(aes(Total))+
+  facet_wrap(~total_checked)+
+  labs(title = "Morning Routine checked & \nTotal %")
+
+# see how number of morning routine checks affects the total todo lists checked
+ggplot(filter(all_morning_rt, total_checked != 0)) + 
+  geom_density(aes(work_finished_mr_exc))+
+  facet_wrap(~total_checked)+
+  labs(title = "Morning Routine checked & \nTotal %")
+```
+
+<br>  
+
+
+### Linear Regression
+<br>  
+
+#### Meditation with all_dat
 ```{r, echo=FALSE}
 
 # Click below to see more about lm() summary function
@@ -119,7 +160,7 @@ summary(meditation_all)
 
 <br>  
 
-### Multiple with multiple_dat
+#### Multiple with multiple_dat
 * Multiple data length: 50 + 
 ```{r}
 multiple_tail <- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
@@ -132,7 +173,7 @@ summary(multiple_tail)
 
 <br>  
 
-### Multiple with all_dat
+#### Multiple with all_dat
 * Multiple data length: 450 + 
 ```{r}
 # Multiple data all
@@ -146,7 +187,7 @@ summary(multiple_all)
 <br>  
 
 
-## Linear Regression Summary for Work_done (all_dat)
+### Linear Regression Summary for Work_done (all_dat)
 
 ```{r}
 #################### Linear Regression Work_done (all_dat) #####################
@@ -162,7 +203,7 @@ summary(work_finished_all)
 <br>  
 
 
-## Actual vs Prediction Visualization for Work_done (all_dat)
+### Actual vs Prediction Visualization for Work_done (all_dat)
 
 ```{r, warning=FALSE}
 all_dat$pred_work_finished <- predict(work_finished_all, newdata = all_dat)
@@ -182,7 +223,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 <br>  
 
 
-## Actual vs Prediction Residual Visualization for Work_done (all_dat)
+### Actual vs Prediction Residual Visualization for Work_done (all_dat)
 
 ```{r, warning=FALSE}
 # graph for legibility# Plot of residual error as a function of prediction
@@ -200,7 +241,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 <br>  
 
 
-## Testing Normality
+### Testing Normality
 
 ```{r}
 library(dplyr)
@@ -221,7 +262,7 @@ shapiro.test(all_dat$Total)
 
   
   
-##  Determining Distributions  
+###  Determining Distributions  
 * Multiple(fit.normal)
 
 ```{r}
