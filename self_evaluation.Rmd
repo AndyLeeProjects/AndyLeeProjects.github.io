@@ -31,8 +31,8 @@ colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
 
 # Remove unnecessary columns & Modify some columns #new
 all_dat <- all_dat %>%
-  select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
-  mutate(work_finished = round(Finished/Total_todo,4),
+  dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
+  dplyr::mutate(work_finished = round(Finished/Total_todo,4),
          Drink = lag(Drink),
          Total = Total*100)%>%
   tibble()
@@ -40,26 +40,25 @@ all_dat <- all_dat %>%
 
 # Same for morning routine #new
 morning_rt <- morning_rt %>%
-  mutate(Date = strptime(as.character(morning_rt$Date), "%m/%d/%Y"),
+  dplyr::mutate(Date = strptime(as.character(morning_rt$Date), "%m/%d/%Y"),
          Date = format(Date, "%m/%d/%Y"),
          morning_phone = rise_time_check, # modify column name 
          night_phone = before_sleep_check) %>%
-  select(Date, everything(), -c(X, level_0, index, 
+  dplyr::select(Date, everything(), -c(X, level_0, index, 
                                 rise_time_check, before_sleep_check)) %>%
   tibble()
 
 # merge morning_rt with all_dat
 all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
-  mutate(Date = mdy(Date),
+  dplyr::mutate(Date = mdy(Date),
          work_finished_mr_exc = 
            round((Finished-total_checked)/(Total_todo-6),4)) %>%
             # work_finished_mr_exc: this variable excludes morning routine 
             #         tasks for more accurate statistical analysis. 
   
-  select(-c(rise_time_min)) %>% # redundant
-  filter(work_finished_mr_exc <= 1 & work_finished_mr_exc >0) %>%
+  dplyr::select(-c(rise_time_min)) %>% # redundant
+  dplyr::filter(work_finished_mr_exc <= 1 & work_finished_mr_exc >0) %>%
   arrange(desc(Date))
-view(all_morning_rt)
 
 
 # Drop Name & Created column
