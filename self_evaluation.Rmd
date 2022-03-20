@@ -76,7 +76,7 @@ multiple_dat = filter(all_dat, Productivity!=0)
 
 ### Distribution for the main variables
 
-```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 12, fig.height = 6, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
 
 p1 <- ggplot(data = all_dat, alpha=.5) + 
   geom_density( aes(Total), color = 'red')
@@ -123,7 +123,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
   + Meditation
   + Reading
   + Morning journal 
-```{r, collapse=TRUE, out.width = "1600px", fig.width = 12, fig.height = 6, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, collapse=TRUE, out.width = "1600px", figures-side, fig.asp = .75, fig.align='center', warning = FALSE}
 
 # see how number of morning routine checks affects the Total %
 ggplot(filter(all_morning_rt, total_checked != 0)) + 
