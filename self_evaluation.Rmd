@@ -9,6 +9,8 @@ output: html_document
 library(lubridate)
 library(gridExtra)
 library(tidyverse)
+library(margins)
+library(psych)
 ```
 
 <br>  
@@ -105,6 +107,44 @@ p8 <- ggplot(data = all_dat, alpha=.5)+
 grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
 
 ```
+<br>  
+<br>  
+
+
+## How do these variables affect the outcome of the day?
+
+<br>  
+
+### Find the relationships between these variables and how they affect my lifestyle
+
+```{r}
+correlation_plot <- all_dat %>%
+  select(c(Screen_time, Meditation, Multiple, Rise_time, work_finished, 
+           Reading,Total))
+
+pairs.panels(correlation_plot)
+```
+
+
+#### Single Regression Function: $y=\alpha+\beta x$
+
+
+* <font size = "3">Set:
+  + y = 
+  + x = 
+  + $\alpha$ = y-intercept
+  + $\beta$ = slope </font>
+
+* <font size = "3">lm() function:Fitting Linear Models
+  1. Finds fitted line($\alpha$ & $\beta$) by using the least-square method
+      - **Least-square**: by summing up the residual squares for different curves, it finds the "least squared" curve that best fit the data. 
+  2. Outputs $R^2$, p-value and other meaningful calculations
+      - $R^2$: It demonstrates how accurate the fitted line is to the data
+      - Formula: $R^2 = \dfrac{Var(mean)-Var(fit)}{Var(min)}$
+      - Ex: If we get.8, it means that $x$ explains 60% of the variation in $y$</font>
+
+<br>  
+
 
   
 <br>  
@@ -116,14 +156,14 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
 <br>  
 
 ### Test how many checked morning routines affect the outcome of the day
-* The morning routine tasks:
+* <font size = "4">The morning routine tasks:
   + Not touching my phone for at least 30 minutes the night before
   + Not touching my phone for an hour after I wake up
   + Exercise 
   + Meditation
   + Reading
-  + Morning journal 
-```{r, collapse=TRUE, out.width = "1600px", figures-side, fig.asp = .75, fig.align='center', warning = FALSE}
+  + Morning journal </font>
+```{r, collapse=TRUE, out.width = "1000px", figures-side, fig.asp = .75, fig.align='center', warning = FALSE}
 
 # see how number of morning routine checks affects the Total %
 ggplot(filter(all_morning_rt, total_checked != 0)) + 
@@ -141,8 +181,38 @@ ggplot(filter(all_morning_rt, total_checked != 0)) +
 <br>  
 
 
-### Linear Regression
+### Logistic Regression
+
 <br>  
+
+#### Single Logistic Regression
+```{r, message=FALSE, warning=FALSE}
+model_logit <- glm(work_finished_mr_exc ~ night_phone,
+                   data = all_morning_rt, family = binomial(link = "logit"))
+m = margins(model_logit) 
+ame_result = summary(m) 
+ame_result
+```
+<br>  
+
+#### How to interpret the Average Marginal Effect(AME) values
+* <font size = "3"> Interpret them as percentage points rather than percentage
+  + work_finished  .1906 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
+<br>  
+
+```{r}
+ggplot(data = ame_result) +
+  geom_point(aes(factor , AME)) +
+  geom_errorbar(aes(x = factor, ymin = lower, ymax = upper),
+  width = .5) + geom_hline ( yintercept = 0) +
+  theme_minimal ( ) +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+
+<br>  
+
 
 #### Meditation with all_dat
 ```{r, echo=FALSE}
