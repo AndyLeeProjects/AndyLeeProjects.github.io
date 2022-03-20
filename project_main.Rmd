@@ -5,6 +5,8 @@ date: "3/13/2022"
 output: html_document
 ---
 
+<br>  
+
 
 ```{r, results='hide', message=FALSE}
 library(tidyverse)
@@ -17,6 +19,7 @@ library(ggridges)
 library(plyr)
 ```
 
+<br>  
 
 ## Read & Manipulate Data
 
