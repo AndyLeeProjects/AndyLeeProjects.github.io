@@ -20,7 +20,7 @@ library(plyr)
 
 ## Read & Manipulate Data
 
-```{r, echo=TRUE, warning=FALSE, collapse=TRUE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # Read 2015 Data
 h15 <- read_csv("2015.csv")
 h15 <- h15 %>%
@@ -104,9 +104,9 @@ h19 <- h19 %>%
   merge(regions,by="Country", all.x=T)
 
 # Combine all data into all_dat
-all_dat <- rbind.fill(h15,h16,h17,h18,h19)
+all_dat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
 
-all_dat
+head(all_dat)
 
 ```
 
