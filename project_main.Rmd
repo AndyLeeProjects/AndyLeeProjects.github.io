@@ -20,7 +20,7 @@ library(plyr)
 
 ## Read & Manipulate Data
 
-```{r, echo=TRUE, warning=FALSE, results='hold'}
+```{r, echo=TRUE, warning=FALSE, results='hide'}
 # Read 2015 Data
 h15 <- read_csv("2015.csv")
 h15 <- h15 %>%
