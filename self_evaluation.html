@@ -320,7 +320,6 @@ all_morning_rt &lt;- merge(morning_rt, all_dat,by=&quot;Date&quot;, all.x=T) %&g
   dplyr::select(-c(rise_time_min)) %&gt;% # redundant
   dplyr::filter(work_finished_mr_exc &lt;= 1 &amp; work_finished_mr_exc &gt;0) %&gt;%
   arrange(desc(Date))
-view(all_morning_rt)
 
 
 # Drop Name &amp; Created column

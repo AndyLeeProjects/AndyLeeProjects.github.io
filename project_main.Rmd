@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-```{r, echo=FALSE}
+```{r, results='hide'}
 library(tidyverse)
 library(socviz)
 library(lubridate)
@@ -18,41 +18,95 @@ library(plyr)
 ```
 
 
-## Read Data
+## Read & Manipulate Data
 
-```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 12, fig.height = 6, fig.asp = .75, fig.align='center'}
-# Read Data
+```{r}
+# Read 2015 Data
 h15 <- read_csv("2015.csv")
 h15 <- h15 %>%
-  mutate(Year = 2015)
+  mutate(Year = 2015) %>%
+  dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
+                H_score = `Happiness Score`,
+                GDP=`Economy (GDP per Capita)`,
+                Health=`Health (Life Expectancy)`,
+                Trust=`Trust (Government Corruption)`,
+                se=`Standard Error`,
+                dystopia_res = `Dystopia Residual`)
+
+
+# Read 2016 Data
 h16 <- read_csv("2016.csv")  
 h16 <- h16 %>%
-  mutate(Year = 2016) 
+  mutate(Year = 2016,
+      `Standard Error` = (`Upper Confidence Interval`-`Lower Confidence Interval`)/3.92) %>%
+              # SE = (upper limit – lower limit) / 3.92. 
+              # This is for 95% CI
+  dplyr::select(-c(`Upper Confidence Interval`,`Lower Confidence Interval`)) %>%
+  dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
+                H_score = `Happiness Score`,
+                GDP=`Economy (GDP per Capita)`,
+                Health=`Health (Life Expectancy)`,
+                Trust=`Trust (Government Corruption)`,
+                se=`Standard Error`,
+                dystopia_res = `Dystopia Residual`)
 
+
+
+# Since we don't have a variable 'Region' starting from 2017, we will create it for 
+# each year
+regions <- dplyr::select(h16, Country, Region)
+
+
+
+# Read 2017 Data
 h17 <- read_csv("2017.csv")  
 h17 <- h17 %>%
-  mutate(Year = 2017)
-names(h17) <- str_replace_all(names(h17),'[.]', " ")
-names(h17) <- str_replace_all(names(h17),'  ', " ")
-colnames(h17)
+  mutate(Year = 2017,
+         `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %>%
+  merge(regions,by="Country", all.x=T) %>%
+  dplyr::select(-c(`Whisker.high`,`Whisker.low`)) %>%
+    dplyr::rename(H_rank=`Happiness.Rank`, # Modify variable names
+                H_score = Happiness.Score,
+                GDP=Economy..GDP.per.Capita.,
+                Health=Health..Life.Expectancy.,
+                Trust=Trust..Government.Corruption.,
+                se=`Standard Error`,
+                dystopia_res = Dystopia.Residual)
 
 
+# Read 2018 Data
 h18 <- read_csv("2018.csv")  
 h18 <- h18 %>%
-  mutate(Year = 2018)
+  mutate(Year = 2018) %>%
+  dplyr::rename(H_rank=`Overall rank`, # Modify variable names
+                H_score = `Score`,
+                GDP=`GDP per capita`,
+                Country = `Country or region`,
+                Health=`Healthy life expectancy`,
+                Trust=`Perceptions of corruption`,
+                Freedom = `Freedom to make life choices`,
+                Family = `Social support`) %>%
+  merge(regions,by="Country", all.x=T)
+
+
+# Read 2019 Data
 h19 <- read_csv("2019.csv")  
 h19 <- h19 %>%
-  mutate(Year = 2019)
+  mutate(Year = 2019) %>%
+  dplyr::rename(H_rank=`Overall rank`, # Modify variable names
+                H_score = `Score`,
+                GDP=`GDP per capita`,
+                Country = `Country or region`,
+                Health=`Healthy life expectancy`,
+                Trust=`Perceptions of corruption`,
+                Freedom = `Freedom to make life choices`,
+                Family = `Social support`) %>%
+  merge(regions,by="Country", all.x=T)
 
-#common_names <- intersect(colnames(h15), colnames(h16),colnames(h17)
-#                          ,colnames(h18),colnames(h19))
+# Combine all data into all_dat
+all_dat <- rbind.fill(h15,h16,h17,h18,h19)
 
-
-# for (i in 16:19){
-#   file_name <- paste0("20", as.character(i), ".csv")
-#   temp <- read_csv(file_name)
-#   happiness_dat <- rbind.fill.matrix(happiness_dat, temp)
-#}
+# Need to fill in dystopia variable for 17~19
 
 ```
 
