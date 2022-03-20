@@ -283,6 +283,8 @@ library(ggridges)
 library(plyr)</code></pre>
 <div id="read-manipulate-data" class="section level2">
 <h2>Read &amp; Manipulate Data</h2>
+<pre class="r"><code># Read 2015 Data
+h15 &lt;- read_csv(&quot;2015.csv&quot;)</code></pre>
 <pre><code>## Rows: 158 Columns: 12</code></pre>
 <pre><code>## ── Column specification ────────────────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -291,6 +293,19 @@ library(plyr)</code></pre>
 <pre><code>## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>h15 &lt;- h15 %&gt;%
+  mutate(Year = 2015) %&gt;%
+  dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
+                H_score = `Happiness Score`,
+                GDP=`Economy (GDP per Capita)`,
+                Health=`Health (Life Expectancy)`,
+                Trust=`Trust (Government Corruption)`,
+                se=`Standard Error`,
+                dystopia_res = `Dystopia Residual`)
+
+
+# Read 2016 Data
+h16 &lt;- read_csv(&quot;2016.csv&quot;)  </code></pre>
 <pre><code>## Rows: 157 Columns: 13</code></pre>
 <pre><code>## ── Column specification ────────────────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -299,6 +314,30 @@ library(plyr)</code></pre>
 <pre><code>## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>h16 &lt;- h16 %&gt;%
+  mutate(Year = 2016,
+      `Standard Error` = (`Upper Confidence Interval`-`Lower Confidence Interval`)/3.92) %&gt;%
+              # SE = (upper limit – lower limit) / 3.92. 
+              # This is for 95% CI
+  dplyr::select(-c(`Upper Confidence Interval`,`Lower Confidence Interval`)) %&gt;%
+  dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
+                H_score = `Happiness Score`,
+                GDP=`Economy (GDP per Capita)`,
+                Health=`Health (Life Expectancy)`,
+                Trust=`Trust (Government Corruption)`,
+                se=`Standard Error`,
+                dystopia_res = `Dystopia Residual`)
+
+
+
+# Since we don&#39;t have a variable &#39;Region&#39; starting from 2017, we will create it for 
+# each year
+regions &lt;- dplyr::select(h16, Country, Region)
+
+
+
+# Read 2017 Data
+h17 &lt;- read_csv(&quot;2017.csv&quot;)  </code></pre>
 <pre><code>## Rows: 155 Columns: 12</code></pre>
 <pre><code>## ── Column specification ────────────────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -307,6 +346,22 @@ library(plyr)</code></pre>
 <pre><code>## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>h17 &lt;- h17 %&gt;%
+  mutate(Year = 2017,
+         `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %&gt;%
+  merge(regions,by=&quot;Country&quot;, all.x=T) %&gt;%
+  dplyr::select(-c(`Whisker.high`,`Whisker.low`)) %&gt;%
+    dplyr::rename(H_rank=`Happiness.Rank`, # Modify variable names
+                H_score = Happiness.Score,
+                GDP=Economy..GDP.per.Capita.,
+                Health=Health..Life.Expectancy.,
+                Trust=Trust..Government.Corruption.,
+                se=`Standard Error`,
+                dystopia_res = Dystopia.Residual)
+
+
+# Read 2018 Data
+h18 &lt;- read_csv(&quot;2018.csv&quot;)  </code></pre>
 <pre><code>## Rows: 156 Columns: 9</code></pre>
 <pre><code>## ── Column specification ────────────────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -315,6 +370,21 @@ library(plyr)</code></pre>
 <pre><code>## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>h18 &lt;- h18 %&gt;%
+  mutate(Year = 2018) %&gt;%
+  dplyr::rename(H_rank=`Overall rank`, # Modify variable names
+                H_score = `Score`,
+                GDP=`GDP per capita`,
+                Country = `Country or region`,
+                Health=`Healthy life expectancy`,
+                Trust=`Perceptions of corruption`,
+                Freedom = `Freedom to make life choices`,
+                Family = `Social support`) %&gt;%
+  merge(regions,by=&quot;Country&quot;, all.x=T)
+
+
+# Read 2019 Data
+h19 &lt;- read_csv(&quot;2019.csv&quot;)  </code></pre>
 <pre><code>## Rows: 156 Columns: 9</code></pre>
 <pre><code>## ── Column specification ────────────────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -323,6 +393,22 @@ library(plyr)</code></pre>
 <pre><code>## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>h19 &lt;- h19 %&gt;%
+  mutate(Year = 2019) %&gt;%
+  dplyr::rename(H_rank=`Overall rank`, # Modify variable names
+                H_score = `Score`,
+                GDP=`GDP per capita`,
+                Country = `Country or region`,
+                Health=`Healthy life expectancy`,
+                Trust=`Perceptions of corruption`,
+                Freedom = `Freedom to make life choices`,
+                Family = `Social support`) %&gt;%
+  merge(regions,by=&quot;Country&quot;, all.x=T)
+
+# Combine all data into all_dat
+all_dat &lt;- rbind.fill(h15,h16,h17,h18,h19)
+
+all_dat</code></pre>
 <pre><code>##                 Country                          Region H_rank H_score      se     GDP
 ## 1           Switzerland                  Western Europe      1   7.587 0.03411 1.39651
 ## 2               Iceland                  Western Europe      2   7.561 0.04884 1.30232
