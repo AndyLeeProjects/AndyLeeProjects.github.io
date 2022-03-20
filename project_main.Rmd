@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-```{r, results='hide'}
+```{r, results='hide', message=FALSE}
 library(tidyverse)
 library(socviz)
 library(lubridate)

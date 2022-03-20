@@ -274,36 +274,13 @@ $(document).ready(function () {
 
 
 <pre class="r"><code>library(tidyverse)
-library(socviz)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;socviz&#39;</code></pre>
-<pre><code>## The following objects are masked _by_ &#39;.GlobalEnv&#39;:
-## 
-##     county_map, titanic</code></pre>
-<pre class="r"><code>library(lubridate)
-library(geofacet)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;geofacet&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:socviz&#39;:
-## 
-##     election</code></pre>
-<pre class="r"><code>library(ggthemes)
+library(socviz)
+library(lubridate)
+library(geofacet)
+library(ggthemes)
 library(ggrepel)
 library(ggridges)
 library(plyr)</code></pre>
-<pre><code>## ------------------------------------------------------------------------------------------</code></pre>
-<pre><code>## You have loaded plyr after dplyr - this is likely to cause problems.
-## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
-## library(plyr); library(dplyr)</code></pre>
-<pre><code>## ------------------------------------------------------------------------------------------</code></pre>
-<pre><code>## 
-## Attaching package: &#39;plyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
-## 
-##     arrange, count, desc, failwith, id, mutate, rename, summarise, summarize</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     compact</code></pre>
 <div id="read-manipulate-data" class="section level2">
 <h2>Read &amp; Manipulate Data</h2>
 <pre class="r"><code># Read 2015 Data
@@ -393,19 +370,20 @@ all_dat &lt;- tibble(rbind.fill(h15,h16,h17,h18,h19))
 
 all_dat</code></pre>
 <pre><code>## # A tibble: 782 × 13
-##    Country     Region     H_rank H_score     SE   GDP Family Health Freedom Trust Generosity
-##    &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
-##  1 Switzerland Western E…      1    7.59 0.0341  1.40   1.35  0.941   0.666 0.41…      0.297
-##  2 Iceland     Western E…      2    7.56 0.0488  1.30   1.40  0.948   0.629 0.14…      0.436
-##  3 Denmark     Western E…      3    7.53 0.0333  1.33   1.36  0.875   0.649 0.48…      0.341
-##  4 Norway      Western E…      4    7.52 0.0388  1.46   1.33  0.885   0.670 0.36…      0.347
-##  5 Canada      North Ame…      5    7.43 0.0355  1.33   1.32  0.906   0.633 0.32…      0.458
-##  6 Finland     Western E…      6    7.41 0.0314  1.29   1.32  0.889   0.642 0.41…      0.234
-##  7 Netherlands Western E…      7    7.38 0.0280  1.33   1.28  0.893   0.616 0.31…      0.476
-##  8 Sweden      Western E…      8    7.36 0.0316  1.33   1.29  0.911   0.660 0.43…      0.363
-##  9 New Zealand Australia…      9    7.29 0.0337  1.25   1.32  0.908   0.639 0.42…      0.475
-## 10 Australia   Australia…     10    7.28 0.0408  1.33   1.31  0.932   0.651 0.35…      0.436
-## # … with 772 more rows, and 2 more variables: dystopia_res &lt;dbl&gt;, Year &lt;dbl&gt;</code></pre>
+##    Country     Region    H_rank H_score     SE   GDP Family Health Freedom Trust
+##    &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;
+##  1 Switzerland Western …      1    7.59 0.0341  1.40   1.35  0.941   0.666 0.41…
+##  2 Iceland     Western …      2    7.56 0.0488  1.30   1.40  0.948   0.629 0.14…
+##  3 Denmark     Western …      3    7.53 0.0333  1.33   1.36  0.875   0.649 0.48…
+##  4 Norway      Western …      4    7.52 0.0388  1.46   1.33  0.885   0.670 0.36…
+##  5 Canada      North Am…      5    7.43 0.0355  1.33   1.32  0.906   0.633 0.32…
+##  6 Finland     Western …      6    7.41 0.0314  1.29   1.32  0.889   0.642 0.41…
+##  7 Netherlands Western …      7    7.38 0.0280  1.33   1.28  0.893   0.616 0.31…
+##  8 Sweden      Western …      8    7.36 0.0316  1.33   1.29  0.911   0.660 0.43…
+##  9 New Zealand Australi…      9    7.29 0.0337  1.25   1.32  0.908   0.639 0.42…
+## 10 Australia   Australi…     10    7.28 0.0408  1.33   1.31  0.932   0.651 0.35…
+## # … with 772 more rows, and 3 more variables: Generosity &lt;dbl&gt;,
+## #   dystopia_res &lt;dbl&gt;, Year &lt;dbl&gt;</code></pre>
 </div>
 
 
