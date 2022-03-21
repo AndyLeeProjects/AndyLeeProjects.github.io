@@ -117,16 +117,30 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
 
 ### Find the relationships between these variables and how they affect my lifestyle
 
-*<font size="3">Correlation Coefficient Formula
-  $$r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\bar{y})^2}}$$
+<br>  
+
+<font size="3">We will first take a look at the characteristics of the variables by utilizing **descriptive statistics**.</font>
+<br>  
+
+* <font size="3">Use **pairs.panels function** in psych module
+  + The *diagonal histograms* demonstrates the distribution of each variable 
+  + The *bottom left triangle* represents a scatter plot with the best fit line
+  + The *top right triangle* represents a correlation coefficient for each pair, which ranges from -1 to 1
+      - If the coefficient is close to 1, it means that the pair holds a positive relationship and a negative relationship for -1. 
+  + Correlation Coefficient Formula:</font>
+$$r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\bar{y})^2}}$$
+
+
 
 ```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
 correlation_plot <- all_dat %>%
   select(c(Screen_time, Meditation, Multiple, Rise_time, work_finished, 
            Reading,Total))
 
-pairs.panels(correlation_plot)
+pairs.panels(correlation_plot, lm = TRUE)
 ```
+
+<br>  
 
 
 #### Single Regression Function: $y=\alpha+\beta x$

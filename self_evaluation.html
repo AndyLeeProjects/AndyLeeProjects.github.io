@@ -391,13 +391,27 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
 <p><br></p>
 <div id="find-the-relationships-between-these-variables-and-how-they-affect-my-lifestyle" class="section level3">
 <h3>Find the relationships between these variables and how they affect my lifestyle</h3>
-<p>*<font size="3">Correlation Coefficient Formula <span class="math display">\[r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\bar{y})^2}}\]</span></p>
+<p><br></p>
+<p><font size="3">We will first take a look at the characteristics of the variables by utilizing <strong>descriptive statistics</strong>.</font> <br></p>
+<ul>
+<li><font size="3">Use <strong>pairs.panels function</strong> in psych module
+<ul>
+<li>The <em>diagonal histograms</em> demonstrates the distribution of each variable</li>
+<li>The <em>bottom left triangle</em> represents a scatter plot with the best fit line</li>
+<li>The <em>top right triangle</em> represents a correlation coefficient for each pair, which ranges from -1 to 1
+<ul>
+<li>If the coefficient is close to 1, it means that the pair holds a positive relationship and a negative relationship for -1.</li>
+</ul></li>
+<li>Correlation Coefficient Formula:</font> <span class="math display">\[r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\bar{y})^2}}\]</span></li>
+</ul></li>
+</ul>
 <pre class="r"><code>correlation_plot &lt;- all_dat %&gt;%
   select(c(Screen_time, Meditation, Multiple, Rise_time, work_finished, 
            Reading,Total))
 
-pairs.panels(correlation_plot)</code></pre>
+pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><br></p>
 <div id="single-regression-function-yalphabeta-x" class="section level4">
 <h4>Single Regression Function: <span class="math inline">\(y=\alpha+\beta x\)</span></h4>
 <ul>
