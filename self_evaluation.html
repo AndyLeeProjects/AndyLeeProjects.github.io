@@ -273,35 +273,11 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(lubridate)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;lubridate&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     date, intersect, setdiff, union</code></pre>
-<pre class="r"><code>library(gridExtra)
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
-## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   2.1.1     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x lubridate::as.difftime() masks base::as.difftime()
-## x dplyr::combine()         masks gridExtra::combine()
-## x lubridate::date()        masks base::date()
-## x dplyr::filter()          masks stats::filter()
-## x lubridate::intersect()   masks base::intersect()
-## x dplyr::lag()             masks stats::lag()
-## x lubridate::setdiff()     masks base::setdiff()
-## x lubridate::union()       masks base::union()</code></pre>
-<pre class="r"><code>library(margins)
+<pre class="r"><code>library(lubridate)
+library(gridExtra)
+library(tidyverse)
+library(margins)
 library(psych)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;psych&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
-## 
-##     %+%, alpha</code></pre>
 <p><br></p>
 <div id="read-data-manipulation" class="section level3">
 <h3>Read Data &amp; Manipulation</h3>
@@ -395,8 +371,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
 </div>
 <div id="how-do-these-variables-affect-the-outcome-of-the-day" class="section level2">
 <h2>How do these variables affect the outcome of the day?</h2>
-<p><br><br />
-<br></p>
+<p><br></p>
 <div id="find-the-relationships-between-these-variables-and-how-they-affect-my-lifestyle" class="section level3">
 <h3>Find the relationships between these variables and how they affect my lifestyle</h3>
 <p><font size="3">We will first take a look at the characteristics of the variables by utilizing <strong>descriptive statistics</strong>.</font> <br></p>
