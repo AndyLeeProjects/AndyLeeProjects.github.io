@@ -22,7 +22,7 @@ library(psych)
 
 all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
 # all_dat = read.csv('D:/Spring 2022/Project/all_dat.csv')
-morning_rt = read.csv('/Volumes/Programming/personal/progress/morning_routine.csv')
+morning_rt = read.csv('/Volumes/Programming/Spring 2022/Project/morning_routine.csv')
 
 
 colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
@@ -117,7 +117,10 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)
 
 ### Find the relationships between these variables and how they affect my lifestyle
 
-```{r}
+*<font size="3">Correlation Coefficient Formula
+  $$r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\bar{y})^2}}$$
+
+```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
 correlation_plot <- all_dat %>%
   select(c(Screen_time, Meditation, Multiple, Rise_time, work_finished, 
            Reading,Total))
@@ -185,6 +188,7 @@ ggplot(filter(all_morning_rt, total_checked != 0)) +
 
 <br>  
 
+
 #### Single Logistic Regression
 ```{r, message=FALSE, warning=FALSE}
 model_logit <- glm(work_finished_mr_exc ~ night_phone,
@@ -197,7 +201,7 @@ ame_result
 
 #### How to interpret the Average Marginal Effect(AME) values
 * <font size = "3"> Interpret them as percentage points rather than percentage
-  + work_finished  .1906 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
+  + work_finished  .1911 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
 <br>  
 
 ```{r}

@@ -273,17 +273,41 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(lubridate)
-library(gridExtra)
-library(tidyverse)
-library(margins)
+<pre class="r"><code>library(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     date, intersect, setdiff, union</code></pre>
+<pre class="r"><code>library(gridExtra)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
+## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
+## ✓ readr   2.1.1     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x lubridate::as.difftime() masks base::as.difftime()
+## x dplyr::combine()         masks gridExtra::combine()
+## x lubridate::date()        masks base::date()
+## x dplyr::filter()          masks stats::filter()
+## x lubridate::intersect()   masks base::intersect()
+## x dplyr::lag()             masks stats::lag()
+## x lubridate::setdiff()     masks base::setdiff()
+## x lubridate::union()       masks base::union()</code></pre>
+<pre class="r"><code>library(margins)
 library(psych)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;psych&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
+## 
+##     %+%, alpha</code></pre>
 <p><br></p>
 <div id="read-data-manipulation" class="section level3">
 <h3>Read Data &amp; Manipulation</h3>
 <pre class="r"><code>all_dat = read.csv(&#39;/Volumes/Programming/Spring 2022/project/all_dat.csv&#39;)
 # all_dat = read.csv(&#39;D:/Spring 2022/Project/all_dat.csv&#39;)
-morning_rt = read.csv(&#39;/Volumes/Programming/personal/progress/morning_routine.csv&#39;)
+morning_rt = read.csv(&#39;/Volumes/Programming/Spring 2022/Project/morning_routine.csv&#39;)
 
 
 colnames(all_dat) &lt;- c(&#39;X&#39;, &#39;Name&#39;,&#39;Finished&#39;,&#39;Multiple&#39;,&#39;Phone_pickups&#39;,
@@ -367,12 +391,13 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
 <p><br></p>
 <div id="find-the-relationships-between-these-variables-and-how-they-affect-my-lifestyle" class="section level3">
 <h3>Find the relationships between these variables and how they affect my lifestyle</h3>
+<p>*<font size="3">Correlation Coefficient Formula <span class="math display">\[r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\bar{y})^2}}\]</span></p>
 <pre class="r"><code>correlation_plot &lt;- all_dat %&gt;%
   select(c(Screen_time, Meditation, Multiple, Rise_time, work_finished, 
            Reading,Total))
 
 pairs.panels(correlation_plot)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <div id="single-regression-function-yalphabeta-x" class="section level4">
 <h4>Single Regression Function: <span class="math inline">\(y=\alpha+\beta x\)</span></h4>
 <ul>
@@ -445,8 +470,8 @@ ggplot(filter(all_morning_rt, total_checked != 0)) +
 m = margins(model_logit) 
 ame_result = summary(m) 
 ame_result</code></pre>
-<pre><code>##           factor    AME     SE      z      p  lower  upper
-##  night_phoneTrue 0.1906 0.0939 2.0295 0.0424 0.0065 0.3748</code></pre>
+<pre><code>##       factor    AME     SE      z      p  lower  upper
+##  night_phone 0.1911 0.0879 2.1732 0.0298 0.0187 0.3635</code></pre>
 <p><br></p>
 </div>
 <div id="how-to-interpret-the-average-marginal-effectame-values" class="section level4">
@@ -454,7 +479,7 @@ ame_result</code></pre>
 <ul>
 <li><font size = "3"> Interpret them as percentage points rather than percentage
 <ul>
-<li>work_finished .1906 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font> <br></li>
+<li>work_finished .1911 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font> <br></li>
 </ul></li>
 </ul>
 <pre class="r"><code>ggplot(data = ame_result) +
@@ -475,28 +500,28 @@ ame_result</code></pre>
 ##     data = all_dat)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -11.4623  -2.7351   0.2876   2.7322  14.7539 
+##     Min      1Q  Median      3Q     Max 
+## -11.459  -2.760   0.311   2.728  14.724 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   -27.961058   2.169727 -12.887  &lt; 2e-16 ***
-## Multiple       -1.789023   0.295170  -6.061 2.84e-09 ***
-## Phone_pickups   0.056970   0.007448   7.649 1.22e-13 ***
-## Screen_time     0.011465   0.002057   5.575 4.26e-08 ***
-## Drink           0.393147   0.366119   1.074    0.283    
-## Reading        -0.093350   0.015899  -5.871 8.34e-09 ***
-## Rise_time       0.045977   0.003777  12.174  &lt; 2e-16 ***
-## Total_todo     -0.127904   0.077838  -1.643    0.101    
-## Total           0.699692   0.039675  17.636  &lt; 2e-16 ***
-## work_finished -13.114495   2.148972  -6.103 2.23e-09 ***
+## (Intercept)   -28.129695   2.173844 -12.940  &lt; 2e-16 ***
+## Multiple       -1.790261   0.295849  -6.051 3.00e-09 ***
+## Phone_pickups   0.056601   0.007457   7.590 1.81e-13 ***
+## Screen_time     0.011639   0.002060   5.650 2.83e-08 ***
+## Drink           0.371762   0.366816   1.013    0.311    
+## Reading        -0.094780   0.015920  -5.953 5.24e-09 ***
+## Rise_time       0.046618   0.003771  12.361  &lt; 2e-16 ***
+## Total_todo     -0.124933   0.078016  -1.601    0.110    
+## Total           0.706743   0.039584  17.854  &lt; 2e-16 ***
+## work_finished -13.535582   2.139523  -6.326 5.99e-10 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 4.259 on 455 degrees of freedom
+## Residual standard error: 4.27 on 457 degrees of freedom
 ##   (4 observations deleted due to missingness)
-## Multiple R-squared:  0.6456, Adjusted R-squared:  0.6386 
-## F-statistic: 92.08 on 9 and 455 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Multiple R-squared:  0.6435, Adjusted R-squared:  0.6365 
+## F-statistic: 91.65 on 9 and 457 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
 <div id="multiple-with-multiple_dat" class="section level4">
@@ -517,26 +542,26 @@ summary(multiple_tail)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.96722 -0.29884  0.00562  0.30775  1.12087 
+## -0.96096 -0.30544  0.00831  0.31609  1.11328 
 ## 
 ## Coefficients:
-##                 Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)    1.1831495  0.8536405   1.386   0.1707  
-## Phone_pickups  0.0035841  0.0026299   1.363   0.1779  
-## Screen_time   -0.0015665  0.0007663  -2.044   0.0452 *
-## Drink          0.0266969  0.1679398   0.159   0.8742  
-## Meditation    -0.0179650  0.0167935  -1.070   0.2889  
-## Reading       -0.0048266  0.0094516  -0.511   0.6114  
-## Rise_time      0.0029511  0.0017244   1.711   0.0920 .
-## Total_todo    -0.0218439  0.0249253  -0.876   0.3842  
-## work_finished  2.3018931  0.8694485   2.648   0.0103 *
-## Total          0.0147359  0.0181659   0.811   0.4204  
+##                 Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)    1.1141965  0.8342000   1.336  0.18640   
+## Phone_pickups  0.0033614  0.0025671   1.309  0.19508   
+## Screen_time   -0.0014649  0.0007427  -1.972  0.05288 . 
+## Drink          0.0136914  0.1597639   0.086  0.93197   
+## Meditation    -0.0171165  0.0165402  -1.035  0.30464   
+## Reading       -0.0061274  0.0091509  -0.670  0.50552   
+## Rise_time      0.0031625  0.0016424   1.926  0.05860 . 
+## Total_todo    -0.0206266  0.0245675  -0.840  0.40426   
+## work_finished  2.2706056  0.8277484   2.743  0.00789 **
+## Total          0.0159587  0.0175451   0.910  0.36646   
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.5052 on 62 degrees of freedom
-## Multiple R-squared:  0.7615, Adjusted R-squared:  0.7268 
-## F-statistic: 21.99 on 9 and 62 DF,  p-value: 3.672e-16</code></pre>
+## Residual standard error: 0.4992 on 64 degrees of freedom
+## Multiple R-squared:  0.7608, Adjusted R-squared:  0.7271 
+## F-statistic: 22.61 on 9 and 64 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
 <div id="multiple-with-all_dat" class="section level4">
@@ -556,28 +581,28 @@ summary(multiple_all)</code></pre>
 ##     data = all_dat)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -2.44676 -0.41574 -0.02224  0.41723  1.96863 
+##     Min      1Q  Median      3Q     Max 
+## -2.4463 -0.4167 -0.0241  0.4231  1.9660 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   -0.1395938  0.3263947  -0.428 0.669082    
-## Phone_pickups  0.0042987  0.0011007   3.906 0.000108 ***
-## Screen_time   -0.0005943  0.0003013  -1.972 0.049184 *  
-## Drink         -0.0303751  0.0550682  -0.552 0.581498    
-## Meditation    -0.0439626  0.0065194  -6.743 4.68e-11 ***
-## Reading       -0.0103842  0.0023719  -4.378 1.49e-05 ***
-## Rise_time      0.0036409  0.0004950   7.355 8.89e-13 ***
-## Run            0.6966262  0.2604207   2.675 0.007740 ** 
-## Total_todo    -0.0148290  0.0113576  -1.306 0.192330    
-## Total          0.0602246  0.0040551  14.852  &lt; 2e-16 ***
+## (Intercept)   -0.1386551  0.3250977  -0.427 0.669941    
+## Phone_pickups  0.0042469  0.0010951   3.878 0.000121 ***
+## Screen_time   -0.0005883  0.0003006  -1.957 0.050957 .  
+## Drink         -0.0305183  0.0549614  -0.555 0.578981    
+## Meditation    -0.0437303  0.0064611  -6.768 3.98e-11 ***
+## Reading       -0.0104642  0.0023650  -4.425 1.21e-05 ***
+## Rise_time      0.0036442  0.0004941   7.376 7.69e-13 ***
+## Run            0.6946964  0.2600047   2.672 0.007811 ** 
+## Total_todo    -0.0146155  0.0113335  -1.290 0.197842    
+## Total          0.0602126  0.0040335  14.928  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.6485 on 458 degrees of freedom
+## Residual standard error: 0.6475 on 460 degrees of freedom
 ##   (1 observation deleted due to missingness)
-## Multiple R-squared:  0.5675, Adjusted R-squared:  0.559 
-## F-statistic: 66.77 on 9 and 458 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Multiple R-squared:  0.5676, Adjusted R-squared:  0.5591 
+## F-statistic: 67.09 on 9 and 460 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
 </div>
@@ -599,27 +624,27 @@ summary(work_finished_all)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.36590 -0.08969  0.00675  0.09519  0.42490 
+## -0.36590 -0.09006  0.00740  0.09573  0.42401 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    1.533e-01  5.673e-02   2.702  0.00715 ** 
-## Multiple       1.077e-01  8.396e-03  12.829  &lt; 2e-16 ***
-## Phone_pickups  2.113e-04  2.344e-04   0.901  0.36787    
-## Screen_time   -1.754e-05  6.200e-05  -0.283  0.77735    
-## Drink         -5.427e-02  1.186e-02  -4.575 6.15e-06 ***
-## Meditation     1.148e-02  1.069e-03  10.739  &lt; 2e-16 ***
-## Reading        2.363e-03  4.568e-04   5.174 3.44e-07 ***
-## Rise_time     -1.531e-04  8.000e-05  -1.914  0.05624 .  
-## Run           -8.271e-02  5.705e-02  -1.450  0.14783    
-## Total_todo     6.341e-03  2.502e-03   2.534  0.01161 *  
+## (Intercept)    1.489e-01  5.694e-02   2.615  0.00922 ** 
+## Multiple       1.087e-01  8.420e-03  12.911  &lt; 2e-16 ***
+## Phone_pickups  2.360e-04  2.348e-04   1.005  0.31542    
+## Screen_time   -1.668e-05  6.222e-05  -0.268  0.78874    
+## Drink         -5.377e-02  1.191e-02  -4.514 8.11e-06 ***
+## Meditation     1.126e-02  1.068e-03  10.535  &lt; 2e-16 ***
+## Reading        2.378e-03  4.580e-04   5.192 3.15e-07 ***
+## Rise_time     -1.611e-04  8.028e-05  -2.007  0.04534 *  
+## Run           -8.212e-02  5.730e-02  -1.433  0.15248    
+## Total_todo     6.307e-03  2.513e-03   2.510  0.01241 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.1409 on 455 degrees of freedom
+## Residual standard error: 0.1416 on 457 degrees of freedom
 ##   (4 observations deleted due to missingness)
-## Multiple R-squared:  0.6449, Adjusted R-squared:  0.6379 
-## F-statistic: 91.83 on 9 and 455 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Multiple R-squared:  0.6419, Adjusted R-squared:  0.6348 
+## F-statistic: 91.01 on 9 and 457 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level3">
@@ -660,21 +685,22 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
 <pre><code>## # A tibble: 10 × 20
-##    Date     Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation Mentality
-##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
-##  1 08/11/2…        5      3             144         167     0 0                  0         0
-##  2 10/17/2…       15      3             123         200     0 0                 14         0
-##  3 01/10/2…       10      3.6            98          84     0 0                 15         3
-##  4 1/12/21         9      3              74         304     0 0                 15         0
-##  5 1/31/21         4      3              61         440     0 0                  0         0
-##  6 12/21/2…        8      3.6           107         314     0 0                  0         4
-##  7 02/20/2…       15      4              97         132     0 0                 15         0
-##  8 01/26/2…       10      4             126         149     0 0                 15         4
-##  9 01/03/2…        5      2.6            80         308     0 0                 10         3
-## 10 12/16/2…        8      3.4            97         201     0 0                 15         3
-## # … with 11 more variables: Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
-## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;,
-## #   work_finished &lt;dbl&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
+##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
+##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+##  1 08/11…        5      3             144         167     0 0                  0
+##  2 10/17…       15      3             123         200     0 0                 14
+##  3 01/10…       10      3.6            98          84     0 0                 15
+##  4 1/12/…        9      3              74         304     0 0                 15
+##  5 1/31/…        4      3              61         440     0 0                  0
+##  6 12/21…        8      3.6           107         314     0 0                  0
+##  7 02/20…       15      4              97         132     0 0                 15
+##  8 01/26…       10      4             126         149     0 0                 15
+##  9 01/03…        5      2.6            80         308     0 0                 10
+## 10 12/16…        8      3.4            97         201     0 0                 15
+## # … with 12 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
+## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
+## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;,
+## #   pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).
@@ -687,7 +713,7 @@ shapiro.test(all_dat$Total)</code></pre>
 ##  Shapiro-Wilk normality test
 ## 
 ## data:  all_dat$Total
-## W = 0.94474, p-value = 3.276e-12</code></pre>
+## W = 0.94554, p-value = 3.89e-12</code></pre>
 <p><br></p>
 </div>
 <div id="determining-distributions" class="section level3">
@@ -713,20 +739,20 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## ------
 ## min:  1   max:  7 
 ## median:  3.4 
-## mean:  3.440085 
-## estimated sd:  0.9892223 
-## estimated skewness:  -0.2591348 
-## estimated kurtosis:  3.06537</code></pre>
+## mean:  3.438217 
+## estimated sd:  0.9878755 
+## estimated skewness:  -0.2546991 
+## estimated kurtosis:  3.068103</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
-## median:  201 
-## mean:  234.2345 
-## estimated sd:  127.2488 
-## estimated skewness:  1.570153 
-## estimated kurtosis:  6.655322</code></pre>
+## median:  202 
+## mean:  234.3715 
+## estimated sd:  127.0298 
+## estimated skewness:  1.568781 
+## estimated kurtosis:  6.666055</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-3.png" width="672" /></p>
@@ -734,10 +760,10 @@ descdist(wf, discrete = FALSE)</code></pre>
 ## ------
 ## min:  0   max:  1 
 ## median:  0.7778 
-## mean:  0.7200835 
-## estimated sd:  0.2341082 
-## estimated skewness:  -1.071923 
-## estimated kurtosis:  3.642819</code></pre>
+## mean:  0.7192017 
+## estimated sd:  0.2341472 
+## estimated skewness:  -1.061836 
+## estimated kurtosis:  3.617536</code></pre>
 <pre class="r"><code>#fit.beta &lt;- fitdist(wf, &#39;beta&#39;, method = &quot;mme&quot;) 
   # method = &quot;mme&quot;: Moment matching estimation consists in equalizing theoretical
   #                 and empirical moments. 
