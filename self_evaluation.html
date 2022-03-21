@@ -362,7 +362,7 @@ multiple_dat = filter(all_dat, Productivity!=0)</code></pre>
   geom_density( aes(Total), color = &#39;red&#39;)
 
 p2 &lt;- ggplot(data = all_dat) +
-  geom_density( aes(work_finished), color = &#39;blue&#39;)
+  geom_density( aes(Multiple), color = &#39;blue&#39;)
 
 p3 &lt;- ggplot(data = all_dat, alpha=.5)+
   geom_density( aes(Reading), color = &#39;purple&#39;)
@@ -381,33 +381,41 @@ p7 &lt;- ggplot(data = all_dat, alpha=.5)+
 
 p8 &lt;- ggplot(data = all_dat, alpha=.5)+
   geom_density(aes(Drink), color = &#39;darkgreen&#39;)
+
+p9 &lt;- ggplot(data = all_dat, alpha=.5)+
+  geom_density(aes(work_finished), color = &#39;darkgreen&#39;)
+
+p10 &lt;- ggplot(data = all_dat, alpha=.5)+
+  geom_density(aes(Phone_pickups), color = &#39;darkgreen&#39;)
   
-grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8, nrow = 4)</code></pre>
+grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-3-1.png" width="1600px" style="display: block; margin: auto;" /> <br><br />
+<br><br />
 <br></p>
 </div>
 <div id="how-do-these-variables-affect-the-outcome-of-the-day" class="section level2">
 <h2>How do these variables affect the outcome of the day?</h2>
-<p><br></p>
+<p><br><br />
+<br></p>
 <div id="find-the-relationships-between-these-variables-and-how-they-affect-my-lifestyle" class="section level3">
 <h3>Find the relationships between these variables and how they affect my lifestyle</h3>
-<p><br></p>
 <p><font size="3">We will first take a look at the characteristics of the variables by utilizing <strong>descriptive statistics</strong>.</font> <br></p>
 <ul>
 <li><font size="3">Use <strong>pairs.panels function</strong> in psych module
 <ul>
-<li>The <em>diagonal histograms</em> demonstrates the distribution of each variable</li>
-<li>The <em>bottom left triangle</em> represents a scatter plot with the best fit line</li>
-<li>The <em>top right triangle</em> represents a correlation coefficient for each pair, which ranges from -1 to 1
+<li><strong>The diagonal histograms</strong> demonstrates the distribution of each variable</li>
+<li><strong>The bottom left triangle</strong> represents a scatter plot with the best fit line</li>
+<li><strong>The top right triangle</strong> represents a correlation coefficient for each pair, which ranges from -1 to 1
 <ul>
 <li>If the coefficient is close to 1, it means that the pair holds a positive relationship and a negative relationship for -1.</li>
 </ul></li>
 <li>Correlation Coefficient Formula:</font> <span class="math display">\[r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\bar{y})^2}}\]</span></li>
 </ul></li>
 </ul>
+<p><br></p>
 <pre class="r"><code>correlation_plot &lt;- all_dat %&gt;%
-  select(c(Screen_time, Meditation, Multiple, Rise_time, work_finished, 
-           Reading,Total))
+  select(c(Screen_time, Meditation, Multiple, Rise_time, 
+           Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="1600px" style="display: block; margin: auto;" /></p>
