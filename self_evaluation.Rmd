@@ -16,7 +16,7 @@ library(psych)
 <br>  
 
 
-### Read Data & Manipulation
+### Read & Organize Data
 
 ```{r}
 
@@ -76,7 +76,7 @@ multiple_dat = filter(all_dat, Productivity!=0)
 <br>  
 
 
-### Distribution for the main variables
+### Distribution for the main variables in all_dat
 
 ```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
 
@@ -154,8 +154,8 @@ pairs.panels(correlation_plot, lm = TRUE)
 
 
 * <font size = "3">Set:
-  + y = 
-  + x = 
+  + x = (Soon to be added)
+  + y = (Soon to be added)
   + $\alpha$ = y-intercept
   + $\beta$ = slope </font>
 
@@ -169,24 +169,108 @@ pairs.panels(correlation_plot, lm = TRUE)
 
 <br>  
 
-
+* <font size="4" color="red">Soon to be added:
+  + Single Regression Analysis with designated x and y
+  + Multiple Regression Analysis with meaningful variables</font>
   
 <br>  
 <br>  
+<br>  
+<br>  
 
 
-## How important is my Morning Routine? 
+## How important are my Morning Routine tasks? 
+<br>  
+
+$$"The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start."\\ -Jim\ Kwik$$
+<br>  
+
+### We will use the following data set
+* <font size="3">Combined Morning Routine variables with all_dat variables</font>
+```{r, message=FALSE}
+tibble(all_morning_rt)
+```
+<br>  
+
+* <font size="3">Column Names</font>
+```{r}
+colnames(all_morning_rt)
+```
 
 <br>  
 
-### Test how many checked morning routines affect the outcome of the day
+
+### Morning Routine Variables Descriptions & Visualizations
+* <font size="3">**Total_checked**: The number of morning routine tasks completed</font>
+* <font size="3">**Meditation_check**: Meditation task completion (Boolean value)</font>
+* <font size="3">**Reading_check**: Reading task completion (Boolean value)</font>
+* <font size="3">**morning_thoughts_check**: Morning journal task completion (Boolean value)</font>
+* <font size="3">**Push_up_check**: Push up task completion (Boolean value)</font>
+* <font size="3">**Morning_phone**: Did not touch my phone for the first hour of the day (Boolean value)</font>
+* <font size="3">**Night_phone**: Did not touch my phone for the last hour of the day (Boolean value)</font>
+<br>  
+
+
+```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 10, fig.asp = .75, fig.align='center', warning = FALSE}
+# Total_checked: the number of morning routine tasks completed
+p1 <- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = total_checked), fill = "orange",
+           alpha = .8)+
+  theme(legend.position = "None")
+
+# Meditation_check: Meditation task completion (Boolean value)
+p2 <- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = meditation_check, fill = meditation_check),
+           alpha = .8)+
+  theme(legend.position = "None")
+
+# Reading_check: Reading task completion (Boolean value)
+p3 <- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = reading_check, fill = reading_check),
+           alpha = .8)+
+  theme(legend.position = "None")
+
+# morning_thoughts_check: Morning journal task completion (Boolean value)
+p4 <- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = morning_thoughts_check, fill = morning_thoughts_check),
+           alpha = .8)+
+  theme(legend.position = "None")
+
+# push_up_check: Push up task completion (Boolean value)
+p5 <- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = push_up_check, fill = push_up_check),
+           alpha = .8)+
+  theme(legend.position = "None")
+
+# Morning_phone: Did not touch my phone for the first hour of the day (Boolean value)
+p6 <- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = morning_phone, fill = morning_phone),
+           alpha = .8)+
+  theme(legend.position = "None")
+
+# Night_phone: Did not touch my phone for the last hour of the day (Boolean value)
+p7 <- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = night_phone, fill = night_phone),
+           alpha = .8, position = "dodge")+
+  theme(legend.position = "None")
+
+grid.arrange(p2, p3,p4,p5,p6,p7,p1, nrow = 4)
+
+```
+
+
+<br>  
+
+
+### Test how Total_checked variable affects the outcome of the day
 * <font size = "4">The morning routine tasks:
   + Not touching my phone for at least 30 minutes the night before
   + Not touching my phone for an hour after I wake up
-  + Exercise 
+  + Exercise (Push up)
   + Meditation
   + Reading
   + Morning journal </font>
+  
 ```{r, collapse=TRUE, out.width = "1000px", figures-side, fig.asp = .75, fig.align='center', warning = FALSE}
 
 # see how number of morning routine checks affects the Total %

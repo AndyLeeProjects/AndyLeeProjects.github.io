@@ -279,8 +279,8 @@ library(tidyverse)
 library(margins)
 library(psych)</code></pre>
 <p><br></p>
-<div id="read-data-manipulation" class="section level3">
-<h3>Read Data &amp; Manipulation</h3>
+<div id="read-organize-data" class="section level3">
+<h3>Read &amp; Organize Data</h3>
 <pre class="r"><code>all_dat = read.csv(&#39;/Volumes/Programming/Spring 2022/project/all_dat.csv&#39;)
 # all_dat = read.csv(&#39;D:/Spring 2022/Project/all_dat.csv&#39;)
 morning_rt = read.csv(&#39;/Volumes/Programming/Spring 2022/Project/morning_routine.csv&#39;)
@@ -332,8 +332,8 @@ dat_date =  filter(all_dat, Date!=0) # Exclude wrong date format
 multiple_dat = filter(all_dat, Productivity!=0)</code></pre>
 <p><br></p>
 </div>
-<div id="distribution-for-the-main-variables" class="section level3">
-<h3>Distribution for the main variables</h3>
+<div id="distribution-for-the-main-variables-in-all_dat" class="section level3">
+<h3>Distribution for the main variables in all_dat</h3>
 <pre class="r"><code>p1 &lt;- ggplot(data = all_dat, alpha=.5) + 
   geom_density( aes(Total), color = &#39;red&#39;)
 
@@ -400,8 +400,8 @@ pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 <ul>
 <li><font size = "3">Set:
 <ul>
-<li>y =</li>
-<li>x =</li>
+<li>x = (Soon to be added)</li>
+<li>y = (Soon to be added)</li>
 <li><span class="math inline">\(\alpha\)</span> = y-intercept</li>
 <li><span class="math inline">\(\beta\)</span> = slope </font></li>
 </ul></li>
@@ -420,22 +420,132 @@ pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 </ol></li>
 </ul>
 <p><br></p>
+<ul>
+<li><font size="4" color="red">Soon to be added:
+<ul>
+<li>Single Regression Analysis with designated x and y</li>
+<li>Multiple Regression Analysis with meaningful variables</font></li>
+</ul></li>
+</ul>
 <p><br><br />
+<br><br />
+<br><br />
 <br></p>
 </div>
 </div>
 </div>
-<div id="how-important-is-my-morning-routine" class="section level2">
-<h2>How important is my Morning Routine?</h2>
+<div id="how-important-are-my-morning-routine-tasks" class="section level2">
+<h2>How important are my Morning Routine tasks?</h2>
 <p><br></p>
-<div id="test-how-many-checked-morning-routines-affect-the-outcome-of-the-day" class="section level3">
-<h3>Test how many checked morning routines affect the outcome of the day</h3>
+<p><span class="math display">\[&quot;The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start.&quot;\\ -Jim\ Kwik\]</span> <br></p>
+<div id="we-will-use-the-following-data-set" class="section level3">
+<h3>We will use the following data set</h3>
+<ul>
+<li><font size="3">Combined Morning Routine variables with all_dat variables</font></li>
+</ul>
+<pre class="r"><code>tibble(all_morning_rt)</code></pre>
+<pre><code>## # A tibble: 126 × 30
+##    Date       total_checked meditation_min meditation_check reading_check
+##    &lt;date&gt;             &lt;int&gt;          &lt;int&gt; &lt;lgl&gt;            &lt;lgl&gt;        
+##  1 2022-03-19             3             15 TRUE             FALSE        
+##  2 2022-03-18             1              0 FALSE            TRUE         
+##  3 2022-03-17             1             15 TRUE             FALSE        
+##  4 2022-03-16             0              0 FALSE            FALSE        
+##  5 2022-03-15             0              0 FALSE            FALSE        
+##  6 2022-03-13             2             15 TRUE             TRUE         
+##  7 2022-03-11             3              0 FALSE            FALSE        
+##  8 2022-03-10             1              0 FALSE            FALSE        
+##  9 2022-03-09             4              0 FALSE            FALSE        
+## 10 2022-03-08             4              0 FALSE            FALSE        
+## # … with 116 more rows, and 25 more variables: reading_min &lt;int&gt;, run_km &lt;int&gt;,
+## #   morning_thoughts_check &lt;lgl&gt;, push_up_check &lt;lgl&gt;, morning_phone &lt;lgl&gt;,
+## #   night_phone &lt;lgl&gt;, Finished &lt;dbl&gt;, Multiple &lt;dbl&gt;, Phone_pickups &lt;dbl&gt;,
+## #   Screen_time &lt;dbl&gt;, Drink &lt;dbl&gt;, Key_words &lt;chr&gt;, Meditation &lt;dbl&gt;,
+## #   Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
+## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;,
+## #   Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, work_finished_mr_exc &lt;dbl&gt;</code></pre>
+<p><br></p>
+<ul>
+<li><font size="3">Column Names</font></li>
+</ul>
+<pre class="r"><code>colnames(all_morning_rt)</code></pre>
+<pre><code>##  [1] &quot;Date&quot;                   &quot;total_checked&quot;          &quot;meditation_min&quot;        
+##  [4] &quot;meditation_check&quot;       &quot;reading_check&quot;          &quot;reading_min&quot;           
+##  [7] &quot;run_km&quot;                 &quot;morning_thoughts_check&quot; &quot;push_up_check&quot;         
+## [10] &quot;morning_phone&quot;          &quot;night_phone&quot;            &quot;Finished&quot;              
+## [13] &quot;Multiple&quot;               &quot;Phone_pickups&quot;          &quot;Screen_time&quot;           
+## [16] &quot;Drink&quot;                  &quot;Key_words&quot;              &quot;Meditation&quot;            
+## [19] &quot;Mentality&quot;              &quot;Satisfaction&quot;           &quot;Reading&quot;               
+## [22] &quot;Productivity&quot;           &quot;Rise_time&quot;              &quot;Run&quot;                   
+## [25] &quot;Social&quot;                 &quot;Tech&quot;                   &quot;Total&quot;                 
+## [28] &quot;Total_todo&quot;             &quot;work_finished&quot;          &quot;work_finished_mr_exc&quot;</code></pre>
+<p><br></p>
+</div>
+<div id="morning-routine-variables-descriptions-visualizations" class="section level3">
+<h3>Morning Routine Variables Descriptions &amp; Visualizations</h3>
+<ul>
+<li><font size="3"><strong>Total_checked</strong>: The number of morning routine tasks completed</font></li>
+<li><font size="3"><strong>Meditation_check</strong>: Meditation task completion (Boolean value)</font></li>
+<li><font size="3"><strong>Reading_check</strong>: Reading task completion (Boolean value)</font></li>
+<li><font size="3"><strong>morning_thoughts_check</strong>: Morning journal task completion (Boolean value)</font></li>
+<li><font size="3"><strong>Push_up_check</strong>: Push up task completion (Boolean value)</font></li>
+<li><font size="3"><strong>Morning_phone</strong>: Did not touch my phone for the first hour of the day (Boolean value)</font></li>
+<li><font size="3"><strong>Night_phone</strong>: Did not touch my phone for the last hour of the day (Boolean value)</font> <br></li>
+</ul>
+<pre class="r"><code># Total_checked: the number of morning routine tasks completed
+p1 &lt;- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = total_checked), fill = &quot;orange&quot;,
+           alpha = .8)+
+  theme(legend.position = &quot;None&quot;)
+
+# Meditation_check: Meditation task completion (Boolean value)
+p2 &lt;- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = meditation_check, fill = meditation_check),
+           alpha = .8)+
+  theme(legend.position = &quot;None&quot;)
+
+# Reading_check: Reading task completion (Boolean value)
+p3 &lt;- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = reading_check, fill = reading_check),
+           alpha = .8)+
+  theme(legend.position = &quot;None&quot;)
+
+# morning_thoughts_check: Morning journal task completion (Boolean value)
+p4 &lt;- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = morning_thoughts_check, fill = morning_thoughts_check),
+           alpha = .8)+
+  theme(legend.position = &quot;None&quot;)
+
+# push_up_check: Push up task completion (Boolean value)
+p5 &lt;- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = push_up_check, fill = push_up_check),
+           alpha = .8)+
+  theme(legend.position = &quot;None&quot;)
+
+# Morning_phone: Did not touch my phone for the first hour of the day (Boolean value)
+p6 &lt;- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = morning_phone, fill = morning_phone),
+           alpha = .8)+
+  theme(legend.position = &quot;None&quot;)
+
+# Night_phone: Did not touch my phone for the last hour of the day (Boolean value)
+p7 &lt;- ggplot(data = all_morning_rt) +
+  geom_bar(aes(x = night_phone, fill = night_phone),
+           alpha = .8, position = &quot;dodge&quot;)+
+  theme(legend.position = &quot;None&quot;)
+
+grid.arrange(p2, p3,p4,p5,p6,p7,p1, nrow = 4)</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><br></p>
+</div>
+<div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level3">
+<h3>Test how Total_checked variable affects the outcome of the day</h3>
 <ul>
 <li><font size = "4">The morning routine tasks:
 <ul>
 <li>Not touching my phone for at least 30 minutes the night before</li>
 <li>Not touching my phone for an hour after I wake up</li>
-<li>Exercise</li>
+<li>Exercise (Push up)</li>
 <li>Meditation</li>
 <li>Reading</li>
 <li>Morning journal </font></li>
@@ -485,7 +595,7 @@ ame_result</code></pre>
   width = .5) + geom_hline ( yintercept = 0) +
   theme_minimal ( ) +
   theme(axis.text.x = element_text(angle = 90))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="meditation-with-all_dat" class="section level4">
@@ -658,7 +768,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level3">
@@ -673,7 +783,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level3">
@@ -682,22 +792,21 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
 <pre><code>## # A tibble: 10 × 20
-##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
-##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
-##  1 08/11…        5      3             144         167     0 0                  0
-##  2 10/17…       15      3             123         200     0 0                 14
-##  3 01/10…       10      3.6            98          84     0 0                 15
-##  4 1/12/…        9      3              74         304     0 0                 15
-##  5 1/31/…        4      3              61         440     0 0                  0
-##  6 12/21…        8      3.6           107         314     0 0                  0
-##  7 02/20…       15      4              97         132     0 0                 15
-##  8 01/26…       10      4             126         149     0 0                 15
-##  9 01/03…        5      2.6            80         308     0 0                 10
-## 10 12/16…        8      3.4            97         201     0 0                 15
+##    Date       Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
+##    &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+##  1 08/11/2021        5      3             144         167     0 0                  0
+##  2 10/17/2021       15      3             123         200     0 0                 14
+##  3 01/10/2022       10      3.6            98          84     0 0                 15
+##  4 1/12/21           9      3              74         304     0 0                 15
+##  5 1/31/21           4      3              61         440     0 0                  0
+##  6 12/21/2021        8      3.6           107         314     0 0                  0
+##  7 02/20/2021       15      4              97         132     0 0                 15
+##  8 01/26/2022       10      4             126         149     0 0                 15
+##  9 01/03/2022        5      2.6            80         308     0 0                 10
+## 10 12/16/2021        8      3.4            97         201     0 0                 15
 ## # … with 12 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
 ## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
-## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;,
-## #   pred_work_finished &lt;dbl&gt;</code></pre>
+## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).
@@ -731,7 +840,7 @@ shapiro.test(all_dat$Total)</code></pre>
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
 descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  1   max:  7 
@@ -741,7 +850,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated skewness:  -0.2546991 
 ## estimated kurtosis:  3.068103</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
@@ -752,7 +861,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated kurtosis:  6.666055</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-3.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-3.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  0   max:  1 
@@ -769,7 +878,7 @@ fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
 #plot(fit.beta)
 #plot(fit.gamma)
 plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-4.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-4.png" width="672" /></p>
 </div>
 </div>
 
