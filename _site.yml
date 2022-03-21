@@ -5,12 +5,12 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "My Website"
-      href: https://www.andyleeproject.com/
     - text: "Self Evaluation Project"
       href: self_evaluation.html
     - text: "Happiness Project"
       href: project_main.html
+    - text: "My Website"
+      href: https://www.andyleeproject.com/
   html_document :
     theme: cosmo 
     css: style.css

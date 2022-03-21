@@ -201,6 +201,9 @@ colnames(all_morning_rt)
 
 
 ### Morning Routine Variables Descriptions & Visualizations
+Note that they are all discrete variables
+<br>  
+
 * <font size="3">**Total_checked**: The number of morning routine tasks completed</font>
 * <font size="3">**Meditation_check**: Meditation task completion (Boolean value)</font>
 * <font size="3">**Reading_check**: Reading task completion (Boolean value)</font>
