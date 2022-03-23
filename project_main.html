@@ -274,14 +274,14 @@ $(document).ready(function () {
 
 
 <p><br></p>
-<pre class="r"><code>library(tidyverse)
-library(socviz)
+<pre class="r"><code>library(socviz)
 library(lubridate)
 library(geofacet)
 library(ggthemes)
 library(ggrepel)
 library(ggridges)
-library(plyr)</code></pre>
+library(plyr)
+library(tidyverse)</code></pre>
 <p><br></p>
 <div id="read-manipulate-data" class="section level2">
 <h2>Read &amp; Manipulate Data</h2>
@@ -318,7 +318,7 @@ h16 &lt;- h16 %&gt;%
 
 # Since we don&#39;t have a variable &#39;Region&#39; starting from 2017, we will create it for 
 # each year
-regions &lt;- dplyr::select(h16, Country, Region)
+h_regions &lt;- dplyr::select(h16, Country, Region)
 
 
 
@@ -327,7 +327,7 @@ h17 &lt;- read_csv(&quot;2017.csv&quot;)
 h17 &lt;- h17 %&gt;%
   dplyr::mutate(Year = 2017,
          `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %&gt;%
-  merge(regions,by=&quot;Country&quot;, all.x=T) %&gt;%
+  merge(h_regions,by=&quot;Country&quot;, all.x=T) %&gt;%
   dplyr::select(-c(`Whisker.high`,`Whisker.low`)) %&gt;%
     dplyr::rename(H_rank=`Happiness.Rank`, # Modify variable names
                 H_score = Happiness.Score,
@@ -350,7 +350,7 @@ h18 &lt;- h18 %&gt;%
                 Trust=`Perceptions of corruption`,
                 Freedom = `Freedom to make life choices`,
                 Family = `Social support`) %&gt;%
-  merge(regions,by=&quot;Country&quot;, all.x=T)
+  merge(h_regions,by=&quot;Country&quot;, all.x=T)
 
 
 # Read 2019 Data
@@ -365,7 +365,7 @@ h19 &lt;- h19 %&gt;%
                 Trust=`Perceptions of corruption`,
                 Freedom = `Freedom to make life choices`,
                 Family = `Social support`) %&gt;%
-  merge(regions,by=&quot;Country&quot;, all.x=T)
+  merge(h_regions,by=&quot;Country&quot;, all.x=T)
 
 # Combine all data into all_dat
 h_alldat &lt;- tibble(rbind.fill(h15,h16,h17,h18,h19))</code></pre>

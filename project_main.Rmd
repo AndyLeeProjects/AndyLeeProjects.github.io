@@ -9,7 +9,6 @@ output: html_document
 
 
 ```{r, results='hide', message=FALSE}
-library(tidyverse)
 library(socviz)
 library(lubridate)
 library(geofacet)
@@ -17,6 +16,7 @@ library(ggthemes)
 library(ggrepel)
 library(ggridges)
 library(plyr)
+library(tidyverse)
 ```
 
 <br>  
@@ -57,7 +57,7 @@ h16 <- h16 %>%
 
 # Since we don't have a variable 'Region' starting from 2017, we will create it for 
 # each year
-regions <- dplyr::select(h16, Country, Region)
+h_regions <- dplyr::select(h16, Country, Region)
 
 
 
@@ -66,7 +66,7 @@ h17 <- read_csv("2017.csv")
 h17 <- h17 %>%
   dplyr::mutate(Year = 2017,
          `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %>%
-  merge(regions,by="Country", all.x=T) %>%
+  merge(h_regions,by="Country", all.x=T) %>%
   dplyr::select(-c(`Whisker.high`,`Whisker.low`)) %>%
     dplyr::rename(H_rank=`Happiness.Rank`, # Modify variable names
                 H_score = Happiness.Score,
@@ -89,7 +89,7 @@ h18 <- h18 %>%
                 Trust=`Perceptions of corruption`,
                 Freedom = `Freedom to make life choices`,
                 Family = `Social support`) %>%
-  merge(regions,by="Country", all.x=T)
+  merge(h_regions,by="Country", all.x=T)
 
 
 # Read 2019 Data
@@ -104,7 +104,7 @@ h19 <- h19 %>%
                 Trust=`Perceptions of corruption`,
                 Freedom = `Freedom to make life choices`,
                 Family = `Social support`) %>%
-  merge(regions,by="Country", all.x=T)
+  merge(h_regions,by="Country", all.x=T)
 
 # Combine all data into all_dat
 h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
