@@ -107,7 +107,7 @@ h19 <- h19 %>%
   merge(regions,by="Country", all.x=T)
 
 # Combine all data into all_dat
-all_dat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
+h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
 
 
 ```
