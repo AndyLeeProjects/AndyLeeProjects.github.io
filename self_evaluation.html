@@ -414,7 +414,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
 </ul>
 <p><br></p>
 <pre class="r"><code>correlation_plot &lt;- all_dat %&gt;%
-  select(c(Screen_time, Meditation, Multiple, Rise_time, 
+  dplyr::select(c(Screen_time, Meditation, Multiple, Rise_time, 
            Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
@@ -874,15 +874,8 @@ shapiro.test(all_dat$Total)</code></pre>
 <ul>
 <li>Multiple(fit.normal)</li>
 </ul>
-<pre class="r"><code>library(fitdistrplus)</code></pre>
-<pre><code>## Loading required package: MASS</code></pre>
-<pre><code>## 
-## Attaching package: &#39;MASS&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     select</code></pre>
-<pre><code>## Loading required package: survival</code></pre>
-<pre class="r"><code>library(logspline)
+<pre class="r"><code>library(fitdistrplus)
+library(logspline)
 
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.

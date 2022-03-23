@@ -162,7 +162,7 @@ $$r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\
 
 ```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
 correlation_plot <- all_dat %>%
-  select(c(Screen_time, Meditation, Multiple, Rise_time, 
+  dplyr::select(c(Screen_time, Meditation, Multiple, Rise_time, 
            Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)
