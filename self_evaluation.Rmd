@@ -244,48 +244,48 @@ Note that they are all discrete variables
 
 ```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 10, fig.asp = .75, fig.align='center', warning = FALSE}
 # Total_checked: the number of morning routine tasks completed
-p1 <- ggplot(data = all_morning_rt) +
+mr_p1 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = total_checked), fill = "orange",
            alpha = .8)+
   theme(legend.position = "None")
 
 # Meditation_check: Meditation task completion (Boolean value)
-p2 <- ggplot(data = all_morning_rt) +
+mr_p2 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = meditation_check, fill = meditation_check),
            alpha = .8)+
   theme(legend.position = "None")
 
 # Reading_check: Reading task completion (Boolean value)
-p3 <- ggplot(data = all_morning_rt) +
+mr_p3 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = reading_check, fill = reading_check),
            alpha = .8)+
   theme(legend.position = "None")
 
 # morning_thoughts_check: Morning journal task completion (Boolean value)
-p4 <- ggplot(data = all_morning_rt) +
+mr_p4 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = morning_thoughts_check, fill = morning_thoughts_check),
            alpha = .8)+
   theme(legend.position = "None")
 
 # push_up_check: Push up task completion (Boolean value)
-p5 <- ggplot(data = all_morning_rt) +
+mr_p5 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = push_up_check, fill = push_up_check),
            alpha = .8)+
   theme(legend.position = "None")
 
 # Morning_phone: Did not touch my phone for the first hour of the day (Boolean value)
-p6 <- ggplot(data = all_morning_rt) +
+mr_p6 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = morning_phone, fill = morning_phone),
            alpha = .8)+
   theme(legend.position = "None")
 
 # Night_phone: Did not touch my phone for the last hour of the day (Boolean value)
-p7 <- ggplot(data = all_morning_rt) +
+mr_p7 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = night_phone, fill = night_phone),
            alpha = .8, position = "dodge")+
   theme(legend.position = "None")
 
-grid.arrange(p2, p3,p4,p5,p6,p7,p1, nrow = 4)
+grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4)
 
 ```
 

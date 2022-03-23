@@ -540,48 +540,48 @@ summary(model)</code></pre>
 <li><font size="3"><strong>Night_phone</strong>: Did not touch my phone for the last hour of the day (Boolean value)</font> <br></li>
 </ul>
 <pre class="r"><code># Total_checked: the number of morning routine tasks completed
-p1 &lt;- ggplot(data = all_morning_rt) +
+mr_p1 &lt;- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = total_checked), fill = &quot;orange&quot;,
            alpha = .8)+
   theme(legend.position = &quot;None&quot;)
 
 # Meditation_check: Meditation task completion (Boolean value)
-p2 &lt;- ggplot(data = all_morning_rt) +
+mr_p2 &lt;- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = meditation_check, fill = meditation_check),
            alpha = .8)+
   theme(legend.position = &quot;None&quot;)
 
 # Reading_check: Reading task completion (Boolean value)
-p3 &lt;- ggplot(data = all_morning_rt) +
+mr_p3 &lt;- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = reading_check, fill = reading_check),
            alpha = .8)+
   theme(legend.position = &quot;None&quot;)
 
 # morning_thoughts_check: Morning journal task completion (Boolean value)
-p4 &lt;- ggplot(data = all_morning_rt) +
+mr_p4 &lt;- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = morning_thoughts_check, fill = morning_thoughts_check),
            alpha = .8)+
   theme(legend.position = &quot;None&quot;)
 
 # push_up_check: Push up task completion (Boolean value)
-p5 &lt;- ggplot(data = all_morning_rt) +
+mr_p5 &lt;- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = push_up_check, fill = push_up_check),
            alpha = .8)+
   theme(legend.position = &quot;None&quot;)
 
 # Morning_phone: Did not touch my phone for the first hour of the day (Boolean value)
-p6 &lt;- ggplot(data = all_morning_rt) +
+mr_p6 &lt;- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = morning_phone, fill = morning_phone),
            alpha = .8)+
   theme(legend.position = &quot;None&quot;)
 
 # Night_phone: Did not touch my phone for the last hour of the day (Boolean value)
-p7 &lt;- ggplot(data = all_morning_rt) +
+mr_p7 &lt;- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = night_phone, fill = night_phone),
            alpha = .8, position = &quot;dodge&quot;)+
   theme(legend.position = &quot;None&quot;)
 
-grid.arrange(p2, p3,p4,p5,p6,p7,p1, nrow = 4)</code></pre>
+grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
@@ -839,21 +839,22 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
 <pre><code>## # A tibble: 10 × 20
-##    Date       Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
-##    &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
-##  1 08/11/2021        5      3             144         167     0 0                  0
-##  2 10/17/2021       15      3             123         200     0 0                 14
-##  3 01/10/2022       10      3.6            98          84     0 0                 15
-##  4 1/12/21           9      3              74         304     0 0                 15
-##  5 1/31/21           4      3              61         440     0 0                  0
-##  6 12/21/2021        8      3.6           107         314     0 0                  0
-##  7 02/20/2021       15      4              97         132     0 0                 15
-##  8 01/26/2022       10      4             126         149     0 0                 15
-##  9 01/03/2022        5      2.6            80         308     0 0                 10
-## 10 12/16/2021        8      3.4            97         201     0 0                 15
+##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
+##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+##  1 08/11…        5      3             144         167     0 0                  0
+##  2 10/17…       15      3             123         200     0 0                 14
+##  3 01/10…       10      3.6            98          84     0 0                 15
+##  4 1/12/…        9      3              74         304     0 0                 15
+##  5 1/31/…        4      3              61         440     0 0                  0
+##  6 12/21…        8      3.6           107         314     0 0                  0
+##  7 02/20…       15      4              97         132     0 0                 15
+##  8 01/26…       10      4             126         149     0 0                 15
+##  9 01/03…        5      2.6            80         308     0 0                 10
+## 10 12/16…        8      3.4            97         201     0 0                 15
 ## # … with 12 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
 ## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
-## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
+## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;,
+## #   pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).
@@ -874,8 +875,15 @@ shapiro.test(all_dat$Total)</code></pre>
 <ul>
 <li>Multiple(fit.normal)</li>
 </ul>
-<pre class="r"><code>library(fitdistrplus)
-library(logspline)
+<pre class="r"><code>library(fitdistrplus)</code></pre>
+<pre><code>## Loading required package: MASS</code></pre>
+<pre><code>## 
+## Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre class="r"><code>library(logspline)
 
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
