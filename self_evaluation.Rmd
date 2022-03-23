@@ -70,6 +70,8 @@ dat_date =  filter(all_dat, Date!=0) # Exclude wrong date format
   # Multiple data length: 53
 multiple_dat = filter(all_dat, Productivity!=0)
 
+# Use ifelse statement to create a new variable that differenciates the seasons
+
 ```
 
   
@@ -108,14 +110,33 @@ p9 <- ggplot(data = all_dat, alpha=.5)+
   geom_density(aes(work_finished), color = 'darkgreen')
 
 p10 <- ggplot(data = all_dat, alpha=.5)+
-  geom_density(aes(Phone_pickups), color = 'darkgreen')
+  geom_density(aes(Total_todo), color = 'darkgreen')
   
 grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)
 
 ```
 <br>  
+
+### Main Varibles Descriptions
+
+* <font size="3">**Reading**: reading duration in minutes</font>
+* <font size="3">**Meditation**: meditation duration in minutes</font>
+* <font size="3">**Phone_pickups**: number of times I picked up my phone</font>
+* <font size="3">**Screen_time**: duration of spent time on my phone in minutes</font>
+* <font size="3">**Rise_time**: the variation in minutes from the intended rise time
+    + 0: Woke up on time
+    + -n: Woke up n minutes earlier than intended
+    + +n: Woke up n minutes later than intended</font>
+* <font size="3">**Drink**: Whether or not I drank the day before (Boolean)</font>
+* <font size="3">**Work_finished**: Finished_tasks / Total_tasks </font>
+* <font size="3">**Multiple**: Subjective grade given each day
+    + Considered factors: Mentality, Satisfaction, Productivity, Social interaction, and Tech consumption</font>
+* <font size="3">**Total**: The sum of the percentages calculated of above variables</font>
+
 <br>  
 <br>  
+<br>  
+
 
 
 
@@ -154,8 +175,8 @@ pairs.panels(correlation_plot, lm = TRUE)
 
 
 * <font size = "3">Set:
-  + x = (Soon to be added)
-  + y = (Soon to be added)
+  + x = Meditation
+  + y = Tasks Finished in percentage
   + $\alpha$ = y-intercept
   + $\beta$ = slope </font>
 
@@ -173,6 +194,13 @@ pairs.panels(correlation_plot, lm = TRUE)
   + Single Regression Analysis with designated x and y
   + Multiple Regression Analysis with meaningful variables</font>
   
+  
+```{r}
+model <- lm(work_finished ~ Meditation, data = all_dat)
+summary(model)
+```
+
+
 <br>  
 <br>  
 <br>  

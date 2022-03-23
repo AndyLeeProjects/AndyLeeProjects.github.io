@@ -109,6 +109,7 @@ eia_table <- eia_table[,-1]
 # taxes: percentage of taxes on retail_price
 # crude_oil: percentage of crude oil on retail_price
 ############################################################################### 
+
 eia_table$mon_yr <- my(eia_table$mon_yr)
 ggplot(eia_table, aes(x = mon_yr, y = retail_price)) +
   geom_line(aes(fill = "refining")) +

@@ -368,23 +368,7 @@ h19 &lt;- h19 %&gt;%
   merge(regions,by=&quot;Country&quot;, all.x=T)
 
 # Combine all data into all_dat
-all_dat &lt;- tibble(rbind.fill(h15,h16,h17,h18,h19))
-
-all_dat</code></pre>
-<pre><code>## # A tibble: 782 × 13
-##    Country Region H_rank H_score     SE   GDP Family Health Freedom Trust Generosity
-##    &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
-##  1 Switze… Weste…      1    7.59 0.0341  1.40   1.35  0.941   0.666 0.41…      0.297
-##  2 Iceland Weste…      2    7.56 0.0488  1.30   1.40  0.948   0.629 0.14…      0.436
-##  3 Denmark Weste…      3    7.53 0.0333  1.33   1.36  0.875   0.649 0.48…      0.341
-##  4 Norway  Weste…      4    7.52 0.0388  1.46   1.33  0.885   0.670 0.36…      0.347
-##  5 Canada  North…      5    7.43 0.0355  1.33   1.32  0.906   0.633 0.32…      0.458
-##  6 Finland Weste…      6    7.41 0.0314  1.29   1.32  0.889   0.642 0.41…      0.234
-##  7 Nether… Weste…      7    7.38 0.0280  1.33   1.28  0.893   0.616 0.31…      0.476
-##  8 Sweden  Weste…      8    7.36 0.0316  1.33   1.29  0.911   0.660 0.43…      0.363
-##  9 New Ze… Austr…      9    7.29 0.0337  1.25   1.32  0.908   0.639 0.42…      0.475
-## 10 Austra… Austr…     10    7.28 0.0408  1.33   1.31  0.932   0.651 0.35…      0.436
-## # … with 772 more rows, and 2 more variables: dystopia_res &lt;dbl&gt;, Year &lt;dbl&gt;</code></pre>
+all_dat &lt;- tibble(rbind.fill(h15,h16,h17,h18,h19))</code></pre>
 </div>
 
 
