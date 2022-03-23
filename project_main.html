@@ -288,7 +288,7 @@ library(plyr)</code></pre>
 <pre class="r"><code># Read 2015 Data
 h15 &lt;- read_csv(&quot;2015.csv&quot;)
 h15 &lt;- h15 %&gt;%
-  mutate(Year = 2015) %&gt;%
+  dplyr::mutate(Year = 2015) %&gt;%
   dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
                 H_score = `Happiness Score`,
                 GDP=`Economy (GDP per Capita)`,
@@ -301,7 +301,7 @@ h15 &lt;- h15 %&gt;%
 # Read 2016 Data
 h16 &lt;- read_csv(&quot;2016.csv&quot;)  
 h16 &lt;- h16 %&gt;%
-  mutate(Year = 2016,
+  dplyr::mutate(Year = 2016,
       `Standard Error` = (`Upper Confidence Interval`-`Lower Confidence Interval`)/3.92) %&gt;%
               # SE = (upper limit – lower limit) / 3.92. 
               # This is for 95% CI
@@ -325,7 +325,7 @@ regions &lt;- dplyr::select(h16, Country, Region)
 # Read 2017 Data
 h17 &lt;- read_csv(&quot;2017.csv&quot;)  
 h17 &lt;- h17 %&gt;%
-  mutate(Year = 2017,
+  dplyr::mutate(Year = 2017,
          `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %&gt;%
   merge(regions,by=&quot;Country&quot;, all.x=T) %&gt;%
   dplyr::select(-c(`Whisker.high`,`Whisker.low`)) %&gt;%
@@ -341,7 +341,7 @@ h17 &lt;- h17 %&gt;%
 # Read 2018 Data
 h18 &lt;- read_csv(&quot;2018.csv&quot;)  
 h18 &lt;- h18 %&gt;%
-  mutate(Year = 2018) %&gt;%
+  dplyr::mutate(Year = 2018) %&gt;%
   dplyr::rename(H_rank=`Overall rank`, # Modify variable names
                 H_score = `Score`,
                 GDP=`GDP per capita`,
@@ -356,7 +356,7 @@ h18 &lt;- h18 %&gt;%
 # Read 2019 Data
 h19 &lt;- read_csv(&quot;2019.csv&quot;)  
 h19 &lt;- h19 %&gt;%
-  mutate(Year = 2019) %&gt;%
+  dplyr::mutate(Year = 2019) %&gt;%
   dplyr::rename(H_rank=`Overall rank`, # Modify variable names
                 H_score = `Score`,
                 GDP=`GDP per capita`,

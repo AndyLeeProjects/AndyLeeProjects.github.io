@@ -27,7 +27,7 @@ library(plyr)
 # Read 2015 Data
 h15 <- read_csv("2015.csv")
 h15 <- h15 %>%
-  mutate(Year = 2015) %>%
+  dplyr::mutate(Year = 2015) %>%
   dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
                 H_score = `Happiness Score`,
                 GDP=`Economy (GDP per Capita)`,
@@ -40,7 +40,7 @@ h15 <- h15 %>%
 # Read 2016 Data
 h16 <- read_csv("2016.csv")  
 h16 <- h16 %>%
-  mutate(Year = 2016,
+  dplyr::mutate(Year = 2016,
       `Standard Error` = (`Upper Confidence Interval`-`Lower Confidence Interval`)/3.92) %>%
               # SE = (upper limit – lower limit) / 3.92. 
               # This is for 95% CI
@@ -64,7 +64,7 @@ regions <- dplyr::select(h16, Country, Region)
 # Read 2017 Data
 h17 <- read_csv("2017.csv")  
 h17 <- h17 %>%
-  mutate(Year = 2017,
+  dplyr::mutate(Year = 2017,
          `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %>%
   merge(regions,by="Country", all.x=T) %>%
   dplyr::select(-c(`Whisker.high`,`Whisker.low`)) %>%
@@ -80,7 +80,7 @@ h17 <- h17 %>%
 # Read 2018 Data
 h18 <- read_csv("2018.csv")  
 h18 <- h18 %>%
-  mutate(Year = 2018) %>%
+  dplyr::mutate(Year = 2018) %>%
   dplyr::rename(H_rank=`Overall rank`, # Modify variable names
                 H_score = `Score`,
                 GDP=`GDP per capita`,
@@ -95,7 +95,7 @@ h18 <- h18 %>%
 # Read 2019 Data
 h19 <- read_csv("2019.csv")  
 h19 <- h19 %>%
-  mutate(Year = 2019) %>%
+  dplyr::mutate(Year = 2019) %>%
   dplyr::rename(H_rank=`Overall rank`, # Modify variable names
                 H_score = `Score`,
                 GDP=`GDP per capita`,
