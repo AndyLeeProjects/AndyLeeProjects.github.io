@@ -185,7 +185,7 @@ pairs.panels(correlation_plot, lm = TRUE)
       - **Least-square**: by summing up the residual squares for different curves, it finds the "least squared" curve that best fit the data. 
   2. Outputs $R^2$, p-value and other meaningful calculations
       - $R^2$: It demonstrates how accurate the fitted line is to the data
-      - Formula: $R^2 = \dfrac{Var(mean)-Var(fit)}{Var(min)}$
+      - Formula: $R^2 =1-\dfrac{Var(fit)}{Var(mean)}$ or $1-\dfrac{RSS}{TSS}$
       - Ex: If we get.8, it means that $x$ explains 60% of the variation in $y$</font>
 
 <br>  
@@ -198,6 +198,9 @@ pairs.panels(correlation_plot, lm = TRUE)
 ```{r}
 model <- lm(work_finished ~ Meditation, data = all_dat)
 summary(model)
+
+# predict function:
+  # uses the beta coefficents that were calculated in the lm() function.
 ```
 
 
