@@ -13,7 +13,7 @@ navbar:
       href: https://www.andyleeproject.com/
 output:
   html_document:
-    css: bootstrap.min.css
+    theme: cosmo
     
     
   

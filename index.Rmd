@@ -2,7 +2,7 @@
 title: "Projects"
 ---
   
-[**Last Updated Time**: "`r Sys.time()`"]{style="float:right"}  
+[**Last Updated Time**: `r Sys.time()`]{style="float:right"}  
   
   
 
