@@ -2,6 +2,7 @@
 title: "Projects"
 ---
   
+[Last Updated Time: "`r Sys.time()`"]{style="float:right"}
 ***  
 
 * <font size = "3" color = "blue">[Happiness Project](https://alin-96.github.io/project_main.html)</font>
