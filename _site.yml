@@ -11,6 +11,7 @@ navbar:
       href: project_main.html
     - text: "My Website"
       href: https://www.andyleeproject.com/
+output:
   html_document:
     css: bootstrap.min.css
     
