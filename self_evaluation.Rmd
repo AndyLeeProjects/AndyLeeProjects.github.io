@@ -71,7 +71,10 @@ dat_date =  filter(all_dat, Date!=0) # Exclude wrong date format
 multiple_dat = filter(all_dat, Productivity!=0)
 
 # Use ifelse statement to create a new variable that differenciates the seasons
-
+#all_dat_season <- all_dat %>%
+  #separate(Date, c("month","day","year"),'/')
+  #mutate(season = ifelse(,'Break','School')) %>%
+  #arrange(Date)
 ```
 
   
