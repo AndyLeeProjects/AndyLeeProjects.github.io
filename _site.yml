@@ -11,7 +11,7 @@ navbar:
       href: project_main.html
     - text: "My Website"
       href: https://www.andyleeproject.com/
-  html_document :
+  html_document:
     theme: cosmo
     css: style.css
     
