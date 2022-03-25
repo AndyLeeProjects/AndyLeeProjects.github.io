@@ -70,6 +70,7 @@ all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
 
 ```
 
+<br>  
 
 ### Read & Organize Data: Add School Variable
 
@@ -223,7 +224,7 @@ $$r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\
 <br>  
 
 
-```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, echo = TRUE, eval = TRUE, out.width = "85%", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
 correlation_plot <- all_dat %>%
   dplyr::select(c(Screen_time, Meditation, Multiple, Rise_time, 
            Reading,Phone_pickups, work_finished, Total))
@@ -265,12 +266,6 @@ summary(model)
 # predict function:
   # uses the beta coefficents that were calculated in the lm() function.
 ```
-
-### School vs Break
-```{r}
-
-```
-
 
 <br>  
 <br>  
@@ -373,7 +368,7 @@ grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4)
   + Reading
   + Morning journal </font>
   
-```{r, collapse=TRUE, out.width = "1000px", figures-side, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, collapse=TRUE, out.width = "70%", figures-side, fig.asp = .75, fig.align='center', warning = FALSE}
 
 # see how number of morning routine checks affects the Total %
 ggplot(filter(all_morning_rt, total_checked != 0)) + 
@@ -411,7 +406,7 @@ ame_result
   + work_finished  .1911 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
 <br>  
 
-```{r}
+```{r, out.width = "60%",fig.align='center'}
 ggplot(data = ame_result) +
   geom_point(aes(factor , AME)) +
   geom_errorbar(aes(x = factor, ymin = lower, ymax = upper),

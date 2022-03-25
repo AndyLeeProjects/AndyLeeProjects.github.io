@@ -327,6 +327,7 @@ all_morning_rt &lt;- merge(morning_rt, all_dat,by=&quot;Date&quot;, all.x=T) %&g
   dplyr::select(-c(rise_time_min)) %&gt;% # redundant
   dplyr::filter(work_finished_mr_exc &lt;= 1 &amp; work_finished_mr_exc &gt;0) %&gt;%
   arrange(desc(Date))</code></pre>
+<p><br></p>
 </div>
 <div id="read-organize-data-add-school-variable" class="section level3">
 <h3>Read &amp; Organize Data: Add School Variable</h3>
@@ -474,7 +475,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
            Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="85%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <div id="single-regression-function-yalphabeta-x" class="section level4">
 <h4>Single Regression Function: <span class="math inline">\(y=\alpha+\beta x\)</span></h4>
@@ -531,14 +532,11 @@ summary(model)</code></pre>
 ## F-statistic: 256.3 on 1 and 469 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code># predict function:
   # uses the beta coefficents that were calculated in the lm() function.</code></pre>
-</div>
-</div>
-<div id="school-vs-break" class="section level3">
-<h3>School vs Break</h3>
 <p><br><br />
 <br><br />
 <br><br />
 <br></p>
+</div>
 </div>
 </div>
 <div id="how-important-are-my-morning-routine-tasks" class="section level2">
@@ -643,7 +641,7 @@ mr_p7 &lt;- ggplot(data = all_morning_rt) +
   theme(legend.position = &quot;None&quot;)
 
 grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level3">
@@ -665,14 +663,14 @@ ggplot(filter(all_morning_rt, total_checked != 0)) +
   geom_density(aes(Total))+
   facet_wrap(~total_checked)+
   labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/figures-side-1.png" width="1000px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/figures-side-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>
 # see how number of morning routine checks affects the total todo lists checked
 ggplot(filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
   labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/figures-side-2.png" width="1000px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/figures-side-2.png" width="70%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="logistic-regression" class="section level3">
@@ -703,7 +701,7 @@ ame_result</code></pre>
   width = .5) + geom_hline ( yintercept = 0) +
   theme_minimal ( ) +
   theme(axis.text.x = element_text(angle = 90))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="60%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="meditation-with-all_dat" class="section level4">
@@ -836,7 +834,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level3">
@@ -851,7 +849,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level3">
@@ -909,7 +907,7 @@ shapiro.test(all_dat$Total)</code></pre>
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
 descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  1   max:  7 
@@ -919,7 +917,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated skewness:  -0.2436281 
 ## estimated kurtosis:  3.053041</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
@@ -930,7 +928,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated kurtosis:  6.699625</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-3.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-3.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  0   max:  1 
@@ -947,7 +945,7 @@ fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
 #plot(fit.beta)
 #plot(fit.gamma)
 plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-4.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-4.png" width="672" /></p>
 </div>
 </div>
 
