@@ -31,13 +31,18 @@ colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
                        'Reading','Productivity','Rise_time','Run','Social',
                        'Tech','Total','Total_todo','Work_done')
 
-# Remove unnecessary columns & Modify some columns #new
+
+
+# Remove unnecessary columns & Modify some columns
 all_dat <- all_dat %>%
   dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
   dplyr::mutate(work_finished = round(Finished/Total_todo,4),
          Drink = lag(Drink),
          Total = Total*100)%>%
   tibble()
+
+# Correct the date format for earlier Dates
+all_dat$Date[1:114] = format(mdy(all_dat$Date[1:114]),"%m/%d/%Y")
 
 
 # Same for morning routine #new
@@ -63,18 +68,43 @@ all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
   arrange(desc(Date))
 
 
-# Drop Name & Created column
-dat_date =  filter(all_dat, Date!=0) # Exclude wrong date format
+```
 
-# Only include multiple-related(social, tech, satisfaction, overall, etc)
-  # Multiple data length: 53
-multiple_dat = filter(all_dat, Productivity!=0)
 
-# Use ifelse statement to create a new variable that differenciates the seasons
-#all_dat_season <- all_dat %>%
-  #separate(Date, c("month","day","year"),'/')
-  #mutate(season = ifelse(,'Break','School')) %>%
-  #arrange(Date)
+### Add School Variable
+
+```{r}
+# Break dates
+date_breaks <- as.character(format(c(seq(as.Date('11/25/2020', format = "%m/%d/%Y"), by = "day", length.out = 5), seq(as.Date('12/17/2020', format = "%m/%d/%Y"), by = "day", length.out = 46), seq(as.Date('03/23/2021', format = "%m/%d/%Y"), by = "day", length.out = 6), seq(as.Date('04/23/2021', format = "%m/%d/%Y"), by = "day", length.out = 6), seq(as.Date('05/19/2021', format = "%m/%d/%Y"), by = "day", length.out = 104), seq(as.Date('10/11/2021', format = "%m/%d/%Y"), by = "day", length.out = 2), seq(as.Date('12/21/2021', format = "%m/%d/%Y"), by = "day", length.out = 37), seq(as.Date('03/14/2022', format = "%m/%d/%Y"), by = "day", length.out = 7)), "%m/%d/%Y"))
+
+# Semester Quarters
+# 1st quarter of the semester
+first_q <- c(as.character(format(c(seq(as.Date('09/01', format = "%m/%d"), by = "day", length.out = 27),seq(as.Date('02/01', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
+
+# 2nd quarter of the semester
+second_q <- c(as.character(format(c(seq(as.Date('09/28', format = "%m/%d"), by = "day", length.out = 27),seq(as.Date('02/28', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
+
+# 3rd quarter of the semester
+third_q <- c(as.character(format(c(seq(as.Date('10/25', format = "%m/%d"), by = "day", length.out = 27),seq(as.Date('03/27', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
+
+# 4th quarter of the semester
+fourth_q <- c(as.character(format(c(seq(as.Date('11/21', format = "%m/%d"), by = "day", length.out = 26),seq(as.Date('04/23', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
+
+# Create School variable
+all_dat <- all_dat %>%
+  mutate(
+    School = ifelse(format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% first_q, "1st", FALSE),
+    School = ifelse(format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% second_q, "2nd", School),
+    School = ifelse(format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% third_q, "3rd", School),
+    School = ifelse(format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% fourth_q, "4th", School),
+    School = ifelse(Date %in% date_breaks, "Break", School),
+    School = ifelse(Date == '08/30/2021', "1st", School),
+    School = ifelse(Date == '08/31/2021', "1st", School),
+    School = ifelse(Date %in% c('12/17/2021','12/18/2021','12/19/2021','12/20/2021'), "4th", School),
+    School = ifelse(Date %in% c("01/27/2022","01/28/2022"), "1st",School)
+  )
+
+
 ```
 
   
@@ -204,6 +234,11 @@ summary(model)
 
 # predict function:
   # uses the beta coefficents that were calculated in the lm() function.
+```
+
+### School vs Break
+```{r}
+
 ```
 
 
@@ -373,18 +408,6 @@ summary(meditation_all)
 
 ```
 
-<br>  
-
-#### Multiple with multiple_dat
-* Multiple data length: 50 + 
-```{r}
-multiple_tail <- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
-                      Reading+ Rise_time+ Total_todo + 
-                      work_finished + Total, 
-                    data = multiple_dat)
-summary(multiple_tail)
-
-```
 
 <br>  
 

@@ -292,13 +292,18 @@ colnames(all_dat) &lt;- c(&#39;X&#39;, &#39;Name&#39;,&#39;Finished&#39;,&#39;Mu
                        &#39;Reading&#39;,&#39;Productivity&#39;,&#39;Rise_time&#39;,&#39;Run&#39;,&#39;Social&#39;,
                        &#39;Tech&#39;,&#39;Total&#39;,&#39;Total_todo&#39;,&#39;Work_done&#39;)
 
-# Remove unnecessary columns &amp; Modify some columns #new
+
+
+# Remove unnecessary columns &amp; Modify some columns
 all_dat &lt;- all_dat %&gt;%
   dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %&gt;%
   dplyr::mutate(work_finished = round(Finished/Total_todo,4),
          Drink = lag(Drink),
          Total = Total*100)%&gt;%
   tibble()
+
+# Correct the date format for earlier Dates
+all_dat$Date[1:114] = format(mdy(all_dat$Date[1:114]),&quot;%m/%d/%Y&quot;)
 
 
 # Same for morning routine #new
@@ -321,21 +326,39 @@ all_morning_rt &lt;- merge(morning_rt, all_dat,by=&quot;Date&quot;, all.x=T) %&g
   
   dplyr::select(-c(rise_time_min)) %&gt;% # redundant
   dplyr::filter(work_finished_mr_exc &lt;= 1 &amp; work_finished_mr_exc &gt;0) %&gt;%
-  arrange(desc(Date))
+  arrange(desc(Date))</code></pre>
+</div>
+<div id="add-school-variable" class="section level3">
+<h3>Add School Variable</h3>
+<pre class="r"><code># Break dates
+date_breaks &lt;- as.character(format(c(seq(as.Date(&#39;11/25/2020&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 5), seq(as.Date(&#39;12/17/2020&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 46), seq(as.Date(&#39;03/23/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 6), seq(as.Date(&#39;04/23/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 6), seq(as.Date(&#39;05/19/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 104), seq(as.Date(&#39;10/11/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 2), seq(as.Date(&#39;12/21/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 37), seq(as.Date(&#39;03/14/2022&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 7)), &quot;%m/%d/%Y&quot;))
 
+# Semester Quarters
+# 1st quarter of the semester
+first_q &lt;- c(as.character(format(c(seq(as.Date(&#39;09/01&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),seq(as.Date(&#39;02/01&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
 
-# Drop Name &amp; Created column
-dat_date =  filter(all_dat, Date!=0) # Exclude wrong date format
+# 2nd quarter of the semester
+second_q &lt;- c(as.character(format(c(seq(as.Date(&#39;09/28&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),seq(as.Date(&#39;02/28&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
 
-# Only include multiple-related(social, tech, satisfaction, overall, etc)
-  # Multiple data length: 53
-multiple_dat = filter(all_dat, Productivity!=0)
+# 3rd quarter of the semester
+third_q &lt;- c(as.character(format(c(seq(as.Date(&#39;10/25&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),seq(as.Date(&#39;03/27&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
 
-# Use ifelse statement to create a new variable that differenciates the seasons
-#all_dat_season &lt;- all_dat %&gt;%
-  #separate(Date, c(&quot;month&quot;,&quot;day&quot;,&quot;year&quot;),&#39;/&#39;)
-  #mutate(season = ifelse(,&#39;Break&#39;,&#39;School&#39;)) %&gt;%
-  #arrange(Date)</code></pre>
+# 4th quarter of the semester
+fourth_q &lt;- c(as.character(format(c(seq(as.Date(&#39;11/21&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 26),seq(as.Date(&#39;04/23&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
+
+# Create School variable
+all_dat &lt;- all_dat %&gt;%
+  mutate(
+    School = ifelse(format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% first_q, &quot;1st&quot;, FALSE),
+    School = ifelse(format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% second_q, &quot;2nd&quot;, School),
+    School = ifelse(format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% third_q, &quot;3rd&quot;, School),
+    School = ifelse(format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% fourth_q, &quot;4th&quot;, School),
+    School = ifelse(Date %in% date_breaks, &quot;Break&quot;, School),
+    School = ifelse(Date == &#39;08/30/2021&#39;, &quot;1st&quot;, School),
+    School = ifelse(Date == &#39;08/31/2021&#39;, &quot;1st&quot;, School),
+    School = ifelse(Date %in% c(&#39;12/17/2021&#39;,&#39;12/18/2021&#39;,&#39;12/19/2021&#39;,&#39;12/20/2021&#39;), &quot;4th&quot;, School),
+    School = ifelse(Date %in% c(&quot;01/27/2022&quot;,&quot;01/28/2022&quot;), &quot;1st&quot;,School)
+  )</code></pre>
 <p><br></p>
 </div>
 <div id="distribution-for-the-main-variables-in-all_dat" class="section level3">
@@ -371,7 +394,7 @@ p10 &lt;- ggplot(data = all_dat, alpha=.5)+
   geom_density(aes(Total_todo), color = &#39;darkgreen&#39;)
   
 grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-3-1.png" width="1600px" style="display: block; margin: auto;" /> <br></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="1600px" style="display: block; margin: auto;" /> <br></p>
 </div>
 <div id="main-varibles-descriptions" class="section level3">
 <h3>Main Varibles Descriptions</h3>
@@ -422,7 +445,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
            Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <div id="single-regression-function-yalphabeta-x" class="section level4">
 <h4>Single Regression Function: <span class="math inline">\(y=\alpha+\beta x\)</span></h4>
@@ -479,11 +502,14 @@ summary(model)</code></pre>
 ## F-statistic: 256.3 on 1 and 469 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code># predict function:
   # uses the beta coefficents that were calculated in the lm() function.</code></pre>
+</div>
+</div>
+<div id="school-vs-break" class="section level3">
+<h3>School vs Break</h3>
 <p><br><br />
 <br><br />
 <br><br />
 <br></p>
-</div>
 </div>
 </div>
 <div id="how-important-are-my-morning-routine-tasks" class="section level2">
@@ -497,25 +523,25 @@ summary(model)</code></pre>
 </ul>
 <pre class="r"><code>tibble(all_morning_rt)</code></pre>
 <pre><code>## # A tibble: 129 × 30
-##    Date       total_checked meditation_min meditation_check reading_check reading_min
-##    &lt;date&gt;             &lt;int&gt;          &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;               &lt;int&gt;
-##  1 2022-03-22             1             15 True             False                   0
-##  2 2022-03-21             2              0 False            False                   0
-##  3 2022-03-20             6             15 True             True                   23
-##  4 2022-03-19             3             15 True             False                   0
-##  5 2022-03-18             1              0 False            True                   16
-##  6 2022-03-17             1             15 True             False                   0
-##  7 2022-03-16             0              0 False            False                   0
-##  8 2022-03-15             0              0 False            False                   0
-##  9 2022-03-13             2             15 True             True                   31
-## 10 2022-03-11             3              0 False            False                   0
-## # … with 119 more rows, and 24 more variables: run_km &lt;int&gt;,
+##    Date       total_checked meditation_min meditation_check reading_check
+##    &lt;date&gt;             &lt;int&gt;          &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;        
+##  1 2022-03-22             1             15 True             False        
+##  2 2022-03-21             2              0 False            False        
+##  3 2022-03-20             6             15 True             True         
+##  4 2022-03-19             3             15 True             False        
+##  5 2022-03-18             1              0 False            True         
+##  6 2022-03-17             1             15 True             False        
+##  7 2022-03-16             0              0 False            False        
+##  8 2022-03-15             0              0 False            False        
+##  9 2022-03-13             2             15 True             True         
+## 10 2022-03-11             3              0 False            False        
+## # … with 119 more rows, and 25 more variables: reading_min &lt;int&gt;, run_km &lt;int&gt;,
 ## #   morning_thoughts_check &lt;chr&gt;, push_up_check &lt;chr&gt;, morning_phone &lt;chr&gt;,
 ## #   night_phone &lt;chr&gt;, Finished &lt;dbl&gt;, Multiple &lt;dbl&gt;, Phone_pickups &lt;dbl&gt;,
-## #   Screen_time &lt;dbl&gt;, Drink &lt;dbl&gt;, Key_words &lt;chr&gt;, Meditation &lt;dbl&gt;, Mentality &lt;dbl&gt;,
-## #   Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;,
-## #   Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;,
-## #   work_finished_mr_exc &lt;dbl&gt;</code></pre>
+## #   Screen_time &lt;dbl&gt;, Drink &lt;dbl&gt;, Key_words &lt;chr&gt;, Meditation &lt;dbl&gt;,
+## #   Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
+## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;,
+## #   Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, work_finished_mr_exc &lt;dbl&gt;</code></pre>
 <p><br></p>
 <ul>
 <li><font size="3">Column Names</font></li>
@@ -588,7 +614,7 @@ mr_p7 &lt;- ggplot(data = all_morning_rt) +
   theme(legend.position = &quot;None&quot;)
 
 grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level3">
@@ -648,7 +674,7 @@ ame_result</code></pre>
   width = .5) + geom_hline ( yintercept = 0) +
   theme_minimal ( ) +
   theme(axis.text.x = element_text(angle = 90))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="meditation-with-all_dat" class="section level4">
@@ -682,46 +708,6 @@ ame_result</code></pre>
 ##   (4 observations deleted due to missingness)
 ## Multiple R-squared:  0.642,  Adjusted R-squared:  0.635 
 ## F-statistic: 91.65 on 9 and 460 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p><br></p>
-</div>
-<div id="multiple-with-multiple_dat" class="section level4">
-<h4>Multiple with multiple_dat</h4>
-<ul>
-<li>Multiple data length: 50 +</li>
-</ul>
-<pre class="r"><code>multiple_tail &lt;- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
-                      Reading+ Rise_time+ Total_todo + 
-                      work_finished + Total, 
-                    data = multiple_dat)
-summary(multiple_tail)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = Multiple ~ Phone_pickups + Screen_time + Drink + 
-##     Meditation + Reading + Rise_time + Total_todo + work_finished + 
-##     Total, data = multiple_dat)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.96019 -0.31757  0.05445  0.37452  1.19151 
-## 
-## Coefficients:
-##                 Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)    1.2128556  0.8344294   1.454   0.1507  
-## Phone_pickups  0.0035205  0.0026347   1.336   0.1860  
-## Screen_time   -0.0017357  0.0007386  -2.350   0.0217 *
-## Drink          0.0773411  0.1609861   0.480   0.6325  
-## Meditation    -0.0184346  0.0162572  -1.134   0.2609  
-## Reading       -0.0074321  0.0092050  -0.807   0.4223  
-## Rise_time      0.0025830  0.0016330   1.582   0.1184  
-## Total_todo    -0.0200495  0.0244909  -0.819   0.4159  
-## work_finished  2.1794182  0.8482065   2.569   0.0124 *
-## Total          0.0156758  0.0178738   0.877   0.3836  
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.5137 on 67 degrees of freedom
-## Multiple R-squared:  0.7397, Adjusted R-squared:  0.7047 
-## F-statistic: 21.16 on 9 and 67 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
 <div id="multiple-with-all_dat" class="section level4">
@@ -821,7 +807,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level3">
@@ -836,7 +822,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level3">
@@ -844,22 +830,23 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 <pre class="r"><code>library(dplyr)
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
-<pre><code>## # A tibble: 10 × 20
-##    Date  Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation Mentality
-##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
-##  1 08/1…        5      3             144         167     0 0                  0         0
-##  2 10/1…       15      3             123         200     0 0                 14         0
-##  3 01/1…       10      3.6            98          84     0 0                 15         3
-##  4 1/12…        9      3              74         304     0 0                 15         0
-##  5 1/31…        4      3              61         440     0 0                  0         0
-##  6 12/2…        8      3.6           107         314     0 0                  0         4
-##  7 02/2…       15      4              97         132     0 0                 15         0
-##  8 01/2…       10      4             126         149     0 0                 15         4
-##  9 01/0…        5      2.6            80         308     0 0                 10         3
-## 10 12/1…        8      3.4            97         201     0 0                 15         3
-## # … with 11 more variables: Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
-## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;,
-## #   work_finished &lt;dbl&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
+<pre><code>## # A tibble: 10 × 21
+##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
+##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+##  1 08/11…        5      3             144         167     0 0                  0
+##  2 10/17…       15      3             123         200     0 0                 14
+##  3 01/10…       10      3.6            98          84     0 0                 15
+##  4 01/12…        9      3              74         304     0 0                 15
+##  5 01/31…        4      3              61         440     0 0                  0
+##  6 12/21…        8      3.6           107         314     0 0                  0
+##  7 02/20…       15      4              97         132     0 0                 15
+##  8 01/26…       10      4             126         149     0 0                 15
+##  9 01/03…        5      2.6            80         308     0 0                 10
+## 10 12/16…        8      3.4            97         201     0 0                 15
+## # … with 13 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
+## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
+## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, School &lt;chr&gt;,
+## #   pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).
@@ -880,13 +867,20 @@ shapiro.test(all_dat$Total)</code></pre>
 <ul>
 <li>Multiple(fit.normal)</li>
 </ul>
-<pre class="r"><code>library(fitdistrplus)
-library(logspline)
+<pre class="r"><code>library(fitdistrplus)</code></pre>
+<pre><code>## Loading required package: MASS</code></pre>
+<pre><code>## 
+## Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre class="r"><code>library(logspline)
 
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
 descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  1   max:  7 
@@ -896,7 +890,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated skewness:  -0.2436281 
 ## estimated kurtosis:  3.053041</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
@@ -907,7 +901,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated kurtosis:  6.699625</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-3.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-3.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  0   max:  1 
@@ -924,7 +918,7 @@ fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
 #plot(fit.beta)
 #plot(fit.gamma)
 plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-4.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-4.png" width="672" /></p>
 </div>
 </div>
 
