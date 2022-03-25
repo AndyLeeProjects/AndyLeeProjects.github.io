@@ -71,31 +71,52 @@ all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
 ```
 
 
-### Add School Variable
+### Read & Organize Data: Add School Variable
 
 ```{r}
 # Break dates
-date_breaks <- as.character(format(c(seq(as.Date('11/25/2020', format = "%m/%d/%Y"), by = "day", length.out = 5), seq(as.Date('12/17/2020', format = "%m/%d/%Y"), by = "day", length.out = 46), seq(as.Date('03/23/2021', format = "%m/%d/%Y"), by = "day", length.out = 6), seq(as.Date('04/23/2021', format = "%m/%d/%Y"), by = "day", length.out = 6), seq(as.Date('05/19/2021', format = "%m/%d/%Y"), by = "day", length.out = 104), seq(as.Date('10/11/2021', format = "%m/%d/%Y"), by = "day", length.out = 2), seq(as.Date('12/21/2021', format = "%m/%d/%Y"), by = "day", length.out = 37), seq(as.Date('03/14/2022', format = "%m/%d/%Y"), by = "day", length.out = 7)), "%m/%d/%Y"))
+  # Fall, Thanksgiving, Christmas, Spring, Summer, etc.
+date_breaks <- as.character(format(c(
+seq(as.Date('11/25/2020', format = "%m/%d/%Y"), by = "day", length.out = 5),
+seq(as.Date('12/17/2020', format = "%m/%d/%Y"), by = "day", length.out = 46),
+seq(as.Date('03/23/2021', format = "%m/%d/%Y"), by = "day", length.out = 6),
+seq(as.Date('04/23/2021', format = "%m/%d/%Y"), by = "day", length.out = 6),
+seq(as.Date('05/19/2021', format = "%m/%d/%Y"), by = "day", length.out = 104),
+seq(as.Date('10/11/2021', format = "%m/%d/%Y"), by = "day", length.out = 2),
+seq(as.Date('12/21/2021', format = "%m/%d/%Y"), by = "day", length.out = 37),
+seq(as.Date('03/14/2022', format = "%m/%d/%Y"), by = "day", length.out = 7)),
+"%m/%d/%Y"))
 
 # Semester Quarters
 # 1st quarter of the semester
-first_q <- c(as.character(format(c(seq(as.Date('09/01', format = "%m/%d"), by = "day", length.out = 27),seq(as.Date('02/01', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
+first_q <- c(as.character(format(c(
+  seq(as.Date('09/01', format = "%m/%d"), by = "day", length.out = 27),
+  seq(as.Date('02/01', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
 
 # 2nd quarter of the semester
-second_q <- c(as.character(format(c(seq(as.Date('09/28', format = "%m/%d"), by = "day", length.out = 27),seq(as.Date('02/28', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
+second_q <- c(as.character(format(c(
+  seq(as.Date('09/28', format = "%m/%d"), by = "day", length.out = 27),
+  seq(as.Date('02/28', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
 
 # 3rd quarter of the semester
-third_q <- c(as.character(format(c(seq(as.Date('10/25', format = "%m/%d"), by = "day", length.out = 27),seq(as.Date('03/27', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
+third_q <- c(as.character(format(c(
+  seq(as.Date('10/25', format = "%m/%d"), by = "day", length.out = 27),
+  seq(as.Date('03/27', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
 
 # 4th quarter of the semester
-fourth_q <- c(as.character(format(c(seq(as.Date('11/21', format = "%m/%d"), by = "day", length.out = 26),seq(as.Date('04/23', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
+fourth_q <- c(as.character(format(c(
+  seq(as.Date('11/21', format = "%m/%d"), by = "day", length.out = 26),
+  seq(as.Date('04/23', format = "%m/%d"), by = "day", length.out = 27)),"%m/%d")))
 
 # Create School variable
 all_dat <- all_dat %>%
   mutate(
-    School = ifelse(format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% first_q, "1st", FALSE),
-    School = ifelse(format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% second_q, "2nd", School),
-    School = ifelse(format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% third_q, "3rd", School),
+    School = ifelse(
+      format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% first_q, "1st", FALSE),
+    School = ifelse(
+      format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% second_q, "2nd", School),
+    School = ifelse(
+      format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% third_q, "3rd", School),
     School = ifelse(format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% fourth_q, "4th", School),
     School = ifelse(Date %in% date_breaks, "Break", School),
     School = ifelse(Date == '08/30/2021', "1st", School),
@@ -113,7 +134,7 @@ all_dat <- all_dat %>%
 
 ### Distribution for the main variables in all_dat
 
-```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, echo = TRUE, eval = TRUE, out.width = "90%", fig.asp = .75, fig.align='center', warning = FALSE}
 
 p1 <- ggplot(data = all_dat, alpha=.5) + 
   geom_density( aes(Total), color = 'red')
@@ -165,6 +186,15 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)
 * <font size="3">**Multiple**: Subjective grade given each day
     + Considered factors: Mentality, Satisfaction, Productivity, Social interaction, and Tech consumption</font>
 * <font size="3">**Total**: The sum of the percentages calculated of above variables</font>
+
+<br>  
+
+#### School Variable 
+```{r, echo = TRUE, eval = TRUE, out.width = "70%", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
+ggplot(data = all_dat, aes(x = work_finished,
+                           color = School))+
+  geom_density()
+```
 
 <br>  
 <br>  

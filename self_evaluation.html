@@ -328,30 +328,51 @@ all_morning_rt &lt;- merge(morning_rt, all_dat,by=&quot;Date&quot;, all.x=T) %&g
   dplyr::filter(work_finished_mr_exc &lt;= 1 &amp; work_finished_mr_exc &gt;0) %&gt;%
   arrange(desc(Date))</code></pre>
 </div>
-<div id="add-school-variable" class="section level3">
-<h3>Add School Variable</h3>
+<div id="read-organize-data-add-school-variable" class="section level3">
+<h3>Read &amp; Organize Data: Add School Variable</h3>
 <pre class="r"><code># Break dates
-date_breaks &lt;- as.character(format(c(seq(as.Date(&#39;11/25/2020&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 5), seq(as.Date(&#39;12/17/2020&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 46), seq(as.Date(&#39;03/23/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 6), seq(as.Date(&#39;04/23/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 6), seq(as.Date(&#39;05/19/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 104), seq(as.Date(&#39;10/11/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 2), seq(as.Date(&#39;12/21/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 37), seq(as.Date(&#39;03/14/2022&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 7)), &quot;%m/%d/%Y&quot;))
+  # Fall, Thanksgiving, Christmas, Spring, Summer, etc.
+date_breaks &lt;- as.character(format(c(
+seq(as.Date(&#39;11/25/2020&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 5),
+seq(as.Date(&#39;12/17/2020&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 46),
+seq(as.Date(&#39;03/23/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 6),
+seq(as.Date(&#39;04/23/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 6),
+seq(as.Date(&#39;05/19/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 104),
+seq(as.Date(&#39;10/11/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 2),
+seq(as.Date(&#39;12/21/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 37),
+seq(as.Date(&#39;03/14/2022&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 7)),
+&quot;%m/%d/%Y&quot;))
 
 # Semester Quarters
 # 1st quarter of the semester
-first_q &lt;- c(as.character(format(c(seq(as.Date(&#39;09/01&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),seq(as.Date(&#39;02/01&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
+first_q &lt;- c(as.character(format(c(
+  seq(as.Date(&#39;09/01&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),
+  seq(as.Date(&#39;02/01&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
 
 # 2nd quarter of the semester
-second_q &lt;- c(as.character(format(c(seq(as.Date(&#39;09/28&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),seq(as.Date(&#39;02/28&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
+second_q &lt;- c(as.character(format(c(
+  seq(as.Date(&#39;09/28&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),
+  seq(as.Date(&#39;02/28&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
 
 # 3rd quarter of the semester
-third_q &lt;- c(as.character(format(c(seq(as.Date(&#39;10/25&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),seq(as.Date(&#39;03/27&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
+third_q &lt;- c(as.character(format(c(
+  seq(as.Date(&#39;10/25&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),
+  seq(as.Date(&#39;03/27&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
 
 # 4th quarter of the semester
-fourth_q &lt;- c(as.character(format(c(seq(as.Date(&#39;11/21&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 26),seq(as.Date(&#39;04/23&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
+fourth_q &lt;- c(as.character(format(c(
+  seq(as.Date(&#39;11/21&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 26),
+  seq(as.Date(&#39;04/23&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
 
 # Create School variable
 all_dat &lt;- all_dat %&gt;%
   mutate(
-    School = ifelse(format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% first_q, &quot;1st&quot;, FALSE),
-    School = ifelse(format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% second_q, &quot;2nd&quot;, School),
-    School = ifelse(format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% third_q, &quot;3rd&quot;, School),
+    School = ifelse(
+      format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% first_q, &quot;1st&quot;, FALSE),
+    School = ifelse(
+      format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% second_q, &quot;2nd&quot;, School),
+    School = ifelse(
+      format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% third_q, &quot;3rd&quot;, School),
     School = ifelse(format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% fourth_q, &quot;4th&quot;, School),
     School = ifelse(Date %in% date_breaks, &quot;Break&quot;, School),
     School = ifelse(Date == &#39;08/30/2021&#39;, &quot;1st&quot;, School),
@@ -394,7 +415,7 @@ p10 &lt;- ggplot(data = all_dat, alpha=.5)+
   geom_density(aes(Total_todo), color = &#39;darkgreen&#39;)
   
 grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="1600px" style="display: block; margin: auto;" /> <br></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="90%" style="display: block; margin: auto;" /> <br></p>
 </div>
 <div id="main-varibles-descriptions" class="section level3">
 <h3>Main Varibles Descriptions</h3>
@@ -417,9 +438,17 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
 </ul></li>
 <li><font size="3"><strong>Total</strong>: The sum of the percentages calculated of above variables</font></li>
 </ul>
+<p><br></p>
+<div id="school-variable" class="section level4">
+<h4>School Variable</h4>
+<pre class="r"><code>ggplot(data = all_dat, aes(x = work_finished,
+                           color = School))+
+  geom_density()</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p><br><br />
 <br><br />
 <br></p>
+</div>
 </div>
 <div id="how-do-these-variables-affect-the-outcome-of-the-day" class="section level2">
 <h2>How do these variables affect the outcome of the day?</h2>
@@ -445,7 +474,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
            Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <div id="single-regression-function-yalphabeta-x" class="section level4">
 <h4>Single Regression Function: <span class="math inline">\(y=\alpha+\beta x\)</span></h4>
@@ -614,7 +643,7 @@ mr_p7 &lt;- ggplot(data = all_morning_rt) +
   theme(legend.position = &quot;None&quot;)
 
 grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level3">
@@ -674,7 +703,7 @@ ame_result</code></pre>
   width = .5) + geom_hline ( yintercept = 0) +
   theme_minimal ( ) +
   theme(axis.text.x = element_text(angle = 90))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="meditation-with-all_dat" class="section level4">
@@ -807,7 +836,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level3">
@@ -822,7 +851,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level3">
@@ -880,7 +909,7 @@ shapiro.test(all_dat$Total)</code></pre>
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
 descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  1   max:  7 
@@ -890,7 +919,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated skewness:  -0.2436281 
 ## estimated kurtosis:  3.053041</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
@@ -901,7 +930,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated kurtosis:  6.699625</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-3.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-3.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  0   max:  1 
@@ -918,7 +947,7 @@ fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
 #plot(fit.beta)
 #plot(fit.gamma)
 plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-4.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-4.png" width="672" /></p>
 </div>
 </div>
 
