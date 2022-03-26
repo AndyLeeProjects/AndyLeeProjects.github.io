@@ -9,5 +9,5 @@ title: "Projects"
 ***  
 
 * <font size = "3" color = "blue">[Happiness Project](https://alin-96.github.io/project_main.html)</font>
-* <font size = "3" color = "blue">[Self-Evaluation Project](https://alin-96.github.io/project.html)</font>
+* <font size = "3" color = "blue">[Self-Evaluation Project](https://alin-96.github.io/self_evaluation.html)</font>
 
