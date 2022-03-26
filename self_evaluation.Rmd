@@ -203,7 +203,8 @@ ggplot(data = all_dat, aes(x = work_finished,
 ```{r, echo = TRUE, eval = TRUE, out.width = "70%", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
 ggplot(data = all_dat)+
   geom_boxplot(aes(x = reorder(Weekdays,work_finished, fun = median), y = work_finished, color = Weekdays))+
-  theme(legend.position = "None")
+  theme(legend.position = "None")+
+  labs(x = "", y = "Work Finished (%)")
 ```
 
 
