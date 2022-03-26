@@ -72,7 +72,7 @@ all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
 
 <br>  
 
-### Read & Organize Data: Add School Variable
+### Read & Organize Data: Add School & Weekday Variables
 
 ```{r}
 # Break dates
@@ -123,7 +123,8 @@ all_dat <- all_dat %>%
     School = ifelse(Date == '08/30/2021', "1st", School),
     School = ifelse(Date == '08/31/2021', "1st", School),
     School = ifelse(Date %in% c('12/17/2021','12/18/2021','12/19/2021','12/20/2021'), "4th", School),
-    School = ifelse(Date %in% c("01/27/2022","01/28/2022"), "1st",School)
+    School = ifelse(Date %in% c("01/27/2022","01/28/2022"), "1st",School),
+    Weekdays = weekdays(as.Date(Date,'%m/%d/%Y'))
   )
 
 
@@ -196,6 +197,15 @@ ggplot(data = all_dat, aes(x = work_finished,
                            color = School))+
   geom_density()
 ```
+<br>  
+
+#### Weekday Variable
+```{r, echo = TRUE, eval = TRUE, out.width = "70%", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
+ggplot(data = all_dat)+
+  geom_boxplot(aes(x = reorder(Weekdays,work_finished, fun = median), y = work_finished, color = Weekdays))+
+  theme(legend.position = "None")
+```
+
 
 <br>  
 <br>  
