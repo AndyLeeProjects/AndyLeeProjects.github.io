@@ -329,8 +329,8 @@ all_morning_rt &lt;- merge(morning_rt, all_dat,by=&quot;Date&quot;, all.x=T) %&g
   arrange(desc(Date))</code></pre>
 <p><br></p>
 </div>
-<div id="read-organize-data-add-school-variable" class="section level3">
-<h3>Read &amp; Organize Data: Add School Variable</h3>
+<div id="read-organize-data-add-school-weekday-variables" class="section level3">
+<h3>Read &amp; Organize Data: Add School &amp; Weekday Variables</h3>
 <pre class="r"><code># Break dates
   # Fall, Thanksgiving, Christmas, Spring, Summer, etc.
 date_breaks &lt;- as.character(format(c(
@@ -379,7 +379,8 @@ all_dat &lt;- all_dat %&gt;%
     School = ifelse(Date == &#39;08/30/2021&#39;, &quot;1st&quot;, School),
     School = ifelse(Date == &#39;08/31/2021&#39;, &quot;1st&quot;, School),
     School = ifelse(Date %in% c(&#39;12/17/2021&#39;,&#39;12/18/2021&#39;,&#39;12/19/2021&#39;,&#39;12/20/2021&#39;), &quot;4th&quot;, School),
-    School = ifelse(Date %in% c(&quot;01/27/2022&quot;,&quot;01/28/2022&quot;), &quot;1st&quot;,School)
+    School = ifelse(Date %in% c(&quot;01/27/2022&quot;,&quot;01/28/2022&quot;), &quot;1st&quot;,School),
+    Weekdays = weekdays(as.Date(Date,&#39;%m/%d/%Y&#39;))
   )</code></pre>
 <p><br></p>
 </div>
@@ -445,7 +446,14 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
 <pre class="r"><code>ggplot(data = all_dat, aes(x = work_finished,
                            color = School))+
   geom_density()</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /> <br></p>
+</div>
+<div id="weekday-variable" class="section level4">
+<h4>Weekday Variable</h4>
+<pre class="r"><code>ggplot(data = all_dat)+
+  geom_boxplot(aes(x = reorder(Weekdays,work_finished, fun = median), y = work_finished, color = Weekdays))+
+  theme(legend.position = &quot;None&quot;)</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <p><br><br />
 <br><br />
 <br></p>
@@ -475,7 +483,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
            Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="85%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <div id="single-regression-function-yalphabeta-x" class="section level4">
 <h4>Single Regression Function: <span class="math inline">\(y=\alpha+\beta x\)</span></h4>
@@ -517,19 +525,19 @@ summary(model)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.62857 -0.09846  0.02654  0.13565  0.44556 
+## -0.62966 -0.09919  0.02581  0.13287  0.44560 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 0.554440   0.013439   41.26   &lt;2e-16 ***
-## Meditation  0.019601   0.001224   16.01   &lt;2e-16 ***
+## (Intercept) 0.554398   0.013401   41.37   &lt;2e-16 ***
+## Meditation  0.019653   0.001218   16.14   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.1881 on 469 degrees of freedom
+## Residual standard error: 0.1876 on 472 degrees of freedom
 ##   (3 observations deleted due to missingness)
-## Multiple R-squared:  0.3533, Adjusted R-squared:  0.3519 
-## F-statistic: 256.3 on 1 and 469 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Multiple R-squared:  0.3556, Adjusted R-squared:  0.3542 
+## F-statistic: 260.5 on 1 and 472 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code># predict function:
   # uses the beta coefficents that were calculated in the lm() function.</code></pre>
 <p><br><br />
@@ -549,26 +557,26 @@ summary(model)</code></pre>
 <li><font size="3">Combined Morning Routine variables with all_dat variables</font></li>
 </ul>
 <pre class="r"><code>tibble(all_morning_rt)</code></pre>
-<pre><code>## # A tibble: 129 × 30
-##    Date       total_checked meditation_min meditation_check reading_check
-##    &lt;date&gt;             &lt;int&gt;          &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;        
-##  1 2022-03-22             1             15 True             False        
-##  2 2022-03-21             2              0 False            False        
-##  3 2022-03-20             6             15 True             True         
-##  4 2022-03-19             3             15 True             False        
-##  5 2022-03-18             1              0 False            True         
-##  6 2022-03-17             1             15 True             False        
-##  7 2022-03-16             0              0 False            False        
-##  8 2022-03-15             0              0 False            False        
-##  9 2022-03-13             2             15 True             True         
-## 10 2022-03-11             3              0 False            False        
-## # … with 119 more rows, and 25 more variables: reading_min &lt;int&gt;, run_km &lt;int&gt;,
+<pre><code>## # A tibble: 130 × 30
+##    Date       total_checked meditation_min meditation_check reading_check reading_min
+##    &lt;date&gt;             &lt;int&gt;          &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;               &lt;int&gt;
+##  1 2022-03-23             5             15 True             False                   0
+##  2 2022-03-22             1             15 True             False                   0
+##  3 2022-03-21             2              0 False            False                   0
+##  4 2022-03-20             6             15 True             True                   23
+##  5 2022-03-19             3             15 True             False                   0
+##  6 2022-03-18             1              0 False            True                   16
+##  7 2022-03-17             1             15 True             False                   0
+##  8 2022-03-16             0              0 False            False                   0
+##  9 2022-03-15             0              0 False            False                   0
+## 10 2022-03-13             2             15 True             True                   31
+## # … with 120 more rows, and 24 more variables: run_km &lt;int&gt;,
 ## #   morning_thoughts_check &lt;chr&gt;, push_up_check &lt;chr&gt;, morning_phone &lt;chr&gt;,
 ## #   night_phone &lt;chr&gt;, Finished &lt;dbl&gt;, Multiple &lt;dbl&gt;, Phone_pickups &lt;dbl&gt;,
-## #   Screen_time &lt;dbl&gt;, Drink &lt;dbl&gt;, Key_words &lt;chr&gt;, Meditation &lt;dbl&gt;,
-## #   Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
-## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;,
-## #   Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, work_finished_mr_exc &lt;dbl&gt;</code></pre>
+## #   Screen_time &lt;dbl&gt;, Drink &lt;dbl&gt;, Key_words &lt;chr&gt;, Meditation &lt;dbl&gt;, Mentality &lt;dbl&gt;,
+## #   Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;,
+## #   Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;,
+## #   work_finished_mr_exc &lt;dbl&gt;</code></pre>
 <p><br></p>
 <ul>
 <li><font size="3">Column Names</font></li>
@@ -641,7 +649,7 @@ mr_p7 &lt;- ggplot(data = all_morning_rt) +
   theme(legend.position = &quot;None&quot;)
 
 grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="1600px" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="1600px" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level3">
@@ -684,7 +692,7 @@ m = margins(model_logit)
 ame_result = summary(m) 
 ame_result</code></pre>
 <pre><code>##           factor    AME     SE      z      p  lower  upper
-##  night_phoneTrue 0.1813 0.0861 2.1062 0.0352 0.0126 0.3500</code></pre>
+##  night_phoneTrue 0.1825 0.0859 2.1246 0.0336 0.0141 0.3509</code></pre>
 <p><br></p>
 </div>
 <div id="how-to-interpret-the-average-marginal-effectame-values" class="section level4">
@@ -701,7 +709,7 @@ ame_result</code></pre>
   width = .5) + geom_hline ( yintercept = 0) +
   theme_minimal ( ) +
   theme(axis.text.x = element_text(angle = 90))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="60%" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-13-1.png" width="60%" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="meditation-with-all_dat" class="section level4">
@@ -714,27 +722,27 @@ ame_result</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -11.4664  -2.8100   0.2982   2.7069  14.7470 
+## -11.4701  -2.7706   0.3398   2.7358  14.6674 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   -28.099416   2.178413 -12.899  &lt; 2e-16 ***
-## Multiple       -1.832133   0.294982  -6.211 1.18e-09 ***
-## Phone_pickups   0.056879   0.007466   7.618 1.48e-13 ***
-## Screen_time     0.011550   0.002064   5.595 3.79e-08 ***
-## Drink           0.357483   0.367511   0.973    0.331    
-## Reading        -0.095696   0.015943  -6.003 3.94e-09 ***
-## Rise_time       0.047103   0.003772  12.487  &lt; 2e-16 ***
-## Total_todo     -0.128069   0.077806  -1.646    0.100    
-## Total           0.710610   0.039596  17.946  &lt; 2e-16 ***
-## work_finished -13.671350   2.143140  -6.379 4.35e-10 ***
+## (Intercept)   -28.005005   2.174126 -12.881  &lt; 2e-16 ***
+## Multiple       -1.819727   0.294557  -6.178 1.42e-09 ***
+## Phone_pickups   0.055712   0.007426   7.503 3.23e-13 ***
+## Screen_time     0.011437   0.002061   5.550 4.82e-08 ***
+## Drink           0.356762   0.367316   0.971    0.332    
+## Reading        -0.097391   0.015881  -6.133 1.85e-09 ***
+## Rise_time       0.046876   0.003762  12.460  &lt; 2e-16 ***
+## Total_todo     -0.127035   0.077699  -1.635    0.103    
+## Total           0.709973   0.039544  17.954  &lt; 2e-16 ***
+## work_finished -13.562726   2.139930  -6.338 5.53e-10 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 4.28 on 460 degrees of freedom
+## Residual standard error: 4.278 on 463 degrees of freedom
 ##   (4 observations deleted due to missingness)
 ## Multiple R-squared:  0.642,  Adjusted R-squared:  0.635 
-## F-statistic: 91.65 on 9 and 460 DF,  p-value: &lt; 2.2e-16</code></pre>
+## F-statistic: 92.25 on 9 and 463 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
 <div id="multiple-with-all_dat" class="section level4">
@@ -755,27 +763,27 @@ summary(multiple_all)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -2.44307 -0.41924 -0.02983  0.41879  1.98112 
+## -2.44460 -0.41942 -0.02198  0.41913  1.97798 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   -0.1578393  0.3243592  -0.487  0.62676    
-## Phone_pickups  0.0043587  0.0010933   3.987 7.78e-05 ***
-## Screen_time   -0.0005854  0.0003003  -1.950  0.05183 .  
-## Drink         -0.0285778  0.0549423  -0.520  0.60321    
-## Meditation    -0.0445019  0.0064112  -6.941 1.32e-11 ***
-## Reading       -0.0104984  0.0023636  -4.442 1.12e-05 ***
-## Rise_time      0.0036419  0.0004940   7.372 7.79e-13 ***
-## Run            0.6993296  0.2599994   2.690  0.00741 ** 
-## Total_todo    -0.0148900  0.0112818  -1.320  0.18755    
-## Total          0.0604418  0.0040182  15.042  &lt; 2e-16 ***
+## (Intercept)   -0.1480986  0.3235073  -0.458 0.647316    
+## Phone_pickups  0.0042409  0.0010863   3.904 0.000109 ***
+## Screen_time   -0.0005926  0.0002995  -1.979 0.048417 *  
+## Drink         -0.0292786  0.0548597  -0.534 0.593804    
+## Meditation    -0.0441755  0.0063942  -6.909 1.61e-11 ***
+## Reading       -0.0106823  0.0023520  -4.542 7.11e-06 ***
+## Rise_time      0.0036229  0.0004926   7.354 8.72e-13 ***
+## Run            0.6934597  0.2595754   2.672 0.007815 ** 
+## Total_todo    -0.0145787  0.0112574  -1.295 0.195951    
+## Total          0.0604698  0.0040118  15.073  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.6475 on 463 degrees of freedom
+## Residual standard error: 0.6466 on 466 degrees of freedom
 ##   (1 observation deleted due to missingness)
-## Multiple R-squared:  0.5675, Adjusted R-squared:  0.5591 
-## F-statistic: 67.51 on 9 and 463 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Multiple R-squared:  0.5685, Adjusted R-squared:  0.5602 
+## F-statistic: 68.22 on 9 and 466 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
 </div>
@@ -797,27 +805,27 @@ summary(work_finished_all)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.36592 -0.09081  0.00749  0.09646  0.42421 
+## -0.36590 -0.09045  0.00723  0.09524  0.42392 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    1.493e-01  5.668e-02   2.634  0.00871 ** 
-## Multiple       1.088e-01  8.364e-03  13.009  &lt; 2e-16 ***
-## Phone_pickups  2.271e-04  2.341e-04   0.970  0.33256    
-## Screen_time   -1.561e-05  6.207e-05  -0.251  0.80157    
-## Drink         -5.381e-02  1.189e-02  -4.527 7.64e-06 ***
-## Meditation     1.121e-02  1.060e-03  10.580  &lt; 2e-16 ***
-## Reading        2.398e-03  4.564e-04   5.254 2.28e-07 ***
-## Rise_time     -1.651e-04  7.994e-05  -2.065  0.03947 *  
-## Run           -8.252e-02  5.719e-02  -1.443  0.14977    
-## Total_todo     6.337e-03  2.496e-03   2.539  0.01145 *  
+## (Intercept)    1.511e-01  5.643e-02   2.678  0.00766 ** 
+## Multiple       1.088e-01  8.327e-03  13.064  &lt; 2e-16 ***
+## Phone_pickups  2.204e-04  2.321e-04   0.949  0.34296    
+## Screen_time   -1.713e-05  6.180e-05  -0.277  0.78176    
+## Drink         -5.388e-02  1.185e-02  -4.546 6.98e-06 ***
+## Meditation     1.123e-02  1.054e-03  10.656  &lt; 2e-16 ***
+## Reading        2.389e-03  4.531e-04   5.273 2.06e-07 ***
+## Rise_time     -1.665e-04  7.957e-05  -2.092  0.03695 *  
+## Run           -8.273e-02  5.700e-02  -1.451  0.14738    
+## Total_todo     6.288e-03  2.487e-03   2.529  0.01178 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.1413 on 460 degrees of freedom
+## Residual standard error: 0.1409 on 463 degrees of freedom
 ##   (4 observations deleted due to missingness)
-## Multiple R-squared:  0.6417, Adjusted R-squared:  0.6347 
-## F-statistic: 91.56 on 9 and 460 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Multiple R-squared:  0.643,  Adjusted R-squared:  0.6361 
+## F-statistic: 92.67 on 9 and 463 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level3">
@@ -834,7 +842,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level3">
@@ -849,7 +857,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level3">
@@ -857,23 +865,22 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 <pre class="r"><code>library(dplyr)
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
-<pre><code>## # A tibble: 10 × 21
-##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
-##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
-##  1 08/11…        5      3             144         167     0 0                  0
-##  2 10/17…       15      3             123         200     0 0                 14
-##  3 01/10…       10      3.6            98          84     0 0                 15
-##  4 01/12…        9      3              74         304     0 0                 15
-##  5 01/31…        4      3              61         440     0 0                  0
-##  6 12/21…        8      3.6           107         314     0 0                  0
-##  7 02/20…       15      4              97         132     0 0                 15
-##  8 01/26…       10      4             126         149     0 0                 15
-##  9 01/03…        5      2.6            80         308     0 0                 10
-## 10 12/16…        8      3.4            97         201     0 0                 15
-## # … with 13 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
-## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
-## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, School &lt;chr&gt;,
-## #   pred_work_finished &lt;dbl&gt;</code></pre>
+<pre><code>## # A tibble: 10 × 22
+##    Date  Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation Mentality
+##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 08/1…        5      3             144         167     0 0                  0         0
+##  2 10/1…       15      3             123         200     0 0                 14         0
+##  3 01/1…       10      3.6            98          84     0 0                 15         3
+##  4 01/1…        9      3              74         304     0 0                 15         0
+##  5 01/3…        4      3              61         440     0 0                  0         0
+##  6 12/2…        8      3.6           107         314     0 0                  0         4
+##  7 02/2…       15      4              97         132     0 0                 15         0
+##  8 01/2…       10      4             126         149     0 0                 15         4
+##  9 01/0…        5      2.6            80         308     0 0                 10         3
+## 10 12/1…        8      3.4            97         201     0 0                 15         3
+## # … with 13 more variables: Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
+## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;,
+## #   work_finished &lt;dbl&gt;, School &lt;chr&gt;, Weekdays &lt;chr&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).
@@ -886,7 +893,7 @@ shapiro.test(all_dat$Total)</code></pre>
 ##  Shapiro-Wilk normality test
 ## 
 ## data:  all_dat$Total
-## W = 0.94614, p-value = 4.199e-12</code></pre>
+## W = 0.94498, p-value = 2.63e-12</code></pre>
 <p><br></p>
 </div>
 <div id="determining-distributions" class="section level3">
@@ -907,36 +914,36 @@ shapiro.test(all_dat$Total)</code></pre>
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
 descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  1   max:  7 
 ## median:  3.4 
-## mean:  3.432489 
-## estimated sd:  0.9878968 
-## estimated skewness:  -0.2436281 
-## estimated kurtosis:  3.053041</code></pre>
+## mean:  3.438155 
+## estimated sd:  0.9875545 
+## estimated skewness:  -0.2537518 
+## estimated kurtosis:  3.049811</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
-## median:  202.5 
-## mean:  234.4662 
-## estimated sd:  126.645 
-## estimated skewness:  1.570876 
-## estimated kurtosis:  6.699625</code></pre>
+## median:  202 
+## mean:  233.7904 
+## estimated sd:  126.5639 
+## estimated skewness:  1.574923 
+## estimated kurtosis:  6.713088</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-3.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-3.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  0   max:  1 
 ## median:  0.7778 
-## mean:  0.7188255 
-## estimated sd:  0.2337002 
-## estimated skewness:  -1.057821 
-## estimated kurtosis:  3.616794</code></pre>
+## mean:  0.7200384 
+## estimated sd:  0.233463 
+## estimated skewness:  -1.066239 
+## estimated kurtosis:  3.633662</code></pre>
 <pre class="r"><code>#fit.beta &lt;- fitdist(wf, &#39;beta&#39;, method = &quot;mme&quot;) 
   # method = &quot;mme&quot;: Moment matching estimation consists in equalizing theoretical
   #                 and empirical moments. 
@@ -945,7 +952,7 @@ fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
 #plot(fit.beta)
 #plot(fit.gamma)
 plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-4.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-4.png" width="672" /></p>
 </div>
 </div>
 
