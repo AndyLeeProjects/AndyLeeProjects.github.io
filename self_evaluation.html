@@ -445,7 +445,9 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)</code></pre>
 <h4>School Variable</h4>
 <pre class="r"><code>ggplot(data = all_dat, aes(x = work_finished,
                            color = School))+
-  geom_density()</code></pre>
+  geom_density()+
+  labs(x = &quot;Work Finished (%)&quot;)+
+  scale_color_discrete(name = &quot;School Qtrs&quot;)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /> <br></p>
 </div>
 <div id="weekday-variable" class="section level4">
