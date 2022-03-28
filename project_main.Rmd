@@ -109,7 +109,7 @@ h19 <- h19 %>%
 # Combine all data into all_dat
 h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
 
-
+glimpse(h_alldat)
 ```
 
 
