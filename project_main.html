@@ -386,6 +386,25 @@ glimpse(h_alldat)</code></pre>
 ## $ Generosity   &lt;dbl&gt; 0.29678, 0.43630, 0.34139, 0.34699, 0.45811, 0.23351, 0.4…
 ## $ dystopia_res &lt;dbl&gt; 2.51738, 2.70201, 2.49204, 2.46531, 2.45176, 2.61955, 2.4…
 ## $ Year         &lt;dbl&gt; 2015, 2015, 2015, 2015, 2015, 2015, 2015, 2015, 2015, 201…</code></pre>
+<pre class="r"><code># Get Top 10 mean of happiness rank from 2015 ~ 2019
+( top_10 &lt;- h_alldat %&gt;%
+  group_by(Country) %&gt;%
+  summarise(mean_rank = mean(H_rank)) %&gt;%
+  arrange(mean_rank, &quot;DESC&quot;) %&gt;%
+  filter(mean_rank &lt;= 10) )</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##    Country     mean_rank
+##    &lt;chr&gt;           &lt;dbl&gt;
+##  1 Denmark           2.2
+##  2 Norway            2.8
+##  3 Iceland           3.2
+##  4 Finland           3.6
+##  5 Switzerland       3.6
+##  6 Netherlands       6.2
+##  7 Canada            6.8
+##  8 New Zealand       8.2
+##  9 Sweden            8.6
+## 10 Australia        10</code></pre>
 </div>
 
 
