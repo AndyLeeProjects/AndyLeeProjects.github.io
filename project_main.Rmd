@@ -17,6 +17,7 @@ library(ggrepel)
 library(ggridges)
 library(plyr)
 library(tidyverse)
+theme_set(theme_minimal())
 ```
 
 <br>  
@@ -112,7 +113,7 @@ h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
 glimpse(h_alldat)
 ```
 
-```{r}
+```{r, echo = TRUE, eval = TRUE, out.width = "90%", fig.asp = .75, fig.align='center', warning = FALSE}
 # Get Top 10 mean of happiness rank from 2015 ~ 2019
 ( top_10 <- h_alldat %>%
   group_by(Country) %>%
@@ -122,6 +123,13 @@ glimpse(h_alldat)
 ```
 
 
+
+```{r}
+ggplot(filter(h_alldat, Region != "NA")) +
+  geom_boxplot(aes(x = H_score, y=reorder(Region, H_score), color = Region))+
+  theme(legend.position = "None") +
+  labs(x = "Happiness Scores", y = "Regions")
+```
 
 
 

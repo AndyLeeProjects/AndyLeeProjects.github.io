@@ -11,6 +11,9 @@ navbar:
       href: project_main.html
     - text: "My Website"
       href: https://www.andyleeproject.com/
+  right:
+    - text: ![](/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/linkedin_img.jpg)
+      href: https://www.google.com
 output:
   html_document:
     theme: cosmo

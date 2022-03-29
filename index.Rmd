@@ -7,7 +7,12 @@ title: "Projects"
   
 
 ***  
+<br>  
 
-* <font size = "3" color = "blue">[Happiness Project](https://alin-96.github.io/project_main.html)</font>
-* <font size = "3" color = "blue">[Self-Evaluation Project](https://alin-96.github.io/self_evaluation.html)</font>
+### [Self-Evaluation Project](https://alin-96.github.io/self_evaluation.html)
+    Self-evaluation Project Description
+<br>  
+<br>  
 
+### [Happiness Project](https://alin-96.github.io/project_main.html)
+    Happiness Project Description 
