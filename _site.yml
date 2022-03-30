@@ -5,15 +5,20 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "Self Evaluation Project"
-      href: self_evaluation.html
-    - text: "Happiness Project"
-      href: project_main.html
+    - text: "Projects"
+      menu:
+      - text: "Self Evaluation Project"
+        href: self_evaluation.html
+      - text: '---------'
+      - text: "Happiness Project"
+        href: project_main.html
     - text: "My Website"
       href: https://www.andyleeproject.com/
   right:
-    - text: ![](/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/linkedin_img.jpg)
-      href: https://www.google.com
+    - icon: fa-linkedin
+      href: https://www.linkedin.com/in/andy-lee-74194912a/
+    - icon: fa-github
+      href: https://github.com/aLin-96
 output:
   html_document:
     theme: cosmo
