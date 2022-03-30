@@ -22,7 +22,7 @@ theme_set(theme_minimal())
 
 <br>  
 
-## Read & Manipulate Data
+### Data Wrangling
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # Read 2015 Data

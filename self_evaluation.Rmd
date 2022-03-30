@@ -16,7 +16,7 @@ library(psych)
 <br>  
 
 
-### Read & Organize Data
+### Data Wrangling
 
 ```{r}
 
