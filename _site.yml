@@ -13,12 +13,12 @@ navbar:
       - text: "Happiness Project"
         href: project_main.html
     - text: "My Website"
-      href: (https://www.andyleeproject.com/){target="_blank"}
+      href: https://www.andyleeproject.com/
   right:
     - icon: fa-linkedin
-      href: (https://www.linkedin.com/in/andy-lee-74194912a/){target="_blank"}
+      href: linkedin_redirect.html
     - icon: fa-github
-      href: (https://github.com/aLin-96){target="_blank"}
+      href: https://github.com/aLin-96
 output:
   html_document:
     theme: cosmo
