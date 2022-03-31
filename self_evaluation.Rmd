@@ -1,5 +1,5 @@
 ---
-title: "Self Evaluation Project"
+title: "Self-Evaluation Project"
 author: "Andy"
 date: "3/15/2022"
 output: html_document
@@ -354,7 +354,7 @@ Note that they are all discrete variables
 <br>  
 
 
-```{r, echo = TRUE, eval = TRUE, fig.width = 8, fig.height = 9, warning = FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 8, fig.height = 9, warning = FALSE}
 # Total_checked: the number of morning routine tasks completed
 mr_p1 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = total_checked), fill = "orange",

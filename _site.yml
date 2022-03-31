@@ -7,7 +7,7 @@ navbar:
       href: index.html
     - text: "Projects"
       menu:
-      - text: "Self Evaluation Project"
+      - text: "Self-Evaluation Project"
         href: self_evaluation.html
       - text: '---------'
       - text: "Happiness Project"
