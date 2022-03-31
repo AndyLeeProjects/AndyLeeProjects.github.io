@@ -9,7 +9,7 @@ title: "Projects"
 ***  
 <br>  
 
-## **[Self-Evaluation Project](https://alin-96.github.io/self_evaluation.html)**
+## [Self-Evaluation Project](https://alin-96.github.io/self_evaluation.html)
 
 <font size="3">   Towards the end of my military service, I tried to find ways to maintain a high-disciplinary lifestyle even after my release. After much contemplation, I decided to develop a grading system for my day-to-day life, which sprouted from the concept of math exams. The graded exams allow us to improve our mathematical knowledge by analyzing our weaknesses and strengths. Thus, by utilizing quantifiable variables that best represent the fullness of my lifestyle and by implementing various mathematical models, I was able to construct an effective grading system for my day-to-day life. 
     
@@ -19,5 +19,5 @@ title: "Projects"
 <br>  
 <br>  
 
-## **[Happiness Project](https://alin-96.github.io/project_main.html)**
+## [Happiness Project](https://alin-96.github.io/project_main.html)
     Happiness Project Description 
