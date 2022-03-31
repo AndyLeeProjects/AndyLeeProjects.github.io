@@ -168,7 +168,7 @@ p9 <- ggplot(data = all_dat, alpha=.5)+
 p10 <- ggplot(data = all_dat, alpha=.5)+
   geom_density(aes(Total_todo), color = 'darkgreen')
   
-grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)
+grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)##
 
 ```
 <br>  
