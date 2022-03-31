@@ -224,7 +224,7 @@ ggplot(data = all_dat)+
 <br>  
 
 #### Time Trend (Total %)
-```{r}
+```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE}
 all_dat_month <- all_dat %>%
   dplyr::group_by(year, month) %>%
   dplyr::summarise(Total = mean(Total),
