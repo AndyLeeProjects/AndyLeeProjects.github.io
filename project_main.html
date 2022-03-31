@@ -416,8 +416,19 @@ glimpse(h_alldat)</code></pre>
   summarise(mean_rank = mean(H_rank)) %&gt;%
   arrange(mean_rank, &quot;DESC&quot;) %&gt;%
   filter(mean_rank &lt;= 10) )</code></pre>
-<pre><code>## [1] mean_rank
-## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##    Country     mean_rank
+##    &lt;chr&gt;           &lt;dbl&gt;
+##  1 Denmark           2.2
+##  2 Norway            2.8
+##  3 Iceland           3.2
+##  4 Finland           3.6
+##  5 Switzerland       3.6
+##  6 Netherlands       6.2
+##  7 Canada            6.8
+##  8 New Zealand       8.2
+##  9 Sweden            8.6
+## 10 Australia        10</code></pre>
 <pre class="r"><code>ggplot(filter(h_alldat, Region != &quot;NA&quot;)) +
   geom_boxplot(aes(x = H_score, y=reorder(Region, H_score), color = Region))+
   theme(legend.position = &quot;None&quot;) +
