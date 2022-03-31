@@ -325,36 +325,13 @@ summary(model)
 $$"The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start."\\ -Jim\ Kwik$$
 <br>  
 
-## **We will use the following data set**
-* <font size="3">Combined Morning Routine variables with all_dat variables</font>
-```{r, message=FALSE}
-tibble(all_morning_rt)
-```
-<br>  
-
-* <font size="3">Column Names</font>
-```{r}
-colnames(all_morning_rt)
-```
-
-<br>  
-
 
 ## **Morning Routine Variables Descriptions & Visualizations**
-Note that they are all discrete variables
-<br>  
 
-* <font size="3">**Total_checked**: The number of morning routine tasks completed</font>
-* <font size="3">**Meditation_check**: Meditation task completion (Boolean value)</font>
-* <font size="3">**Reading_check**: Reading task completion (Boolean value)</font>
-* <font size="3">**morning_thoughts_check**: Morning journal task completion (Boolean value)</font>
-* <font size="3">**Push_up_check**: Push up task completion (Boolean value)</font>
-* <font size="3">**Morning_phone**: Did not touch my phone for the first hour of the day (Boolean value)</font>
-* <font size="3">**Night_phone**: Did not touch my phone for the last hour of the day (Boolean value)</font>
 <br>  
 
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 8, fig.height = 9, warning = FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 8, fig.height = 9, warning = FALSE, fig.align='center'}
 # Total_checked: the number of morning routine tasks completed
 mr_p1 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = total_checked), fill = "orange",
@@ -401,6 +378,18 @@ grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4,
              top = textGrob("Distribution for the Morning Routine Variables\n",gp=gpar(fontsize=16,font=1)))
 
 ```
+<br>  
+
+Note that they are all discrete variables
+<br>  
+
+* <font size="3">**Total_checked**: The number of morning routine tasks completed</font>
+* <font size="3">**Meditation_check**: Meditation task completion (Boolean value)</font>
+* <font size="3">**Reading_check**: Reading task completion (Boolean value)</font>
+* <font size="3">**morning_thoughts_check**: Morning journal task completion (Boolean value)</font>
+* <font size="3">**Push_up_check**: Push up task completion (Boolean value)</font>
+* <font size="3">**Morning_phone**: Did not touch my phone for the first hour of the day (Boolean value)</font>
+* <font size="3">**Night_phone**: Did not touch my phone for the last hour of the day (Boolean value)</font>
 
 
 <br>  
