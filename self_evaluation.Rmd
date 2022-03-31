@@ -11,6 +11,7 @@ library(gridExtra)
 library(tidyverse)
 library(margins)
 library(psych)
+library(grid)
 ```
 
 <br>  
@@ -124,8 +125,10 @@ all_dat <- all_dat %>%
     School = ifelse(Date == '08/31/2021', "1st", School),
     School = ifelse(Date %in% c('12/17/2021','12/18/2021','12/19/2021','12/20/2021'), "4th", School),
     School = ifelse(Date %in% c("01/27/2022","01/28/2022"), "1st",School),
-    Weekdays = weekdays(as.Date(Date,'%m/%d/%Y'))
-  )
+    Weekdays = weekdays(as.Date(Date,'%m/%d/%Y')),
+    date_sep = Date
+  ) %>%
+  separate(date_sep, into = c("month", "day", "year"), sep="/") # Create year, month, day variables
 
 
 ```
@@ -136,7 +139,7 @@ all_dat <- all_dat %>%
 
 ### Distribution for the main variables in all_dat
 
-```{r, echo = TRUE, eval = TRUE, out.width = "90%", fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, echo = TRUE, eval = TRUE, fig.asp = .75,  warning = FALSE}
 
 p1 <- ggplot(data = all_dat, alpha=.5) + 
   geom_density( aes(Total), color = 'red')
@@ -168,7 +171,8 @@ p9 <- ggplot(data = all_dat, alpha=.5)+
 p10 <- ggplot(data = all_dat, alpha=.5)+
   geom_density(aes(Total_todo), color = 'darkgreen')
   
-grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)
+grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5,
+             top = textGrob("Density Distribution for the Main Variables\n",gp=gpar(fontsize=16,font=1)))
 
 ```
 <br>  
@@ -192,24 +196,55 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5)
 <br>  
 
 #### School Variable 
-```{r, echo = TRUE, eval = TRUE, out.width = "70%", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE}
 ggplot(data = all_dat, aes(x = work_finished,
                            color = School))+
   geom_density()+
-  labs(x = "Work Finished (%)")+
+  labs(title = "Density Plot of Work Finished% for different School periods",
+       x = "Work Finished (%)")+
+  theme(plot.title = element_text(face = "bold")) +
   scale_color_discrete(name = "School Qtrs")
 ```
 <br>  
 
 #### Weekday Variable
-```{r, echo = TRUE, eval = TRUE, out.width = "70%", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, echo = TRUE, eval = TRUE,   warning = FALSE}
+
+all_dat$Weekdays <- factor(all_dat$Weekdays,levels = c("Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday","Sunday"))
+
 ggplot(data = all_dat)+
-  geom_boxplot(aes(x = reorder(Weekdays,work_finished, fun = median), y = work_finished, color = Weekdays))+
+  geom_boxplot(aes(x = Weekdays,
+                   y = work_finished, color = Weekdays))+
   theme(legend.position = "None")+
-  labs(x = "", y = "Work Finished (%)")
+  labs(title = "Work finished % by week days",
+       subtitle = "Data: all_dat (500+ observations)",
+       x = "", y = "Work Finished (%)")+
+  theme(plot.title = element_text(face = "bold"))
 ```
+<br>  
 
+#### Time Trend (Total %)
+```{r}
+all_dat_month <- all_dat %>%
+  dplyr::group_by(year, month) %>%
+  dplyr::summarise(Total = mean(Total),
+            Rise_time = mean(Rise_time)) %>%
+  dplyr::mutate(Date = make_date(year, month)) %>%
+  arrange(Date)
+  
+  
+ggplot(all_dat_month)+
+  geom_line(aes(x=Date, y=Total-Rise_time))+
+  labs(title = "Trend of Total% - Rise time",
+              subtitle = "Larger positive differnce indicates higher productivity")+
+  theme(plot.title = element_text(face = "bold"))
+```
+<br>  
 
+* <font size="3">Note for Rise time: 
+    + 0: Woke up on intended time
+    + Positive value: Later than intended
+    + Negative value: Earlier than intended</font>
 <br>  
 <br>  
 <br>  
@@ -237,7 +272,7 @@ $$r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\
 <br>  
 
 
-```{r, echo = TRUE, eval = TRUE, out.width = "85%", fig.width = 9, fig.height = 5, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, echo = TRUE, eval = TRUE, fig.width = 9, fig.height = 5, fig.asp = .75,  warning = FALSE}
 correlation_plot <- all_dat %>%
   dplyr::select(c(Screen_time, Meditation, Multiple, Rise_time, 
            Reading,Phone_pickups, work_finished, Total))
@@ -321,7 +356,7 @@ Note that they are all discrete variables
 <br>  
 
 
-```{r, echo = TRUE, eval = TRUE, out.width = "1600px", fig.width = 9, fig.height = 10, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, echo = TRUE, eval = TRUE, fig.width = 8, fig.height = 9, warning = FALSE}
 # Total_checked: the number of morning routine tasks completed
 mr_p1 <- ggplot(data = all_morning_rt) +
   geom_bar(aes(x = total_checked), fill = "orange",
@@ -364,7 +399,8 @@ mr_p7 <- ggplot(data = all_morning_rt) +
            alpha = .8, position = "dodge")+
   theme(legend.position = "None")
 
-grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4)
+grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4,
+             top = textGrob("Distribution for the Morning Routine Variables\n",gp=gpar(fontsize=16,font=1)))
 
 ```
 
@@ -381,7 +417,7 @@ grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4)
   + Reading
   + Morning journal </font>
   
-```{r, collapse=TRUE, out.width = "70%", figures-side, fig.asp = .75, fig.align='center', warning = FALSE}
+```{r, collapse=TRUE, figures-side, fig.asp = .75,  warning = FALSE}
 
 # see how number of morning routine checks affects the Total %
 ggplot(filter(all_morning_rt, total_checked != 0)) + 
@@ -419,7 +455,7 @@ ame_result
   + work_finished  .1911 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
 <br>  
 
-```{r, out.width = "60%",fig.align='center'}
+```{r, fig.align='center'}
 ggplot(data = ame_result) +
   geom_point(aes(factor , AME)) +
   geom_errorbar(aes(x = factor, ymin = lower, ymax = upper),
