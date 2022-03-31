@@ -420,13 +420,13 @@ grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4,
 ```{r, collapse=TRUE, figures-side, fig.asp = .75,  warning = FALSE}
 
 # see how number of morning routine checks affects the Total %
-ggplot(filter(all_morning_rt, total_checked != 0)) + 
+ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(Total))+
   facet_wrap(~total_checked)+
   labs(title = "Morning Routine checked & \nTotal %")
 
 # see how number of morning routine checks affects the total todo lists checked
-ggplot(filter(all_morning_rt, total_checked != 0)) + 
+ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
   labs(title = "Morning Routine checked & \n todo lists finished(excluding morning routine tasks)")
