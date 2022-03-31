@@ -112,7 +112,7 @@ fourth_q <- c(as.character(format(c(
 
 # Create School variable
 all_dat <- all_dat %>%
-  mutate(
+  dplyr::mutate(
     School = ifelse(
       format(as.Date(strptime(all_dat$Date, "%m/%d/%Y")), "%m/%d") %in% first_q, "1st", FALSE),
     School = ifelse(

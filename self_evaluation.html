@@ -391,7 +391,7 @@ fourth_q &lt;- c(as.character(format(c(
 
 # Create School variable
 all_dat &lt;- all_dat %&gt;%
-  mutate(
+  dplyr::mutate(
     School = ifelse(
       format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% first_q, &quot;1st&quot;, FALSE),
     School = ifelse(
