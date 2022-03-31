@@ -703,23 +703,22 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
 <pre><code>## # A tibble: 10 × 25
-##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
-##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
-##  1 08/11…        5      3             144         167     0 0                  0
-##  2 10/17…       15      3             123         200     0 0                 14
-##  3 01/10…       10      3.6            98          84     0 0                 15
-##  4 01/12…        9      3              74         304     0 0                 15
-##  5 01/31…        4      3              61         440     0 0                  0
-##  6 12/21…        8      3.6           107         314     0 0                  0
-##  7 02/20…       15      4              97         132     0 0                 15
-##  8 01/26…       10      4             126         149     0 0                 15
-##  9 01/03…        5      2.6            80         308     0 0                 10
-## 10 12/16…        8      3.4            97         201     0 0                 15
-## # … with 17 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
-## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
-## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, School &lt;chr&gt;,
-## #   Weekdays &lt;fct&gt;, month &lt;chr&gt;, day &lt;chr&gt;, year &lt;chr&gt;,
-## #   pred_work_finished &lt;dbl&gt;</code></pre>
+##    Date  Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation Mentality
+##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+##  1 08/1…        5      3             144         167     0 0                  0         0
+##  2 10/1…       15      3             123         200     0 0                 14         0
+##  3 01/1…       10      3.6            98          84     0 0                 15         3
+##  4 01/1…        9      3              74         304     0 0                 15         0
+##  5 01/3…        4      3              61         440     0 0                  0         0
+##  6 12/2…        8      3.6           107         314     0 0                  0         4
+##  7 02/2…       15      4              97         132     0 0                 15         0
+##  8 01/2…       10      4             126         149     0 0                 15         4
+##  9 01/0…        5      2.6            80         308     0 0                 10         3
+## 10 12/1…        8      3.4            97         201     0 0                 15         3
+## # … with 16 more variables: Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
+## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;,
+## #   work_finished &lt;dbl&gt;, School &lt;chr&gt;, Weekdays &lt;fct&gt;, month &lt;chr&gt;, day &lt;chr&gt;,
+## #   year &lt;chr&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).
@@ -740,15 +739,8 @@ shapiro.test(all_dat$Total)</code></pre>
 <ul>
 <li>Multiple(fit.normal)</li>
 </ul>
-<pre class="r"><code>library(fitdistrplus)</code></pre>
-<pre><code>## Loading required package: MASS</code></pre>
-<pre><code>## 
-## Attaching package: &#39;MASS&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     select</code></pre>
-<pre><code>## Loading required package: survival</code></pre>
-<pre class="r"><code>library(logspline)
+<pre class="r"><code>library(fitdistrplus)
+library(logspline)
 
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
