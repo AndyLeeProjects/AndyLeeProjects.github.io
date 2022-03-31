@@ -303,151 +303,9 @@ library(margins)
 library(psych)
 library(grid)</code></pre>
 <p><br></p>
-<div id="data-wrangling" class="section level3">
-<h3>Data Wrangling</h3>
-<pre class="r"><code>all_dat = read.csv(&#39;/Volumes/Programming/Spring 2022/project/all_dat.csv&#39;)
-# all_dat = read.csv(&#39;D:/Spring 2022/Project/all_dat.csv&#39;)
-morning_rt = read.csv(&#39;/Volumes/Programming/Spring 2022/Project/morning_routine.csv&#39;)
-
-
-colnames(all_dat) &lt;- c(&#39;X&#39;, &#39;Name&#39;,&#39;Finished&#39;,&#39;Multiple&#39;,&#39;Phone_pickups&#39;,
-                       &#39;Screen_time&#39;,&#39;Created&#39;,&#39;Date&#39;,&#39;Drink&#39;,&#39;Key_words&#39;,
-                       &#39;Meditation&#39;,&#39;Mentality&#39;,&#39;Satisfaction&#39;,
-                       &#39;Reading&#39;,&#39;Productivity&#39;,&#39;Rise_time&#39;,&#39;Run&#39;,&#39;Social&#39;,
-                       &#39;Tech&#39;,&#39;Total&#39;,&#39;Total_todo&#39;,&#39;Work_done&#39;)
-
-
-
-# Remove unnecessary columns &amp; Modify some columns
-all_dat &lt;- all_dat %&gt;%
-  dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %&gt;%
-  dplyr::mutate(work_finished = round(Finished/Total_todo,4),
-         Drink = lag(Drink),
-         Total = Total*100)%&gt;%
-  tibble()
-
-# Correct the date format for earlier Dates
-all_dat$Date[1:114] = format(mdy(all_dat$Date[1:114]),&quot;%m/%d/%Y&quot;)
-
-
-# Same for morning routine #new
-morning_rt &lt;- morning_rt %&gt;%
-  dplyr::mutate(Date = strptime(as.character(morning_rt$Date), &quot;%m/%d/%Y&quot;),
-         Date = format(Date, &quot;%m/%d/%Y&quot;),
-         morning_phone = rise_time_check, # modify column name 
-         night_phone = before_sleep_check) %&gt;%
-  dplyr::select(Date, everything(), -c(X, level_0, index, 
-                                rise_time_check, before_sleep_check)) %&gt;%
-  tibble()
-
-# merge morning_rt with all_dat
-all_morning_rt &lt;- merge(morning_rt, all_dat,by=&quot;Date&quot;, all.x=T) %&gt;%
-  dplyr::mutate(Date = mdy(Date),
-         work_finished_mr_exc = 
-           round((Finished-total_checked)/(Total_todo-6),4)) %&gt;%
-            # work_finished_mr_exc: this variable excludes morning routine 
-            #         tasks for more accurate statistical analysis. 
-  
-  dplyr::select(-c(rise_time_min)) %&gt;% # redundant
-  dplyr::filter(work_finished_mr_exc &lt;= 1 &amp; work_finished_mr_exc &gt;0) %&gt;%
-  arrange(desc(Date))</code></pre>
-<p><br></p>
-</div>
-<div id="read-organize-data-add-school-weekday-variables" class="section level3">
-<h3>Read &amp; Organize Data: Add School &amp; Weekday Variables</h3>
-<pre class="r"><code># Break dates
-  # Fall, Thanksgiving, Christmas, Spring, Summer, etc.
-date_breaks &lt;- as.character(format(c(
-seq(as.Date(&#39;11/25/2020&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 5),
-seq(as.Date(&#39;12/17/2020&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 46),
-seq(as.Date(&#39;03/23/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 6),
-seq(as.Date(&#39;04/23/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 6),
-seq(as.Date(&#39;05/19/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 104),
-seq(as.Date(&#39;10/11/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 2),
-seq(as.Date(&#39;12/21/2021&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 37),
-seq(as.Date(&#39;03/14/2022&#39;, format = &quot;%m/%d/%Y&quot;), by = &quot;day&quot;, length.out = 7)),
-&quot;%m/%d/%Y&quot;))
-
-# Semester Quarters
-# 1st quarter of the semester
-first_q &lt;- c(as.character(format(c(
-  seq(as.Date(&#39;09/01&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),
-  seq(as.Date(&#39;02/01&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
-
-# 2nd quarter of the semester
-second_q &lt;- c(as.character(format(c(
-  seq(as.Date(&#39;09/28&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),
-  seq(as.Date(&#39;02/28&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
-
-# 3rd quarter of the semester
-third_q &lt;- c(as.character(format(c(
-  seq(as.Date(&#39;10/25&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27),
-  seq(as.Date(&#39;03/27&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
-
-# 4th quarter of the semester
-fourth_q &lt;- c(as.character(format(c(
-  seq(as.Date(&#39;11/21&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 26),
-  seq(as.Date(&#39;04/23&#39;, format = &quot;%m/%d&quot;), by = &quot;day&quot;, length.out = 27)),&quot;%m/%d&quot;)))
-
-# Create School variable
-all_dat &lt;- all_dat %&gt;%
-  dplyr::mutate(
-    School = ifelse(
-      format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% first_q, &quot;1st&quot;, FALSE),
-    School = ifelse(
-      format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% second_q, &quot;2nd&quot;, School),
-    School = ifelse(
-      format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% third_q, &quot;3rd&quot;, School),
-    School = ifelse(format(as.Date(strptime(all_dat$Date, &quot;%m/%d/%Y&quot;)), &quot;%m/%d&quot;) %in% fourth_q, &quot;4th&quot;, School),
-    School = ifelse(Date %in% date_breaks, &quot;Break&quot;, School),
-    School = ifelse(Date == &#39;08/30/2021&#39;, &quot;1st&quot;, School),
-    School = ifelse(Date == &#39;08/31/2021&#39;, &quot;1st&quot;, School),
-    School = ifelse(Date %in% c(&#39;12/17/2021&#39;,&#39;12/18/2021&#39;,&#39;12/19/2021&#39;,&#39;12/20/2021&#39;), &quot;4th&quot;, School),
-    School = ifelse(Date %in% c(&quot;01/27/2022&quot;,&quot;01/28/2022&quot;), &quot;1st&quot;,School),
-    Weekdays = weekdays(as.Date(Date,&#39;%m/%d/%Y&#39;)),
-    date_sep = Date
-  ) %&gt;%
-  separate(date_sep, into = c(&quot;month&quot;, &quot;day&quot;, &quot;year&quot;), sep=&quot;/&quot;) # Create year, month, day variables</code></pre>
-<p><br></p>
-</div>
-<div id="distribution-for-the-main-variables-in-all_dat" class="section level3">
-<h3>Distribution for the main variables in all_dat</h3>
-<pre class="r"><code>p1 &lt;- ggplot(data = all_dat, alpha=.5) + 
-  geom_density( aes(Total), color = &#39;red&#39;)
-
-p2 &lt;- ggplot(data = all_dat) +
-  geom_density( aes(Multiple), color = &#39;blue&#39;)
-
-p3 &lt;- ggplot(data = all_dat, alpha=.5)+
-  geom_density( aes(Reading), color = &#39;purple&#39;)
-
-p4 &lt;-ggplot(data = all_dat, alpha=.5)+
-  geom_density(aes(Meditation), color = &#39;black&#39;)
-
-p5 &lt;- ggplot(data = all_dat, alpha=.5)+
-  geom_density(aes(Phone_pickups), color = &#39;green&#39;)
-
-p6 &lt;- ggplot(data = all_dat, alpha=.5)+
-  geom_density(aes(Screen_time), color = &#39;orange&#39;)
-
-p7 &lt;- ggplot(data = all_dat, alpha=.5)+
-  geom_density(aes(Rise_time), color = &#39;skyblue&#39;)
-
-p8 &lt;- ggplot(data = all_dat, alpha=.5)+
-  geom_density(aes(Drink), color = &#39;darkgreen&#39;)
-
-p9 &lt;- ggplot(data = all_dat, alpha=.5)+
-  geom_density(aes(work_finished), color = &#39;darkgreen&#39;)
-
-p10 &lt;- ggplot(data = all_dat, alpha=.5)+
-  geom_density(aes(Total_todo), color = &#39;darkgreen&#39;)
-  
-grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5,
-             top = textGrob(&quot;Density Distribution for the Main Variables\n&quot;,gp=gpar(fontsize=16,font=1)))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" /> <br></p>
-</div>
-<div id="main-varibles-descriptions" class="section level3">
-<h3>Main Varibles Descriptions</h3>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /> <br></p>
+<div id="main-varibles-descriptions" class="section level2">
+<h2>Main Varibles Descriptions</h2>
 <ul>
 <li><font size="3"><strong>Reading</strong>: reading duration in minutes</font></li>
 <li><font size="3"><strong>Meditation</strong>: meditation duration in minutes</font></li>
@@ -468,8 +326,8 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5,
 <li><font size="3"><strong>Total</strong>: The sum of the percentages calculated of above variables</font></li>
 </ul>
 <p><br></p>
-<div id="school-variable" class="section level4">
-<h4>School Variable</h4>
+<div id="school-variable" class="section level3">
+<h3>School Variable</h3>
 <pre class="r"><code>ggplot(data = all_dat, aes(x = work_finished,
                            color = School))+
   geom_density()+
@@ -479,8 +337,8 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5,
   scale_color_discrete(name = &quot;School Qtrs&quot;)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="672" /> <br></p>
 </div>
-<div id="weekday-variable" class="section level4">
-<h4>Weekday Variable</h4>
+<div id="weekday-variable" class="section level3">
+<h3>Weekday Variable</h3>
 <pre class="r"><code>all_dat$Weekdays &lt;- factor(all_dat$Weekdays,levels = c(&quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;,&quot;Friday&quot;,&quot;Saturday&quot;,&quot;Sunday&quot;))
 
 ggplot(data = all_dat)+
@@ -493,16 +351,17 @@ ggplot(data = all_dat)+
   theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="672" /> <br></p>
 </div>
-<div id="time-trend-total" class="section level4">
-<h4>Time Trend (Total %)</h4>
+<div id="time-trend-total" class="section level3">
+<h3>Time Trend (Total %)</h3>
 <pre class="r"><code>all_dat_month &lt;- all_dat %&gt;%
   dplyr::group_by(year, month) %&gt;%
   dplyr::summarise(Total = mean(Total),
             Rise_time = mean(Rise_time)) %&gt;%
   dplyr::mutate(Date = make_date(year, month)) %&gt;%
-  arrange(Date)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the `.groups` argument.</code></pre>
-<pre class="r"><code>ggplot(all_dat_month)+
+  arrange(Date)
+  
+  
+ggplot(all_dat_month)+
   geom_line(aes(x=Date, y=Total-Rise_time))+
   labs(title = &quot;Trend of Total% - Rise time&quot;,
               subtitle = &quot;Larger positive differnce indicates higher productivity&quot;)+
@@ -520,11 +379,12 @@ ggplot(data = all_dat)+
 </ul>
 </div>
 </div>
-<div id="how-do-these-variables-affect-the-outcome-of-the-day" class="section level2">
-<h2>How do these variables affect the outcome of the day?</h2>
+<div id="how-do-these-variables-affect-the-outcome-of-the-day" class="section level1">
+<h1>How do these variables affect the outcome of the day?</h1>
+<hr />
 <p><br></p>
-<div id="find-the-relationships-between-these-variables-and-how-they-affect-my-lifestyle" class="section level3">
-<h3>Find the relationships between these variables and how they affect my lifestyle</h3>
+<div id="find-the-relationships-between-these-variables-and-how-they-affect-my-lifestyle" class="section level2">
+<h2>Find the relationships between these variables and how they affect my lifestyle</h2>
 <p><font size="3">We will first take a look at the characteristics of the variables by utilizing <strong>descriptive statistics</strong>.</font> <br></p>
 <ul>
 <li><font size="3">Use <strong>pairs.panels function</strong> in psych module
@@ -546,8 +406,8 @@ ggplot(data = all_dat)+
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="864" /></p>
 <p><br></p>
-<div id="single-regression-function-yalphabeta-x" class="section level4">
-<h4>Single Regression Function: <span class="math inline">\(y=\alpha+\beta x\)</span></h4>
+<div id="single-regression-function-yalphabeta-x" class="section level3">
+<h3>Single Regression Function: <span class="math inline">\(y=\alpha+\beta x\)</span></h3>
 <ul>
 <li><font size = "3">Set:
 <ul>
@@ -608,36 +468,37 @@ summary(model)</code></pre>
 </div>
 </div>
 </div>
-<div id="how-important-are-my-morning-routine-tasks" class="section level2">
-<h2>How important are my Morning Routine tasks?</h2>
+<div id="how-important-are-my-morning-routine-tasks" class="section level1">
+<h1>How important are my Morning Routine tasks?</h1>
+<hr />
 <p><br></p>
 <p><span class="math display">\[&quot;The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start.&quot;\\ -Jim\ Kwik\]</span> <br></p>
-<div id="we-will-use-the-following-data-set" class="section level3">
-<h3>We will use the following data set</h3>
+<div id="we-will-use-the-following-data-set" class="section level2">
+<h2>We will use the following data set</h2>
 <ul>
 <li><font size="3">Combined Morning Routine variables with all_dat variables</font></li>
 </ul>
 <pre class="r"><code>tibble(all_morning_rt)</code></pre>
 <pre><code>## # A tibble: 135 × 30
-##    Date       total_checked meditation_min meditation_check reading_check reading_min
-##    &lt;date&gt;             &lt;int&gt;          &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;               &lt;int&gt;
-##  1 2022-03-29             3             15 True             False                   0
-##  2 2022-03-28             2              0 False            False                   0
-##  3 2022-03-26             6             15 True             True                   11
-##  4 2022-03-25             5             15 True             False                   0
-##  5 2022-03-24             5             15 True             False                   0
-##  6 2022-03-23             5             15 True             False                   0
-##  7 2022-03-22             1             15 True             False                   0
-##  8 2022-03-21             2              0 False            False                   0
-##  9 2022-03-20             6             15 True             True                   23
-## 10 2022-03-19             3             15 True             False                   0
-## # … with 125 more rows, and 24 more variables: run_km &lt;int&gt;,
+##    Date       total_checked meditation_min meditation_check reading_check
+##    &lt;date&gt;             &lt;int&gt;          &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;        
+##  1 2022-03-29             3             15 True             False        
+##  2 2022-03-28             2              0 False            False        
+##  3 2022-03-26             6             15 True             True         
+##  4 2022-03-25             5             15 True             False        
+##  5 2022-03-24             5             15 True             False        
+##  6 2022-03-23             5             15 True             False        
+##  7 2022-03-22             1             15 True             False        
+##  8 2022-03-21             2              0 False            False        
+##  9 2022-03-20             6             15 True             True         
+## 10 2022-03-19             3             15 True             False        
+## # … with 125 more rows, and 25 more variables: reading_min &lt;int&gt;, run_km &lt;int&gt;,
 ## #   morning_thoughts_check &lt;chr&gt;, push_up_check &lt;chr&gt;, morning_phone &lt;chr&gt;,
 ## #   night_phone &lt;chr&gt;, Finished &lt;dbl&gt;, Multiple &lt;dbl&gt;, Phone_pickups &lt;dbl&gt;,
-## #   Screen_time &lt;dbl&gt;, Drink &lt;dbl&gt;, Key_words &lt;chr&gt;, Meditation &lt;dbl&gt;, Mentality &lt;dbl&gt;,
-## #   Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;,
-## #   Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;,
-## #   work_finished_mr_exc &lt;dbl&gt;</code></pre>
+## #   Screen_time &lt;dbl&gt;, Drink &lt;dbl&gt;, Key_words &lt;chr&gt;, Meditation &lt;dbl&gt;,
+## #   Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
+## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;,
+## #   Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, work_finished_mr_exc &lt;dbl&gt;</code></pre>
 <p><br></p>
 <ul>
 <li><font size="3">Column Names</font></li>
@@ -655,8 +516,8 @@ summary(model)</code></pre>
 ## [28] &quot;Total_todo&quot;             &quot;work_finished&quot;          &quot;work_finished_mr_exc&quot;</code></pre>
 <p><br></p>
 </div>
-<div id="morning-routine-variables-descriptions-visualizations" class="section level3">
-<h3>Morning Routine Variables Descriptions &amp; Visualizations</h3>
+<div id="morning-routine-variables-descriptions-visualizations" class="section level2">
+<h2>Morning Routine Variables Descriptions &amp; Visualizations</h2>
 <p>Note that they are all discrete variables <br></p>
 <ul>
 <li><font size="3"><strong>Total_checked</strong>: The number of morning routine tasks completed</font></li>
@@ -714,8 +575,8 @@ grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4,
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
 <p><br></p>
 </div>
-<div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level3">
-<h3>Test how Total_checked variable affects the outcome of the day</h3>
+<div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level2">
+<h2>Test how Total_checked variable affects the outcome of the day</h2>
 <ul>
 <li><font size = "4">The morning routine tasks:
 <ul>
@@ -743,11 +604,11 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 <p><img src="self_evaluation_files/figure-html/figures-side-2.png" width="672" /></p>
 <p><br></p>
 </div>
-<div id="logistic-regression" class="section level3">
-<h3>Logistic Regression</h3>
+<div id="logistic-regression" class="section level2">
+<h2>Logistic Regression</h2>
 <p><br></p>
-<div id="single-logistic-regression" class="section level4">
-<h4>Single Logistic Regression</h4>
+<div id="single-logistic-regression" class="section level3">
+<h3>Single Logistic Regression</h3>
 <pre class="r"><code>model_logit &lt;- glm(work_finished_mr_exc ~ night_phone,
                    data = all_morning_rt, family = binomial(link = &quot;logit&quot;))
 m = margins(model_logit) 
@@ -757,8 +618,8 @@ ame_result</code></pre>
 ##  night_phoneTrue 0.1814 0.0854 2.1251 0.0336 0.0141 0.3487</code></pre>
 <p><br></p>
 </div>
-<div id="how-to-interpret-the-average-marginal-effectame-values" class="section level4">
-<h4>How to interpret the Average Marginal Effect(AME) values</h4>
+<div id="how-to-interpret-the-average-marginal-effectame-values" class="section level3">
+<h3>How to interpret the Average Marginal Effect(AME) values</h3>
 <ul>
 <li><font size = "3"> Interpret them as percentage points rather than percentage
 <ul>
@@ -774,8 +635,8 @@ ame_result</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
-<div id="meditation-with-all_dat" class="section level4">
-<h4>Meditation with all_dat</h4>
+<div id="meditation-with-all_dat" class="section level3">
+<h3>Meditation with all_dat</h3>
 <pre><code>## 
 ## Call:
 ## lm(formula = Meditation ~ Multiple + Phone_pickups + Screen_time + 
@@ -807,8 +668,8 @@ ame_result</code></pre>
 ## F-statistic: 93.77 on 9 and 467 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
-<div id="multiple-with-all_dat" class="section level4">
-<h4>Multiple with all_dat</h4>
+<div id="multiple-with-all_dat" class="section level3">
+<h3>Multiple with all_dat</h3>
 <ul>
 <li>Multiple data length: 450 +</li>
 </ul>
@@ -849,8 +710,8 @@ summary(multiple_all)</code></pre>
 <p><br></p>
 </div>
 </div>
-<div id="linear-regression-summary-for-work_done-all_dat" class="section level3">
-<h3>Linear Regression Summary for Work_done (all_dat)</h3>
+<div id="linear-regression-summary-for-work_done-all_dat" class="section level2">
+<h2>Linear Regression Summary for Work_done (all_dat)</h2>
 <pre class="r"><code>#################### Linear Regression Work_done (all_dat) #####################
 
 # Work done 
@@ -890,8 +751,8 @@ summary(work_finished_all)</code></pre>
 ## F-statistic: 93.15 on 9 and 467 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br></p>
 </div>
-<div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level3">
-<h3>Actual vs Prediction Visualization for Work_done (all_dat)</h3>
+<div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2">
+<h2>Actual vs Prediction Visualization for Work_done (all_dat)</h2>
 <pre class="r"><code>all_dat$pred_work_finished &lt;- predict(work_finished_all, newdata = all_dat)
 
 # Explanatory variable: work_finished
@@ -907,8 +768,8 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><br></p>
 </div>
-<div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level3">
-<h3>Actual vs Prediction Residual Visualization for Work_done (all_dat)</h3>
+<div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level2">
+<h2>Actual vs Prediction Residual Visualization for Work_done (all_dat)</h2>
 <pre class="r"><code># graph for legibility# Plot of residual error as a function of prediction
 ggplot(data = all_dat, aes(x = pred_work_finished,
                            y = pred_work_finished - work_finished)) +
@@ -922,28 +783,29 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p><br></p>
 </div>
-<div id="testing-normality" class="section level3">
-<h3>Testing Normality</h3>
+<div id="testing-normality" class="section level2">
+<h2>Testing Normality</h2>
 <pre class="r"><code>library(dplyr)
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
 <pre><code>## # A tibble: 10 × 25
-##    Date  Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation Mentality
-##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
-##  1 08/1…        5      3             144         167     0 0                  0         0
-##  2 10/1…       15      3             123         200     0 0                 14         0
-##  3 01/1…       10      3.6            98          84     0 0                 15         3
-##  4 01/1…        9      3              74         304     0 0                 15         0
-##  5 01/3…        4      3              61         440     0 0                  0         0
-##  6 12/2…        8      3.6           107         314     0 0                  0         4
-##  7 02/2…       15      4              97         132     0 0                 15         0
-##  8 01/2…       10      4             126         149     0 0                 15         4
-##  9 01/0…        5      2.6            80         308     0 0                 10         3
-## 10 12/1…        8      3.4            97         201     0 0                 15         3
-## # … with 16 more variables: Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
-## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;,
-## #   work_finished &lt;dbl&gt;, School &lt;chr&gt;, Weekdays &lt;fct&gt;, month &lt;chr&gt;, day &lt;chr&gt;,
-## #   year &lt;chr&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
+##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
+##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+##  1 08/11…        5      3             144         167     0 0                  0
+##  2 10/17…       15      3             123         200     0 0                 14
+##  3 01/10…       10      3.6            98          84     0 0                 15
+##  4 01/12…        9      3              74         304     0 0                 15
+##  5 01/31…        4      3              61         440     0 0                  0
+##  6 12/21…        8      3.6           107         314     0 0                  0
+##  7 02/20…       15      4              97         132     0 0                 15
+##  8 01/26…       10      4             126         149     0 0                 15
+##  9 01/03…        5      2.6            80         308     0 0                 10
+## 10 12/16…        8      3.4            97         201     0 0                 15
+## # … with 17 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
+## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
+## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, School &lt;chr&gt;,
+## #   Weekdays &lt;fct&gt;, month &lt;chr&gt;, day &lt;chr&gt;, year &lt;chr&gt;,
+## #   pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).
@@ -959,13 +821,20 @@ shapiro.test(all_dat$Total)</code></pre>
 ## W = 0.94541, p-value = 2.597e-12</code></pre>
 <p><br></p>
 </div>
-<div id="determining-distributions" class="section level3">
-<h3>Determining Distributions</h3>
+<div id="determining-distributions" class="section level2">
+<h2>Determining Distributions</h2>
 <ul>
 <li>Multiple(fit.normal)</li>
 </ul>
-<pre class="r"><code>library(fitdistrplus)
-library(logspline)
+<pre class="r"><code>library(fitdistrplus)</code></pre>
+<pre><code>## Loading required package: MASS</code></pre>
+<pre><code>## 
+## Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre class="r"><code>library(logspline)
 
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.

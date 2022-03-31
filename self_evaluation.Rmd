@@ -14,12 +14,9 @@ library(psych)
 library(grid)
 ```
 
-<br>  
 
 
-### Data Wrangling
-
-```{r}
+```{r, echo=FALSE}
 
 all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
 # all_dat = read.csv('D:/Spring 2022/Project/all_dat.csv')
@@ -71,11 +68,9 @@ all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
 
 ```
 
-<br>  
 
-### Read & Organize Data: Add School & Weekday Variables
 
-```{r}
+```{r, echo=FALSE}
 # Break dates
   # Fall, Thanksgiving, Christmas, Spring, Summer, etc.
 date_breaks <- as.character(format(c(
@@ -137,9 +132,7 @@ all_dat <- all_dat %>%
 <br>  
 
 
-### Distribution for the main variables in all_dat
-
-```{r, echo = TRUE, eval = TRUE, fig.asp = .75,  warning = FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 7, fig.height = 7, warning = FALSE, fig.align='center'}
 
 p1 <- ggplot(data = all_dat, alpha=.5) + 
   geom_density( aes(Total), color = 'red')
@@ -177,7 +170,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5,
 ```
 <br>  
 
-### Main Varibles Descriptions
+## Main Varibles Descriptions
 
 * <font size="3">**Reading**: reading duration in minutes</font>
 * <font size="3">**Meditation**: meditation duration in minutes</font>
@@ -195,7 +188,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5,
 
 <br>  
 
-#### School Variable 
+### School Variable 
 ```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE}
 ggplot(data = all_dat, aes(x = work_finished,
                            color = School))+
@@ -207,7 +200,7 @@ ggplot(data = all_dat, aes(x = work_finished,
 ```
 <br>  
 
-#### Weekday Variable
+### Weekday Variable
 ```{r, echo = TRUE, eval = TRUE,   warning = FALSE}
 
 all_dat$Weekdays <- factor(all_dat$Weekdays,levels = c("Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday","Sunday"))
@@ -223,8 +216,8 @@ ggplot(data = all_dat)+
 ```
 <br>  
 
-#### Time Trend (Total %)
-```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE}
+### Time Trend (Total %)
+```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE, message=FALSE}
 all_dat_month <- all_dat %>%
   dplyr::group_by(year, month) %>%
   dplyr::summarise(Total = mean(Total),
@@ -252,12 +245,14 @@ ggplot(all_dat_month)+
 
 
 
-## How do these variables affect the outcome of the day?
+# How do these variables affect the outcome of the day?
+
+---
 
 <br>  
 
 
-### Find the relationships between these variables and how they affect my lifestyle
+## Find the relationships between these variables and how they affect my lifestyle
 <font size="3">We will first take a look at the characteristics of the variables by utilizing **descriptive statistics**.</font>
 <br>  
 
@@ -283,7 +278,7 @@ pairs.panels(correlation_plot, lm = TRUE)
 <br>  
 
 
-#### Single Regression Function: $y=\alpha+\beta x$
+### Single Regression Function: $y=\alpha+\beta x$
 
 
 * <font size = "3">Set:
@@ -321,13 +316,16 @@ summary(model)
 <br>  
 
 
-## How important are my Morning Routine tasks? 
+# How important are my Morning Routine tasks? 
+
+---
+
 <br>  
 
 $$"The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start."\\ -Jim\ Kwik$$
 <br>  
 
-### We will use the following data set
+## We will use the following data set
 * <font size="3">Combined Morning Routine variables with all_dat variables</font>
 ```{r, message=FALSE}
 tibble(all_morning_rt)
@@ -342,7 +340,7 @@ colnames(all_morning_rt)
 <br>  
 
 
-### Morning Routine Variables Descriptions & Visualizations
+## Morning Routine Variables Descriptions & Visualizations
 Note that they are all discrete variables
 <br>  
 
@@ -408,7 +406,7 @@ grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4,
 <br>  
 
 
-### Test how Total_checked variable affects the outcome of the day
+## Test how Total_checked variable affects the outcome of the day
 * <font size = "4">The morning routine tasks:
   + Not touching my phone for at least 30 minutes the night before
   + Not touching my phone for an hour after I wake up
@@ -435,12 +433,12 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 <br>  
 
 
-### Logistic Regression
+## Logistic Regression
 
 <br>  
 
 
-#### Single Logistic Regression
+### Single Logistic Regression
 ```{r, message=FALSE, warning=FALSE}
 model_logit <- glm(work_finished_mr_exc ~ night_phone,
                    data = all_morning_rt, family = binomial(link = "logit"))
@@ -450,7 +448,7 @@ ame_result
 ```
 <br>  
 
-#### How to interpret the Average Marginal Effect(AME) values
+### How to interpret the Average Marginal Effect(AME) values
 * <font size = "3"> Interpret them as percentage points rather than percentage
   + work_finished  .1911 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
 <br>  
@@ -469,7 +467,7 @@ ggplot(data = ame_result) +
 <br>  
 
 
-#### Meditation with all_dat
+### Meditation with all_dat
 ```{r, echo=FALSE}
 
 # Click below to see more about lm() summary function
@@ -485,7 +483,7 @@ summary(meditation_all)
 
 <br>  
 
-#### Multiple with all_dat
+### Multiple with all_dat
 * Multiple data length: 450 + 
 ```{r}
 # Multiple data all
@@ -499,7 +497,7 @@ summary(multiple_all)
 <br>  
 
 
-### Linear Regression Summary for Work_done (all_dat)
+## Linear Regression Summary for Work_done (all_dat)
 
 ```{r}
 #################### Linear Regression Work_done (all_dat) #####################
@@ -515,7 +513,7 @@ summary(work_finished_all)
 <br>  
 
 
-### Actual vs Prediction Visualization for Work_done (all_dat)
+## Actual vs Prediction Visualization for Work_done (all_dat)
 
 ```{r, warning=FALSE}
 all_dat$pred_work_finished <- predict(work_finished_all, newdata = all_dat)
@@ -535,7 +533,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 <br>  
 
 
-### Actual vs Prediction Residual Visualization for Work_done (all_dat)
+## Actual vs Prediction Residual Visualization for Work_done (all_dat)
 
 ```{r, warning=FALSE}
 # graph for legibility# Plot of residual error as a function of prediction
@@ -553,7 +551,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 <br>  
 
 
-### Testing Normality
+## Testing Normality
 
 ```{r}
 library(dplyr)
@@ -574,7 +572,7 @@ shapiro.test(all_dat$Total)
 
   
   
-###  Determining Distributions  
+##  Determining Distributions  
 * Multiple(fit.normal)
 
 ```{r}
