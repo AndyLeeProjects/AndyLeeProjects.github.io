@@ -26,7 +26,7 @@ theme_set(theme_minimal())
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # Read 2015 Data
-h15 <- read_csv("2015.csv")
+h15 <- read_csv("Happiness_Data/2015.csv")
 h15 <- h15 %>%
   dplyr::mutate(Year = 2015) %>%
   dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
@@ -39,7 +39,7 @@ h15 <- h15 %>%
 
 
 # Read 2016 Data
-h16 <- read_csv("2016.csv")  
+h16 <- read_csv("Happiness_Data/2016.csv")  
 h16 <- h16 %>%
   dplyr::mutate(Year = 2016,
       `Standard Error` = (`Upper Confidence Interval`-`Lower Confidence Interval`)/3.92) %>%
@@ -63,7 +63,7 @@ h_regions <- dplyr::select(h16, Country, Region)
 
 
 # Read 2017 Data
-h17 <- read_csv("2017.csv")  
+h17 <- read_csv("Happiness_Data/2017.csv")  
 h17 <- h17 %>%
   dplyr::mutate(Year = 2017,
          `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %>%
@@ -79,7 +79,7 @@ h17 <- h17 %>%
 
 
 # Read 2018 Data
-h18 <- read_csv("2018.csv")  
+h18 <- read_csv("Happiness_Data/2018.csv")  
 h18 <- h18 %>%
   dplyr::mutate(Year = 2018) %>%
   dplyr::rename(H_rank=`Overall rank`, # Modify variable names
@@ -94,7 +94,7 @@ h18 <- h18 %>%
 
 
 # Read 2019 Data
-h19 <- read_csv("2019.csv")  
+h19 <- read_csv("Happiness_Data/2019.csv")  
 h19 <- h19 %>%
   dplyr::mutate(Year = 2019) %>%
   dplyr::rename(H_rank=`Overall rank`, # Modify variable names
