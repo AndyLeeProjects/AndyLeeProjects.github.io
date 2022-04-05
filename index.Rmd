@@ -20,4 +20,5 @@ title: "Projects"
 <br>  
 
 ## [Happiness Project](https://alin-96.github.io/project_main.html)
-    Happiness Project Description 
+
+<font size="3">   The data was collected from Gallup World Poll. Their survey consisted of questions that asked participants to rank their own life on a Cantril ladder with a scale from 1 to 10, 10 being the best ideal way of living and 0 being the worst. This data set focuses on the happiness score of each country, which ranges from 0 to 10. Each country is ranked based on that averaged happiness score for participants. The team recorded scores for these factors: economy or GDP per Capita, family or social support, health or life expectancy, and freedom to help explain the happiness score of each country and these factors are scaled from 0 to 1.85 instead of 0 to 10. </font>

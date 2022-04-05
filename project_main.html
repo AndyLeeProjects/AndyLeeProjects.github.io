@@ -310,7 +310,7 @@ theme_set(theme_minimal())</code></pre>
 <div id="data-wrangling" class="section level3">
 <h3>Data Wrangling</h3>
 <pre class="r"><code># Read 2015 Data
-h15 &lt;- read_csv(&quot;2015.csv&quot;)
+h15 &lt;- read_csv(&quot;Happiness_Data/2015.csv&quot;)
 h15 &lt;- h15 %&gt;%
   dplyr::mutate(Year = 2015) %&gt;%
   dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
@@ -323,7 +323,7 @@ h15 &lt;- h15 %&gt;%
 
 
 # Read 2016 Data
-h16 &lt;- read_csv(&quot;2016.csv&quot;)  
+h16 &lt;- read_csv(&quot;Happiness_Data/2016.csv&quot;)  
 h16 &lt;- h16 %&gt;%
   dplyr::mutate(Year = 2016,
       `Standard Error` = (`Upper Confidence Interval`-`Lower Confidence Interval`)/3.92) %&gt;%
@@ -347,7 +347,7 @@ h_regions &lt;- dplyr::select(h16, Country, Region)
 
 
 # Read 2017 Data
-h17 &lt;- read_csv(&quot;2017.csv&quot;)  
+h17 &lt;- read_csv(&quot;Happiness_Data/2017.csv&quot;)  
 h17 &lt;- h17 %&gt;%
   dplyr::mutate(Year = 2017,
          `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %&gt;%
@@ -363,7 +363,7 @@ h17 &lt;- h17 %&gt;%
 
 
 # Read 2018 Data
-h18 &lt;- read_csv(&quot;2018.csv&quot;)  
+h18 &lt;- read_csv(&quot;Happiness_Data/2018.csv&quot;)  
 h18 &lt;- h18 %&gt;%
   dplyr::mutate(Year = 2018) %&gt;%
   dplyr::rename(H_rank=`Overall rank`, # Modify variable names
@@ -378,7 +378,7 @@ h18 &lt;- h18 %&gt;%
 
 
 # Read 2019 Data
-h19 &lt;- read_csv(&quot;2019.csv&quot;)  
+h19 &lt;- read_csv(&quot;Happiness_Data/2019.csv&quot;)  
 h19 &lt;- h19 %&gt;%
   dplyr::mutate(Year = 2019) %&gt;%
   dplyr::rename(H_rank=`Overall rank`, # Modify variable names
@@ -416,8 +416,19 @@ glimpse(h_alldat)</code></pre>
   summarise(mean_rank = mean(H_rank)) %&gt;%
   arrange(mean_rank, &quot;DESC&quot;) %&gt;%
   filter(mean_rank &lt;= 10) )</code></pre>
-<pre><code>## [1] mean_rank
-## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##    Country     mean_rank
+##    &lt;chr&gt;           &lt;dbl&gt;
+##  1 Denmark           2.2
+##  2 Norway            2.8
+##  3 Iceland           3.2
+##  4 Finland           3.6
+##  5 Switzerland       3.6
+##  6 Netherlands       6.2
+##  7 Canada            6.8
+##  8 New Zealand       8.2
+##  9 Sweden            8.6
+## 10 Australia        10</code></pre>
 <pre class="r"><code>ggplot(filter(h_alldat, Region != &quot;NA&quot;)) +
   geom_boxplot(aes(x = H_score, y=reorder(Region, H_score), color = Region))+
   theme(legend.position = &quot;None&quot;) +
