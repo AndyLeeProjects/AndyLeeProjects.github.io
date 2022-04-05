@@ -6,7 +6,6 @@ output:
   html_document:
     toc: true
     toc_float:
-      number_sections: true
       smooth_scroll: false
 ---
 
@@ -139,6 +138,12 @@ all_dat <- all_dat %>%
   
 <br>  
 
+# **Main Variables: Descriptive Statistics**
+
+---
+
+<br>  
+
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 7, fig.height = 7, warning = FALSE, fig.align='center'}
 
@@ -178,7 +183,7 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5,
 ```
 <br>  
 
-## **Main Varibles Descriptions**
+## Main Varibles Descriptions
 
 * <font size="3">**Reading**: reading duration in minutes</font>
 * <font size="3">**Meditation**: meditation duration in minutes</font>
@@ -195,77 +200,11 @@ grid.arrange(p1, p2, p3,p4,p5,p6,p7,p8,p9,p10, nrow = 5,
 * <font size="3">**Total**: The sum of the percentages calculated of above variables</font>
 
 <br>  
-
-### **School Variable **
-```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE}
-ggplot(data = all_dat, aes(x = work_finished,
-                           color = School))+
-  geom_density()+
-  labs(title = "Density Plot of Work Finished% for different School periods",
-       x = "Work Finished (%)")+
-  theme(plot.title = element_text(face = "bold")) +
-  scale_color_discrete(name = "School Qtrs")
-```
 <br>  
 
-### **Weekday Variable**
-```{r, echo = TRUE, eval = TRUE,   warning = FALSE}
+## Main Variables Correlations
 
-all_dat$Weekdays <- factor(all_dat$Weekdays,levels = c("Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday","Sunday"))
-
-ggplot(data = all_dat)+
-  geom_boxplot(aes(x = Weekdays,
-                   y = work_finished, color = Weekdays))+
-  theme(legend.position = "None")+
-  labs(title = "Work finished % by week days",
-       subtitle = "Data: all_dat (500+ observations)",
-       x = "", y = "Work Finished (%)")+
-  theme(plot.title = element_text(face = "bold"))
-```
-<br>  
-
-### **Time Trend (Total %)**
-```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE, message=FALSE}
-all_dat_month <- all_dat %>%
-  dplyr::group_by(year, month) %>%
-  dplyr::summarise(Total = mean(Total),
-            Rise_time = mean(Rise_time)) %>%
-  dplyr::mutate(Date = make_date(year, month)) %>%
-  arrange(Date)
-  
-  
-ggplot(all_dat_month)+
-  geom_line(aes(x=Date, y=Total-Rise_time))+
-  labs(title = "Trend of Total% - Rise time",
-              subtitle = "Larger positive differnce indicates higher productivity")+
-  theme(plot.title = element_text(face = "bold")) +
-  scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01", "2021-06-01",
-                                "2022-01-01"))
-  
-```
-<br>  
-
-* <font size="3">Note for Rise time: 
-    + 0: Woke up on intended time
-    + Positive value: Later than intended
-    + Negative value: Earlier than intended</font>
-<br>  
-<br>  
-<br>  
-
-
-
-
-# **How do these variables affect the outcome of the day?**
-
----
-
-<br>  
-
-
-## **Find the relationships between these variables and how they affect my lifestyle**
-<font size="3">We will first take a look at the characteristics of the variables by utilizing **descriptive statistics**.</font>
-<br>  
+<font size="4">To find the relationships between these variables and how they affect my lifestyle, we will first observe the relationships within variables</font>
 
 * <font size="3">Use **pairs.panels function** in psych module
   + **The diagonal histograms** demonstrates the distribution of each variable 
@@ -289,45 +228,93 @@ pairs.panels(correlation_plot, lm = TRUE)
 <br>  
 
 
-### **Single Regression Function: $y=\alpha+\beta x$**
 
-
-* <font size = "3">Set:
-  + x = Meditation
-  + y = Tasks Finished in percentage
-  + $\alpha$ = y-intercept
-  + $\beta$ = slope </font>
-
-* <font size = "3">lm() function:Fitting Linear Models
-  1. Finds fitted line($\alpha$ & $\beta$) by using the least-square method
-      - **Least-square**: by summing up the residual squares for different curves, it finds the "least squared" curve that best fit the data. 
-  2. Outputs $R^2$, p-value and other meaningful calculations
-      - $R^2$: It demonstrates how accurate the fitted line is to the data
-      - Formula: $R^2 =1-\dfrac{Var(fit)}{Var(mean)}$ or $1-\dfrac{RSS}{TSS}$
-      - Ex: If we get.8, it means that $x$ explains 60% of the variation in $y$</font>
-
+## School Variable
+```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE}
+ggplot(data = all_dat, aes(x = work_finished,
+                           color = School))+
+  geom_density()+
+  labs(title = "Density Plot of Work Finished% for different School periods",
+       x = "Work Finished (%)")+
+  theme(plot.title = element_text(face = "bold")) +
+  scale_color_discrete(name = "School Qtrs")
+```
+<br>  
+<br>  
 <br>  
 
-* <font size="4" color="red">Soon to be added:
-  + Single Regression Analysis with designated x and y
-  + Multiple Regression Analysis with meaningful variables</font>
-  
-  
-```{r}
-model <- lm(work_finished ~ Meditation, data = all_dat)
-summary(model)
 
-# predict function:
-  # uses the beta coefficents that were calculated in the lm() function.
+## Weekday Variable
+```{r, echo = TRUE, eval = TRUE,   warning = FALSE}
+
+all_dat$Weekdays <- factor(all_dat$Weekdays,levels = c("Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday","Sunday"))
+
+ggplot(data = all_dat)+
+  geom_boxplot(aes(x = Weekdays,
+                   y = work_finished, color = Weekdays))+
+  theme(legend.position = "None")+
+  labs(title = "Work finished % by week days",
+       subtitle = "Data: all_dat (500+ observations)",
+       x = "", y = "Work Finished (%)")+
+  theme(plot.title = element_text(face = "bold"))
+```
+<br>  
+<br>  
+
+
+## Time Trend (Total %)
+```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE, message=FALSE}
+all_dat_month <- all_dat %>%
+  dplyr::group_by(year, month) %>%
+  dplyr::summarise(Total = mean(Total),
+            Rise_time = mean(Rise_time)) %>%
+  dplyr::mutate(Date = make_date(year, month)) %>%
+  arrange(Date)
+  
+  
+ggplot(all_dat_month)+
+  geom_line(aes(x=Date, y=Total))+
+  labs(title = "Trend of Total%",
+              subtitle = "Grouped by Month Average")+
+  theme(plot.title = element_text(face = "bold")) +
+  scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01", "2021-06-01",
+                                "2022-01-01"))
+  
+
 ```
 
 <br>  
 <br>  
+
+
+## Time Trend (Total % - Rise time)
+```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE, message=FALSE}
+ggplot(all_dat_month)+
+  geom_line(aes(x=Date, y=Total-Rise_time))+
+  labs(title = "Trend of Total% - Rise time",
+              subtitle = "Larger positive differnce indicates higher productivity")+
+  theme(plot.title = element_text(face = "bold")) +
+  scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01", "2021-06-01",
+                                "2022-01-01"))
+  
+```
 <br>  
+
+* <font size="3">Note for Rise time: 
+    + 0: Woke up on intended time
+    + Positive value: Later than intended
+    + Negative value: Earlier than intended</font>
+<br>  
+
+<br>  
+
+<br>  
+
 <br>  
 
 
-# **How important are my Morning Routine tasks?**
+
+# **Morning Routine Varables: Descriptive Statistics**
 
 ---
 
@@ -335,10 +322,6 @@ summary(model)
 
 $$"The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start."\\ -Jim\ Kwik$$
 <br>  
-
-
-## **Morning Routine Variables Descriptions & Visualizations**
-
 <br>  
 
 
@@ -391,7 +374,11 @@ grid.arrange(mr_p2, mr_p3,mr_p4,mr_p5,mr_p6,mr_p7,mr_p1, nrow = 4,
 ```
 <br>  
 
-Note that they are all discrete variables
+<br>  
+
+
+## Morning Routine Descriptions
+Note that they are all discrete/ categorical variables
 <br>  
 
 * <font size="3">**Total_checked**: The number of morning routine tasks completed</font>
@@ -404,9 +391,11 @@ Note that they are all discrete variables
 
 
 <br>  
+<br>  
 
 
-## **Test how Total_checked variable affects the outcome of the day**
+
+## Test how Total_checked variable affects the outcome of the day
 * <font size = "4">The morning routine tasks:
   + Not touching my phone for at least 30 minutes the night before
   + Not touching my phone for an hour after I wake up
@@ -430,15 +419,59 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
   labs(title = "Morning Routine checked & \n todo lists finished(excluding morning routine tasks)")
 ```
 
-<br>  
-
-
-## **Logistic Regression**
 
 <br>  
 
+<br>  
 
-### **Single Logistic Regression**
+<br>  
+
+
+
+# **Main Variables: Linear Regressions**
+
+---
+
+
+* <font size = "3">Set:
+  + x = Meditation
+  + y = Tasks Finished in percentage
+  + $\alpha$ = y-intercept
+  + $\beta$ = slope </font>
+
+* <font size = "3">lm() function:Fitting Linear Models
+  1. Finds fitted line($\alpha$ & $\beta$) by using the least-square method
+      - **Least-square**: by summing up the residual squares for different curves, it finds the "least squared" curve that best fit the data. 
+  2. Outputs $R^2$, p-value and other meaningful calculations
+      - $R^2$: It demonstrates how accurate the fitted line is to the data
+      - Formula: $R^2 =1-\dfrac{Var(fit)}{Var(mean)}$ or $1-\dfrac{RSS}{TSS}$
+      - Ex: If we get.8, it means that $x$ explains 60% of the variation in $y$</font>
+
+<br>  
+
+* <font size="4" color="red">Soon to be added:
+  + Single Regression Analysis with designated x and y
+  + Multiple Regression Analysis with meaningful variables</font>
+  
+  
+```{r}
+model <- lm(work_finished ~ Meditation, data = all_dat)
+summary(model)
+
+# predict function:
+  # uses the beta coefficents that were calculated in the lm() function.
+```
+
+<br>  
+<br>  
+<br>  
+
+## Logistic Regression
+
+<br>  
+
+
+### Single Logistic Regression
 ```{r, message=FALSE, warning=FALSE}
 model_logit <- glm(work_finished_mr_exc ~ night_phone,
                    data = all_morning_rt, family = binomial(link = "logit"))
@@ -448,7 +481,7 @@ ame_result
 ```
 <br>  
 
-### **How to interpret the Average Marginal Effect(AME) values**
+### How to interpret the Average Marginal Effect(AME) values
 * <font size = "3"> Interpret them as percentage points rather than percentage
   + work_finished  .1911 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
 <br>  
@@ -467,7 +500,7 @@ ggplot(data = ame_result) +
 <br>  
 
 
-### **Meditation with all_dat**
+### Meditation with all_dat
 ```{r, echo=FALSE}
 
 # Click below to see more about lm() summary function
@@ -483,7 +516,7 @@ summary(meditation_all)
 
 <br>  
 
-### **Multiple with all_dat**
+### Multiple with all_dat
 * Multiple data length: 450 + 
 ```{r}
 # Multiple data all
@@ -497,7 +530,7 @@ summary(multiple_all)
 <br>  
 
 
-## **Linear Regression Summary for Work_done (all_dat)**
+## Linear Regression Summary for Work_done (all_dat)
 
 ```{r}
 #################### Linear Regression Work_done (all_dat) #####################
@@ -513,7 +546,7 @@ summary(work_finished_all)
 <br>  
 
 
-## **Actual vs Prediction Visualization for Work_done (all_dat)**
+## Actual vs Prediction Visualization for Work_done (all_dat)
 
 ```{r, warning=FALSE}
 all_dat$pred_work_finished <- predict(work_finished_all, newdata = all_dat)
@@ -533,7 +566,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 <br>  
 
 
-## **Actual vs Prediction Residual Visualization for Work_done (all_dat)**
+## Actual vs Prediction Residual Visualization for Work_done (all_dat)
 
 ```{r, warning=FALSE}
 # graph for legibility# Plot of residual error as a function of prediction
@@ -551,7 +584,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 <br>  
 
 
-## **Testing Normality**
+## Testing Normality
 
 ```{r}
 library(dplyr)
@@ -572,7 +605,7 @@ shapiro.test(all_dat$Total)
 
   
   
-##  **Determining Distributions**
+##  Determining Distributions
 * Multiple(fit.normal)
 
 ```{r}

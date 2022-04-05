@@ -380,9 +380,13 @@ library(margins)
 library(psych)
 library(grid)</code></pre>
 <p><br></p>
+<div id="main-variables-descriptive-statistics" class="section level1">
+<h1><strong>Main Variables: Descriptive Statistics</strong></h1>
+<hr />
+<p><br></p>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /> <br></p>
 <div id="main-varibles-descriptions" class="section level2">
-<h2><strong>Main Varibles Descriptions</strong></h2>
+<h2>Main Varibles Descriptions</h2>
 <ul>
 <li><font size="3"><strong>Reading</strong>: reading duration in minutes</font></li>
 <li><font size="3"><strong>Meditation</strong>: meditation duration in minutes</font></li>
@@ -402,69 +406,12 @@ library(grid)</code></pre>
 </ul></li>
 <li><font size="3"><strong>Total</strong>: The sum of the percentages calculated of above variables</font></li>
 </ul>
-<p><br></p>
-<div id="school-variable" class="section level3">
-<h3><strong>School Variable </strong></h3>
-<pre class="r"><code>ggplot(data = all_dat, aes(x = work_finished,
-                           color = School))+
-  geom_density()+
-  labs(title = &quot;Density Plot of Work Finished% for different School periods&quot;,
-       x = &quot;Work Finished (%)&quot;)+
-  theme(plot.title = element_text(face = &quot;bold&quot;)) +
-  scale_color_discrete(name = &quot;School Qtrs&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="672" /> <br></p>
+<p><br><br />
+<br></p>
 </div>
-<div id="weekday-variable" class="section level3">
-<h3><strong>Weekday Variable</strong></h3>
-<pre class="r"><code>all_dat$Weekdays &lt;- factor(all_dat$Weekdays,levels = c(&quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;,&quot;Friday&quot;,&quot;Saturday&quot;,&quot;Sunday&quot;))
-
-ggplot(data = all_dat)+
-  geom_boxplot(aes(x = Weekdays,
-                   y = work_finished, color = Weekdays))+
-  theme(legend.position = &quot;None&quot;)+
-  labs(title = &quot;Work finished % by week days&quot;,
-       subtitle = &quot;Data: all_dat (500+ observations)&quot;,
-       x = &quot;&quot;, y = &quot;Work Finished (%)&quot;)+
-  theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="672" /> <br></p>
-</div>
-<div id="time-trend-total" class="section level3">
-<h3><strong>Time Trend (Total %)</strong></h3>
-<pre class="r"><code>all_dat_month &lt;- all_dat %&gt;%
-  dplyr::group_by(year, month) %&gt;%
-  dplyr::summarise(Total = mean(Total),
-            Rise_time = mean(Rise_time)) %&gt;%
-  dplyr::mutate(Date = make_date(year, month)) %&gt;%
-  arrange(Date)
-  
-  
-ggplot(all_dat_month)+
-  geom_line(aes(x=Date, y=Total-Rise_time))+
-  labs(title = &quot;Trend of Total% - Rise time&quot;,
-              subtitle = &quot;Larger positive differnce indicates higher productivity&quot;)+
-  theme(plot.title = element_text(face = &quot;bold&quot;)) +
-  scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;, &quot;2021-06-01&quot;,
-                                &quot;2022-01-01&quot;))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /> <br></p>
-<ul>
-<li><font size="3">Note for Rise time:
-<ul>
-<li>0: Woke up on intended time</li>
-<li>Positive value: Later than intended</li>
-<li>Negative value: Earlier than intended</font> <br><br />
-<br><br />
-<br></li>
-</ul></li>
-</ul>
-</div>
-</div>
-<div id="how-do-these-variables-affect-the-outcome-of-the-day" class="section level1">
-<h1><strong>How do these variables affect the outcome of the day?</strong></h1>
-<hr />
-<p><br></p>
-<div id="find-the-relationships-between-these-variables-and-how-they-affect-my-lifestyle" class="section level2">
-<h2><strong>Find the relationships between these variables and how they affect my lifestyle</strong></h2>
-<p><font size="3">We will first take a look at the characteristics of the variables by utilizing <strong>descriptive statistics</strong>.</font> <br></p>
+<div id="main-variables-correlations" class="section level2">
+<h2>Main Variables Correlations</h2>
+<p><font size="4">To find the relationships between these variables and how they affect my lifestyle, we will first observe the relationships within variables</font></p>
 <ul>
 <li><font size="3">Use <strong>pairs.panels function</strong> in psych module
 <ul>
@@ -483,10 +430,139 @@ ggplot(all_dat_month)+
            Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="864" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="864" /></p>
 <p><br></p>
-<div id="single-regression-function-yalphabeta-x" class="section level3">
-<h3><strong>Single Regression Function: <span class="math inline">\(y=\alpha+\beta x\)</span></strong></h3>
+</div>
+<div id="school-variable" class="section level2">
+<h2>School Variable</h2>
+<pre class="r"><code>ggplot(data = all_dat, aes(x = work_finished,
+                           color = School))+
+  geom_density()+
+  labs(title = &quot;Density Plot of Work Finished% for different School periods&quot;,
+       x = &quot;Work Finished (%)&quot;)+
+  theme(plot.title = element_text(face = &quot;bold&quot;)) +
+  scale_color_discrete(name = &quot;School Qtrs&quot;)</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="672" /> <br><br />
+<br><br />
+<br></p>
+</div>
+<div id="weekday-variable" class="section level2">
+<h2>Weekday Variable</h2>
+<pre class="r"><code>all_dat$Weekdays &lt;- factor(all_dat$Weekdays,levels = c(&quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;,&quot;Friday&quot;,&quot;Saturday&quot;,&quot;Sunday&quot;))
+
+ggplot(data = all_dat)+
+  geom_boxplot(aes(x = Weekdays,
+                   y = work_finished, color = Weekdays))+
+  theme(legend.position = &quot;None&quot;)+
+  labs(title = &quot;Work finished % by week days&quot;,
+       subtitle = &quot;Data: all_dat (500+ observations)&quot;,
+       x = &quot;&quot;, y = &quot;Work Finished (%)&quot;)+
+  theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /> <br><br />
+<br></p>
+</div>
+<div id="time-trend-total" class="section level2">
+<h2>Time Trend (Total %)</h2>
+<pre class="r"><code>all_dat_month &lt;- all_dat %&gt;%
+  dplyr::group_by(year, month) %&gt;%
+  dplyr::summarise(Total = mean(Total),
+            Rise_time = mean(Rise_time)) %&gt;%
+  dplyr::mutate(Date = make_date(year, month)) %&gt;%
+  arrange(Date)
+  
+  
+ggplot(all_dat_month)+
+  geom_line(aes(x=Date, y=Total))+
+  labs(title = &quot;Trend of Total%&quot;,
+              subtitle = &quot;Grouped by Month Average&quot;)+
+  theme(plot.title = element_text(face = &quot;bold&quot;)) +
+  scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;, &quot;2021-06-01&quot;,
+                                &quot;2022-01-01&quot;))</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><br><br />
+<br></p>
+</div>
+<div id="time-trend-total---rise-time" class="section level2">
+<h2>Time Trend (Total % - Rise time)</h2>
+<pre class="r"><code>ggplot(all_dat_month)+
+  geom_line(aes(x=Date, y=Total-Rise_time))+
+  labs(title = &quot;Trend of Total% - Rise time&quot;,
+              subtitle = &quot;Larger positive differnce indicates higher productivity&quot;)+
+  theme(plot.title = element_text(face = &quot;bold&quot;)) +
+  scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;, &quot;2021-06-01&quot;,
+                                &quot;2022-01-01&quot;))</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="672" /> <br></p>
+<ul>
+<li><font size="3">Note for Rise time:
+<ul>
+<li>0: Woke up on intended time</li>
+<li>Positive value: Later than intended</li>
+<li>Negative value: Earlier than intended</font> <br></li>
+</ul></li>
+</ul>
+<p><br></p>
+<p><br></p>
+<p><br></p>
+</div>
+</div>
+<div id="morning-routine-varables-descriptive-statistics" class="section level1">
+<h1><strong>Morning Routine Varables: Descriptive Statistics</strong></h1>
+<hr />
+<p><br></p>
+<p><span class="math display">\[&quot;The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start.&quot;\\ -Jim\ Kwik\]</span> <br><br />
+<br></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /> <br></p>
+<p><br></p>
+<div id="morning-routine-descriptions" class="section level2">
+<h2>Morning Routine Descriptions</h2>
+<p>Note that they are all discrete/ categorical variables <br></p>
+<ul>
+<li><font size="3"><strong>Total_checked</strong>: The number of morning routine tasks completed</font></li>
+<li><font size="3"><strong>Meditation_check</strong>: Meditation task completion (Boolean value)</font></li>
+<li><font size="3"><strong>Reading_check</strong>: Reading task completion (Boolean value)</font></li>
+<li><font size="3"><strong>morning_thoughts_check</strong>: Morning journal task completion (Boolean value)</font></li>
+<li><font size="3"><strong>Push_up_check</strong>: Push up task completion (Boolean value)</font></li>
+<li><font size="3"><strong>Morning_phone</strong>: Did not touch my phone for the first hour of the day (Boolean value)</font></li>
+<li><font size="3"><strong>Night_phone</strong>: Did not touch my phone for the last hour of the day (Boolean value)</font></li>
+</ul>
+<p><br><br />
+<br></p>
+</div>
+<div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level2">
+<h2>Test how Total_checked variable affects the outcome of the day</h2>
+<ul>
+<li><font size = "4">The morning routine tasks:
+<ul>
+<li>Not touching my phone for at least 30 minutes the night before</li>
+<li>Not touching my phone for an hour after I wake up</li>
+<li>Exercise (Push up)</li>
+<li>Meditation</li>
+<li>Reading</li>
+<li>Morning journal </font></li>
+</ul></li>
+</ul>
+<pre class="r"><code>
+# see how number of morning routine checks affects the Total %
+ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
+  geom_density(aes(Total))+
+  facet_wrap(~total_checked)+
+  labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)</code></pre>
+<p><img src="self_evaluation_files/figure-html/figures-side-1.png" width="672" /></p>
+<pre class="r"><code>
+# see how number of morning routine checks affects the total todo lists checked
+ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
+  geom_density(aes(work_finished_mr_exc))+
+  facet_wrap(~total_checked)+
+  labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)</code></pre>
+<p><img src="self_evaluation_files/figure-html/figures-side-2.png" width="672" /></p>
+<p><br></p>
+<p><br></p>
+<p><br></p>
+</div>
+</div>
+<div id="main-variables-linear-regressions" class="section level1">
+<h1><strong>Main Variables: Linear Regressions</strong></h1>
+<hr />
 <ul>
 <li><font size = "3">Set:
 <ul>
@@ -542,66 +618,12 @@ summary(model)</code></pre>
   # uses the beta coefficents that were calculated in the lm() function.</code></pre>
 <p><br><br />
 <br><br />
-<br><br />
 <br></p>
-</div>
-</div>
-</div>
-<div id="how-important-are-my-morning-routine-tasks" class="section level1">
-<h1><strong>How important are my Morning Routine tasks?</strong></h1>
-<hr />
-<p><br></p>
-<p><span class="math display">\[&quot;The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start.&quot;\\ -Jim\ Kwik\]</span> <br></p>
-<div id="morning-routine-variables-descriptions-visualizations" class="section level2">
-<h2><strong>Morning Routine Variables Descriptions &amp; Visualizations</strong></h2>
-<p><br></p>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /> <br></p>
-<p>Note that they are all discrete variables <br></p>
-<ul>
-<li><font size="3"><strong>Total_checked</strong>: The number of morning routine tasks completed</font></li>
-<li><font size="3"><strong>Meditation_check</strong>: Meditation task completion (Boolean value)</font></li>
-<li><font size="3"><strong>Reading_check</strong>: Reading task completion (Boolean value)</font></li>
-<li><font size="3"><strong>morning_thoughts_check</strong>: Morning journal task completion (Boolean value)</font></li>
-<li><font size="3"><strong>Push_up_check</strong>: Push up task completion (Boolean value)</font></li>
-<li><font size="3"><strong>Morning_phone</strong>: Did not touch my phone for the first hour of the day (Boolean value)</font></li>
-<li><font size="3"><strong>Night_phone</strong>: Did not touch my phone for the last hour of the day (Boolean value)</font></li>
-</ul>
-<p><br></p>
-</div>
-<div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level2">
-<h2><strong>Test how Total_checked variable affects the outcome of the day</strong></h2>
-<ul>
-<li><font size = "4">The morning routine tasks:
-<ul>
-<li>Not touching my phone for at least 30 minutes the night before</li>
-<li>Not touching my phone for an hour after I wake up</li>
-<li>Exercise (Push up)</li>
-<li>Meditation</li>
-<li>Reading</li>
-<li>Morning journal </font></li>
-</ul></li>
-</ul>
-<pre class="r"><code>
-# see how number of morning routine checks affects the Total %
-ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
-  geom_density(aes(Total))+
-  facet_wrap(~total_checked)+
-  labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/figures-side-1.png" width="672" /></p>
-<pre class="r"><code>
-# see how number of morning routine checks affects the total todo lists checked
-ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
-  geom_density(aes(work_finished_mr_exc))+
-  facet_wrap(~total_checked)+
-  labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/figures-side-2.png" width="672" /></p>
-<p><br></p>
-</div>
 <div id="logistic-regression" class="section level2">
-<h2><strong>Logistic Regression</strong></h2>
+<h2>Logistic Regression</h2>
 <p><br></p>
 <div id="single-logistic-regression" class="section level3">
-<h3><strong>Single Logistic Regression</strong></h3>
+<h3>Single Logistic Regression</h3>
 <pre class="r"><code>model_logit &lt;- glm(work_finished_mr_exc ~ night_phone,
                    data = all_morning_rt, family = binomial(link = &quot;logit&quot;))
 m = margins(model_logit) 
@@ -612,7 +634,7 @@ ame_result</code></pre>
 <p><br></p>
 </div>
 <div id="how-to-interpret-the-average-marginal-effectame-values" class="section level3">
-<h3><strong>How to interpret the Average Marginal Effect(AME) values</strong></h3>
+<h3>How to interpret the Average Marginal Effect(AME) values</h3>
 <ul>
 <li><font size = "3"> Interpret them as percentage points rather than percentage
 <ul>
@@ -625,11 +647,11 @@ ame_result</code></pre>
   width = .5) + geom_hline ( yintercept = 0) +
   theme_minimal ( ) +
   theme(axis.text.x = element_text(angle = 90))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="meditation-with-all_dat" class="section level3">
-<h3><strong>Meditation with all_dat</strong></h3>
+<h3>Meditation with all_dat</h3>
 <pre><code>## 
 ## Call:
 ## lm(formula = Meditation ~ Multiple + Phone_pickups + Screen_time + 
@@ -662,7 +684,7 @@ ame_result</code></pre>
 <p><br></p>
 </div>
 <div id="multiple-with-all_dat" class="section level3">
-<h3><strong>Multiple with all_dat</strong></h3>
+<h3>Multiple with all_dat</h3>
 <ul>
 <li>Multiple data length: 450 +</li>
 </ul>
@@ -704,7 +726,7 @@ summary(multiple_all)</code></pre>
 </div>
 </div>
 <div id="linear-regression-summary-for-work_done-all_dat" class="section level2">
-<h2><strong>Linear Regression Summary for Work_done (all_dat)</strong></h2>
+<h2>Linear Regression Summary for Work_done (all_dat)</h2>
 <pre class="r"><code>#################### Linear Regression Work_done (all_dat) #####################
 
 # Work done 
@@ -745,7 +767,7 @@ summary(work_finished_all)</code></pre>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2">
-<h2><strong>Actual vs Prediction Visualization for Work_done (all_dat)</strong></h2>
+<h2>Actual vs Prediction Visualization for Work_done (all_dat)</h2>
 <pre class="r"><code>all_dat$pred_work_finished &lt;- predict(work_finished_all, newdata = all_dat)
 
 # Explanatory variable: work_finished
@@ -758,11 +780,11 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level2">
-<h2><strong>Actual vs Prediction Residual Visualization for Work_done (all_dat)</strong></h2>
+<h2>Actual vs Prediction Residual Visualization for Work_done (all_dat)</h2>
 <pre class="r"><code># graph for legibility# Plot of residual error as a function of prediction
 ggplot(data = all_dat, aes(x = pred_work_finished,
                            y = pred_work_finished - work_finished)) +
@@ -773,11 +795,11 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level2">
-<h2><strong>Testing Normality</strong></h2>
+<h2>Testing Normality</h2>
 <pre class="r"><code>library(dplyr)
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
@@ -814,17 +836,27 @@ shapiro.test(all_dat$Total)</code></pre>
 <p><br></p>
 </div>
 <div id="determining-distributions" class="section level2">
-<h2><strong>Determining Distributions</strong></h2>
+<h2>Determining Distributions</h2>
 <ul>
 <li>Multiple(fit.normal)</li>
 </ul>
-<pre class="r"><code>library(fitdistrplus)
-library(logspline)
+<pre class="r"><code>library(fitdistrplus)</code></pre>
+<pre><code>## Loading required package: MASS</code></pre>
+<pre><code>## 
+## Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>## The following object is masked _by_ &#39;.GlobalEnv&#39;:
+## 
+##     survey</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre class="r"><code>library(logspline)
 
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
 descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  1   max:  7 
@@ -834,7 +866,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated skewness:  -0.2471539 
 ## estimated kurtosis:  2.976857</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
@@ -845,7 +877,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated kurtosis:  6.768861</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-3.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-3.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  0   max:  1 
@@ -862,7 +894,7 @@ fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
 #plot(fit.beta)
 #plot(fit.gamma)
 plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-4.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-4.png" width="672" /></p>
 </div>
 </div>
 
