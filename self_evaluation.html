@@ -476,8 +476,9 @@ ggplot(all_dat_month)+
   labs(title = &quot;Trend of Total%&quot;,
               subtitle = &quot;Grouped by Month Average&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
-  scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;, &quot;2021-06-01&quot;,
-                                &quot;2022-01-01&quot;))</code></pre>
+  scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
+                     labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
+                                &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p><br><br />
 <br></p>
@@ -593,27 +594,31 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 <li>Multiple Regression Analysis with meaningful variables</font></li>
 </ul></li>
 </ul>
-<pre class="r"><code>model &lt;- lm(work_finished ~ Meditation, data = all_dat)
+<pre class="r"><code>model &lt;- lm(Phone_pickups ~ Rise_time, data = all_morning_rt)
 summary(model)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = work_finished ~ Meditation, data = all_dat)
+## lm(formula = Phone_pickups ~ Rise_time, data = all_morning_rt)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.61913 -0.09027  0.03438  0.12702  0.45108 
+##     Min      1Q  Median      3Q     Max 
+## -49.954 -21.348  -0.977  17.865  67.517 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 0.548925   0.013352   41.11   &lt;2e-16 ***
-## Meditation  0.019423   0.001215   15.99   &lt;2e-16 ***
+## (Intercept)  96.9544     2.4036  40.338  &lt; 2e-16 ***
+## Rise_time    -0.1348     0.0263  -5.127 8.32e-07 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.1941 on 508 degrees of freedom
-##   (3 observations deleted due to missingness)
-## Multiple R-squared:  0.3348, Adjusted R-squared:  0.3335 
-## F-statistic: 255.7 on 1 and 508 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 28.16 on 162 degrees of freedom
+## Multiple R-squared:  0.1396, Adjusted R-squared:  0.1343 
+## F-statistic: 26.28 on 1 and 162 DF,  p-value: 8.318e-07</code></pre>
+<pre class="r"><code>ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
+  geom_smooth(method = &quot;lm&quot;)+
+  geom_point()</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code># predict function:
   # uses the beta coefficents that were calculated in the lm() function.</code></pre>
 <p><br><br />

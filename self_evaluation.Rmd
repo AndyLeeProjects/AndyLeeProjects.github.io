@@ -60,19 +60,6 @@ morning_rt <- morning_rt %>%
                                 rise_time_check, before_sleep_check)) %>%
   tibble()
 
-# merge morning_rt with all_dat
-all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
-  dplyr::mutate(Date = mdy(Date),
-         work_finished_mr_exc = 
-           round((Finished-total_checked)/(Total_todo-6),4)) %>%
-            # work_finished_mr_exc: this variable excludes morning routine 
-            #         tasks for more accurate statistical analysis. 
-  
-  dplyr::select(-c(rise_time_min)) %>% # redundant
-  dplyr::filter(work_finished_mr_exc <= 1 & work_finished_mr_exc >0) %>%
-  arrange(desc(Date))
-
-
 ```
 
 
@@ -131,6 +118,18 @@ all_dat <- all_dat %>%
     date_sep = Date
   ) %>%
   separate(date_sep, into = c("month", "day", "year"), sep="/") # Create year, month, day variables
+
+# merge morning_rt with all_dat
+all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
+  dplyr::mutate(Date = mdy(Date),
+         work_finished_mr_exc = 
+           round((Finished-total_checked)/(Total_todo-6),4)) %>%
+            # work_finished_mr_exc: this variable excludes morning routine 
+            #         tasks for more accurate statistical analysis. 
+  
+  dplyr::select(-c(rise_time_min)) %>% # redundant
+  dplyr::filter(work_finished_mr_exc <= 1 & work_finished_mr_exc >0) %>%
+  arrange(desc(Date))
 
 
 ```
@@ -277,8 +276,9 @@ ggplot(all_dat_month)+
   labs(title = "Trend of Total%",
               subtitle = "Grouped by Month Average")+
   theme(plot.title = element_text(face = "bold")) +
-  scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01", "2021-06-01",
-                                "2022-01-01"))
+  scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01","2021-04-01", "2021-07-01", "2021-10-01","2022-01-01", "2022-04-01"),
+                     labels=c("09/20", "01/21", "04/21", "07/21", 
+                                "10/21", "01/22","04/22"))
   
 
 ```
@@ -455,9 +455,11 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
   
   
 ```{r}
-model <- lm(work_finished ~ Meditation, data = all_dat)
+model <- lm(Phone_pickups ~ Rise_time, data = all_morning_rt)
 summary(model)
-
+ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
+  geom_smooth(method = "lm")+
+  geom_point()
 # predict function:
   # uses the beta coefficents that were calculated in the lm() function.
 ```
