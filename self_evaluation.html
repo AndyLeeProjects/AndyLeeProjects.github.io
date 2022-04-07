@@ -564,11 +564,13 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 <div id="main-variables-linear-regressions" class="section level1">
 <h1><strong>Main Variables: Linear Regressions</strong></h1>
 <hr />
+<div id="simple-linear-regression" class="section level2">
+<h2>Simple Linear Regression</h2>
 <ul>
 <li><font size = "3">Set:
 <ul>
-<li>x = Meditation</li>
-<li>y = Tasks Finished in percentage</li>
+<li>x = Explanatory Variable</li>
+<li>y = Dependent Variable</li>
 <li><span class="math inline">\(\alpha\)</span> = y-intercept</li>
 <li><span class="math inline">\(\beta\)</span> = slope </font></li>
 </ul></li>
@@ -587,13 +589,35 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 </ol></li>
 </ul>
 <p><br></p>
-<ul>
-<li><font size="4" color="red">Soon to be added:
-<ul>
-<li>Single Regression Analysis with designated x and y</li>
-<li>Multiple Regression Analysis with meaningful variables</font></li>
-</ul></li>
-</ul>
+<pre class="r"><code>model &lt;- lm(work_finished ~ Meditation, data = all_morning_rt)
+summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = work_finished ~ Meditation, data = all_morning_rt)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.53301 -0.11417  0.05349  0.15515  0.33678 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.53822    0.02634  20.433  &lt; 2e-16 ***
+## Meditation   0.01599    0.00220   7.272 1.43e-11 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1954 on 162 degrees of freedom
+## Multiple R-squared:  0.2461, Adjusted R-squared:  0.2414 
+## F-statistic: 52.88 on 1 and 162 DF,  p-value: 1.435e-11</code></pre>
+<pre class="r"><code>ggplot(all_dat,aes(x=Meditation, y=work_finished))+
+  geom_smooth(method = &quot;lm&quot;)+
+  geom_point()+
+  labs(title = &quot;Linear Regression&quot;,
+       subtitle = &quot;y = Total to-do lists finished (%) \nx = Meditation in minutes&quot;,
+       y = &quot;Total to-do lists finished (%)&quot;, x = &quot;Meditation in minutes&quot;)+
+  theme(plot.title = element_text(face = &quot;bold&quot;))+
+  theme_minimal()</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
 <pre class="r"><code>model &lt;- lm(Phone_pickups ~ Rise_time, data = all_morning_rt)
 summary(model)</code></pre>
 <pre><code>## 
@@ -616,14 +640,50 @@ summary(model)</code></pre>
 ## F-statistic: 26.28 on 1 and 162 DF,  p-value: 8.318e-07</code></pre>
 <pre class="r"><code>ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
   geom_smooth(method = &quot;lm&quot;)+
-  geom_point()</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<pre class="r"><code># predict function:
-  # uses the beta coefficents that were calculated in the lm() function.</code></pre>
+  geom_point()+
+  labs(title = &quot;Linear Regression&quot;,
+       subtitle = &quot;y = The number of Phone pickups\nx = Rise time&quot;,
+       y = &quot;Number of Phone pickups\n&quot;, x = &quot;\nRise time&quot;)+
+  theme(plot.title = element_text(face = &quot;bold&quot;))+
+  theme_minimal()</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
 <p><br><br />
 <br><br />
 <br></p>
+</div>
+<div id="multiple-regressions" class="section level2">
+<h2>Multiple regressions</h2>
+<ul>
+<li><font size = "3">Set:
+<ul>
+<li>y = Dependent Variable</li>
+<li><span class="math inline">\(x_1,...x_n\)</span> = n independent/explanatory variables</li>
+<li><span class="math inline">\(\alpha\)</span> = Constant or intercept</li>
+<li><span class="math inline">\(\beta\)</span> = weights for each <span class="math inline">\(x_1,...x_n\)</span> </font></li>
+</ul></li>
+</ul>
+<pre class="r"><code>model &lt;- lm(work_finished ~ Phone_pickups + Screen_time, data = all_morning_rt)
+summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = work_finished ~ Phone_pickups + Screen_time, data = all_morning_rt)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.51721 -0.09987  0.02263  0.14683  0.48197 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    0.6571157  0.0656765  10.005  &lt; 2e-16 ***
+## Phone_pickups  0.0020897  0.0005369   3.892 0.000145 ***
+## Screen_time   -0.0008283  0.0002164  -3.828 0.000185 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2074 on 161 degrees of freedom
+## Multiple R-squared:  0.1554, Adjusted R-squared:  0.1449 
+## F-statistic: 14.81 on 2 and 161 DF,  p-value: 1.25e-06</code></pre>
+</div>
 <div id="logistic-regression" class="section level2">
 <h2>Logistic Regression</h2>
 <p><br></p>
@@ -652,7 +712,7 @@ ame_result</code></pre>
   width = .5) + geom_hline ( yintercept = 0) +
   theme_minimal ( ) +
   theme(axis.text.x = element_text(angle = 90))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="meditation-with-all_dat" class="section level3">
@@ -785,7 +845,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   coord_cartesian( xlim = c(0, 1),
                    ylim = c(0, 1) )  # Limits the range of the</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level2">
@@ -800,7 +860,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level2">
@@ -809,22 +869,23 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
 set.seed(1234)
 dplyr::sample_n(all_dat, 10)</code></pre>
 <pre><code>## # A tibble: 10 × 25
-##    Date  Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation Mentality
-##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
-##  1 08/1…        5      3             144         167     0 0                  0         0
-##  2 10/1…       15      3             123         200     0 0                 14         0
-##  3 03/2…       14      4.6            62         177     0 [&#39;Happy&#39;…         15         5
-##  4 01/1…       10      3.6            98          84     0 0                 15         3
-##  5 01/1…        9      3              74         304     0 0                 15         0
-##  6 03/1…       10      3.6            78         210     0 [&#39;Exam&#39;,…          0         4
-##  7 01/3…        4      3              61         440     0 0                  0         0
-##  8 12/2…        8      3.6           107         314     0 0                  0         4
-##  9 02/2…       15      4              97         132     0 0                 15         0
-## 10 01/2…       10      4             126         149     0 0                 15         4
-## # … with 16 more variables: Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;, Productivity &lt;dbl&gt;,
-## #   Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;, Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;,
-## #   work_finished &lt;dbl&gt;, School &lt;chr&gt;, Weekdays &lt;fct&gt;, month &lt;chr&gt;, day &lt;chr&gt;,
-## #   year &lt;chr&gt;, pred_work_finished &lt;dbl&gt;</code></pre>
+##    Date   Finished Multiple Phone_pickups Screen_time Drink Key_words Meditation
+##    &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+##  1 08/11…        5      3             144         167     0 0                  0
+##  2 10/17…       15      3             123         200     0 0                 14
+##  3 03/24…       14      4.6            62         177     0 [&#39;Happy&#39;…         15
+##  4 01/10…       10      3.6            98          84     0 0                 15
+##  5 01/12…        9      3              74         304     0 0                 15
+##  6 03/10…       10      3.6            78         210     0 [&#39;Exam&#39;,…          0
+##  7 01/31…        4      3              61         440     0 0                  0
+##  8 12/21…        8      3.6           107         314     0 0                  0
+##  9 02/20…       15      4              97         132     0 0                 15
+## 10 01/26…       10      4             126         149     0 0                 15
+## # … with 17 more variables: Mentality &lt;dbl&gt;, Satisfaction &lt;dbl&gt;, Reading &lt;dbl&gt;,
+## #   Productivity &lt;dbl&gt;, Rise_time &lt;dbl&gt;, Run &lt;dbl&gt;, Social &lt;dbl&gt;, Tech &lt;dbl&gt;,
+## #   Total &lt;dbl&gt;, Total_todo &lt;dbl&gt;, work_finished &lt;dbl&gt;, School &lt;chr&gt;,
+## #   Weekdays &lt;fct&gt;, month &lt;chr&gt;, day &lt;chr&gt;, year &lt;chr&gt;,
+## #   pred_work_finished &lt;dbl&gt;</code></pre>
 <pre class="r"><code># The central limit theorem tells us that no matter what distribution things 
 # have, the sampling distribution tends to be normal if the sample is large 
 # enough (n &gt; 30).
@@ -849,9 +910,6 @@ shapiro.test(all_dat$Total)</code></pre>
 <pre><code>## Loading required package: MASS</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;MASS&#39;</code></pre>
-<pre><code>## The following object is masked _by_ &#39;.GlobalEnv&#39;:
-## 
-##     survey</code></pre>
 <pre><code>## The following object is masked from &#39;package:dplyr&#39;:
 ## 
 ##     select</code></pre>
@@ -861,7 +919,7 @@ shapiro.test(all_dat$Total)</code></pre>
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
 descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  1   max:  7 
@@ -871,7 +929,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated skewness:  -0.2471539 
 ## estimated kurtosis:  2.976857</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
@@ -882,7 +940,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated kurtosis:  6.768861</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-3.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-22-3.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  0   max:  1 
@@ -899,7 +957,7 @@ fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
 #plot(fit.beta)
 #plot(fit.gamma)
 plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-4.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-22-4.png" width="672" /></p>
 </div>
 </div>
 

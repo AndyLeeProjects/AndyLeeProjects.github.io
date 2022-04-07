@@ -432,10 +432,10 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 
 ---
 
-
+## Simple Linear Regression
 * <font size = "3">Set:
-  + x = Meditation
-  + y = Tasks Finished in percentage
+  + x = Explanatory Variable
+  + y = Dependent Variable
   + $\alpha$ = y-intercept
   + $\beta$ = slope </font>
 
@@ -449,24 +449,52 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 
 <br>  
 
-* <font size="4" color="red">Soon to be added:
-  + Single Regression Analysis with designated x and y
-  + Multiple Regression Analysis with meaningful variables</font>
+```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
+model <- lm(work_finished ~ Meditation, data = all_morning_rt)
+summary(model)
+ggplot(all_dat,aes(x=Meditation, y=work_finished))+
+  geom_smooth(method = "lm")+
+  geom_point()+
+  labs(title = "Linear Regression",
+       subtitle = "y = Total to-do lists finished (%) \nx = Meditation in minutes",
+       y = "Total to-do lists finished (%)", x = "Meditation in minutes")+
+  theme(plot.title = element_text(face = "bold"))+
+  theme_minimal()
+```
   
   
-```{r}
+```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
 model <- lm(Phone_pickups ~ Rise_time, data = all_morning_rt)
 summary(model)
 ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
   geom_smooth(method = "lm")+
-  geom_point()
-# predict function:
-  # uses the beta coefficents that were calculated in the lm() function.
+  geom_point()+
+  labs(title = "Linear Regression",
+       subtitle = "y = The number of Phone pickups\nx = Rise time",
+       y = "Number of Phone pickups\n", x = "\nRise time")+
+  theme(plot.title = element_text(face = "bold"))+
+  theme_minimal()
 ```
 
 <br>  
 <br>  
 <br>  
+
+## Multiple regressions
+* <font size = "3">Set:
+  + y = Dependent Variable
+  + $x_1,...x_n$ = n independent/explanatory variables
+  + $\alpha$ = Constant or intercept
+  + $\beta$ = weights for each $x_1,...x_n$ </font>
+  
+  
+```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
+model <- lm(work_finished ~ Phone_pickups + Screen_time, data = all_morning_rt)
+summary(model)
+
+
+```
+
 
 ## Logistic Regression
 
