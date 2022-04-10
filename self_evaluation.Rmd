@@ -450,7 +450,7 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 <br>  
 
 ```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
-model <- lm(work_finished ~ Meditation, data = all_morning_rt)
+model <- lm(work_finished ~ Meditation, data = all_dat)
 summary(model)
 ggplot(all_dat,aes(x=Meditation, y=work_finished))+
   geom_smooth(method = "lm")+
@@ -491,10 +491,30 @@ ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
 ```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
 model <- lm(work_finished ~ Phone_pickups + Screen_time, data = all_morning_rt)
 summary(model)
+```
+## Actual vs Prediction Visualization for Work_done (all_dat)
 
-
+```{r}
+work_finished_all <- lm(work_finished ~  Meditation + Screen_time,
+                        data = all_dat)
+summary(work_finished_all)
+plot(work_finished_all )
 ```
 
+```{r, warning=FALSE}
+all_dat$pred_work_finished <- predict(work_finished_all, newdata = all_dat)
+
+# Explanatory variable: work_finished
+ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
+  geom_point(alpha = 0.5, color = "darkgray") +
+  geom_smooth(color = "darkblue") +
+  geom_line(aes(x = work_finished,
+                y = work_finished),   # Plotting the line, y = x
+            color = "red", linetype = 2) +
+  coord_cartesian( xlim = c(0, 1),
+                   ylim = c(0, 1) )  # Limits the range of the
+
+```
 
 ## Logistic Regression
 
@@ -560,38 +580,8 @@ summary(multiple_all)
 <br>  
 
 
-## Linear Regression Summary for Work_done (all_dat)
-
-```{r}
-#################### Linear Regression Work_done (all_dat) #####################
-
-# Work done 
-work_finished_all <- lm(work_finished ~ Multiple + Phone_pickups + Screen_time + 
-                          Drink + Meditation + Reading + Rise_time + Run + 
-                          Total_todo,
-                        data = all_dat)
-summary(work_finished_all)
-```
-  
-<br>  
 
 
-## Actual vs Prediction Visualization for Work_done (all_dat)
-
-```{r, warning=FALSE}
-all_dat$pred_work_finished <- predict(work_finished_all, newdata = all_dat)
-
-# Explanatory variable: work_finished
-ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
-  geom_point(alpha = 0.5, color = "darkgray") +
-  geom_smooth(color = "darkblue") +
-  geom_line(aes(x = work_finished,
-                y = work_finished),   # Plotting the line, y = x
-            color = "red", linetype = 2) +
-  coord_cartesian( xlim = c(0, 1),
-                   ylim = c(0, 1) )  # Limits the range of the
-
-```
   
 <br>  
 
