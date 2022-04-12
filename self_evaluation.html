@@ -589,26 +589,27 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 </ol></li>
 </ul>
 <p><br></p>
-<pre class="r"><code>model &lt;- lm(work_finished ~ Meditation, data = all_morning_rt)
+<pre class="r"><code>model &lt;- lm(work_finished ~ Meditation, data = all_dat)
 summary(model)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = work_finished ~ Meditation, data = all_morning_rt)
+## lm(formula = work_finished ~ Meditation, data = all_dat)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.53301 -0.11417  0.05349  0.15515  0.33678 
+## -0.61913 -0.09027  0.03438  0.12702  0.45108 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  0.53822    0.02634  20.433  &lt; 2e-16 ***
-## Meditation   0.01599    0.00220   7.272 1.43e-11 ***
+## (Intercept) 0.548925   0.013352   41.11   &lt;2e-16 ***
+## Meditation  0.019423   0.001215   15.99   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.1954 on 162 degrees of freedom
-## Multiple R-squared:  0.2461, Adjusted R-squared:  0.2414 
-## F-statistic: 52.88 on 1 and 162 DF,  p-value: 1.435e-11</code></pre>
+## Residual standard error: 0.1941 on 508 degrees of freedom
+##   (3 observations deleted due to missingness)
+## Multiple R-squared:  0.3348, Adjusted R-squared:  0.3335 
+## F-statistic: 255.7 on 1 and 508 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code>ggplot(all_dat,aes(x=Meditation, y=work_finished))+
   geom_smooth(method = &quot;lm&quot;)+
   geom_point()+
@@ -684,6 +685,34 @@ summary(model)</code></pre>
 ## Multiple R-squared:  0.1554, Adjusted R-squared:  0.1449 
 ## F-statistic: 14.81 on 2 and 161 DF,  p-value: 1.25e-06</code></pre>
 </div>
+<div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2">
+<h2>Actual vs Prediction Visualization for Work_done (all_dat)</h2>
+<pre class="r"><code>work_finished_all &lt;- lm(work_finished ~  Meditation + Screen_time,
+                        data = all_dat)
+summary(work_finished_all)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = work_finished ~ Meditation + Screen_time, data = all_dat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.56192 -0.09524  0.02602  0.12499  0.46508 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  6.674e-01  2.291e-02  29.128  &lt; 2e-16 ***
+## Meditation   1.720e-02  1.224e-03  14.051  &lt; 2e-16 ***
+## Screen_time -4.358e-04  6.971e-05  -6.252 8.63e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1872 on 507 degrees of freedom
+##   (3 observations deleted due to missingness)
+## Multiple R-squared:  0.3824, Adjusted R-squared:   0.38 
+## F-statistic:   157 on 2 and 507 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>plot(work_finished_all )</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-1.png" width="672" /><img src="self_evaluation_files/figure-html/unnamed-chunk-14-2.png" width="672" /><img src="self_evaluation_files/figure-html/unnamed-chunk-14-3.png" width="672" /><img src="self_evaluation_files/figure-html/unnamed-chunk-14-4.png" width="672" /></p>
+</div>
 <div id="logistic-regression" class="section level2">
 <h2>Logistic Regression</h2>
 <p><br></p>
@@ -712,7 +741,7 @@ ame_result</code></pre>
   width = .5) + geom_hline ( yintercept = 0) +
   theme_minimal ( ) +
   theme(axis.text.x = element_text(angle = 90))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="meditation-with-all_dat" class="section level3">
@@ -754,6 +783,9 @@ ame_result</code></pre>
 <li>Multiple data length: 450 +</li>
 </ul>
 <pre class="r"><code># Multiple data all
+model &lt;- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
+              Reading + Multiple, data = all_dat)
+all_dat$pred_work_finished &lt;- predict(model, newdata = all_dat)
 multiple_all &lt;- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
                      Reading+ Rise_time+ Run + Total_todo + Total , 
                    data = all_dat)
@@ -787,66 +819,9 @@ summary(multiple_all)</code></pre>
 ##   (1 observation deleted due to missingness)
 ## Multiple R-squared:  0.5771, Adjusted R-squared:  0.5696 
 ## F-statistic: 76.13 on 9 and 502 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p><br></p>
+<p><br><br />
+<br></p>
 </div>
-</div>
-<div id="linear-regression-summary-for-work_done-all_dat" class="section level2">
-<h2>Linear Regression Summary for Work_done (all_dat)</h2>
-<pre class="r"><code>#################### Linear Regression Work_done (all_dat) #####################
-
-# Work done 
-work_finished_all &lt;- lm(work_finished ~ Multiple + Phone_pickups + Screen_time + 
-                          Drink + Meditation + Reading + Rise_time + Run + 
-                          Total_todo,
-                        data = all_dat)
-summary(work_finished_all)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = work_finished ~ Multiple + Phone_pickups + Screen_time + 
-##     Drink + Meditation + Reading + Rise_time + Run + Total_todo, 
-##     data = all_dat)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.35904 -0.09380  0.00536  0.09688  0.44975 
-## 
-## Coefficients:
-##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    1.149e-01  5.420e-02   2.119  0.03457 *  
-## Multiple       1.138e-01  7.977e-03  14.266  &lt; 2e-16 ***
-## Phone_pickups  3.446e-04  2.241e-04   1.538  0.12471    
-## Screen_time   -2.575e-06  6.000e-05  -0.043  0.96578    
-## Drink         -5.751e-02  1.177e-02  -4.885 1.39e-06 ***
-## Meditation     1.049e-02  1.021e-03  10.270  &lt; 2e-16 ***
-## Reading        2.461e-03  4.491e-04   5.480 6.77e-08 ***
-## Rise_time     -2.120e-04  7.751e-05  -2.736  0.00645 ** 
-## Run           -8.447e-02  5.748e-02  -1.469  0.14234    
-## Total_todo     7.002e-03  2.411e-03   2.904  0.00385 ** 
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.1423 on 499 degrees of freedom
-##   (4 observations deleted due to missingness)
-## Multiple R-squared:  0.6484, Adjusted R-squared:  0.6421 
-## F-statistic: 102.3 on 9 and 499 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p><br></p>
-</div>
-<div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2">
-<h2>Actual vs Prediction Visualization for Work_done (all_dat)</h2>
-<pre class="r"><code>all_dat$pred_work_finished &lt;- predict(work_finished_all, newdata = all_dat)
-
-# Explanatory variable: work_finished
-ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
-  geom_point(alpha = 0.5, color = &quot;darkgray&quot;) +
-  geom_smooth(color = &quot;darkblue&quot;) +
-  geom_line(aes(x = work_finished,
-                y = work_finished),   # Plotting the line, y = x
-            color = &quot;red&quot;, linetype = 2) +
-  coord_cartesian( xlim = c(0, 1),
-                   ylim = c(0, 1) )  # Limits the range of the</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
-<p><br></p>
 </div>
 <div id="actual-vs-prediction-residual-visualization-for-work_done-all_dat" class="section level2">
 <h2>Actual vs Prediction Residual Visualization for Work_done (all_dat)</h2>
@@ -860,7 +835,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished,
             color = &quot;red&quot;, linetype = 2) +
   ylab(&quot;residual error (prediction - actual)&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="testing-normality" class="section level2">
@@ -905,13 +880,23 @@ shapiro.test(all_dat$Total)</code></pre>
 <ul>
 <li>Multiple(fit.normal)</li>
 </ul>
-<pre class="r"><code>library(fitdistrplus)
-library(logspline)
+<pre class="r"><code>library(fitdistrplus)</code></pre>
+<pre><code>## Loading required package: MASS</code></pre>
+<pre><code>## 
+## Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>## The following object is masked _by_ &#39;.GlobalEnv&#39;:
+## 
+##     survey</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre class="r"><code>library(logspline)
 
 # The kurtosis and squared skewness of your sample is plotted as a blue point 
 # named &quot;Observation&quot;.
 descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  1   max:  7 
@@ -921,7 +906,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated skewness:  -0.2471539 
 ## estimated kurtosis:  2.976857</code></pre>
 <pre class="r"><code>descdist(all_dat$Screen_time, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-21-2.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  14   max:  915 
@@ -932,7 +917,7 @@ descdist(all_dat$Multiple, discrete = FALSE)</code></pre>
 ## estimated kurtosis:  6.768861</code></pre>
 <pre class="r"><code>wf &lt;- c(na.omit(all_dat$work_finished))
 descdist(wf, discrete = FALSE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-22-3.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-21-3.png" width="672" /></p>
 <pre><code>## summary statistics
 ## ------
 ## min:  0   max:  1 
@@ -949,7 +934,7 @@ fit.normal &lt;- fitdist(all_dat$Multiple, &quot;norm&quot;)
 #plot(fit.beta)
 #plot(fit.gamma)
 plot(fit.normal)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-22-4.png" width="672" /></p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-21-4.png" width="672" /></p>
 </div>
 </div>
 

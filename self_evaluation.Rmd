@@ -557,6 +557,9 @@ summary(meditation_all)
 * Multiple data length: 450 + 
 ```{r}
 # Multiple data all
+model <- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
+              Reading + Multiple, data = all_dat)
+all_dat$pred_work_finished <- predict(model, newdata = all_dat)
 multiple_all <- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
                      Reading+ Rise_time+ Run + Total_todo + Total , 
                    data = all_dat)
@@ -565,11 +568,6 @@ summary(multiple_all)
 
   
 <br>  
-
-
-
-
-  
 <br>  
 
 
