@@ -30,6 +30,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -221,6 +224,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -228,6 +294,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -311,13 +387,128 @@ library(tidyverse)
 theme_set(theme_minimal())</code></pre>
 <p><br></p>
 <div id="data-wrangling" class="section level1">
-<h1>Data Wrangling</h1>
+<h1><strong>Data Wrangling</strong></h1>
+<hr />
 <p><br></p>
 <div id="happiness-data" class="section level2">
 <h2>Happiness Data</h2>
+<pre class="r"><code># Read 2015 Data
+h15 &lt;- read_csv(&quot;Happiness_Data/2015.csv&quot;)
+h15 &lt;- h15 %&gt;%
+  dplyr::mutate(Year = 2015) %&gt;%
+  dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
+                H_score = `Happiness Score`,
+                GDP=`Economy (GDP per Capita)`,
+                Health=`Health (Life Expectancy)`,
+                Trust=`Trust (Government Corruption)`,
+                SE=`Standard Error`,
+                dystopia_res = `Dystopia Residual`)
+
+
+# Read 2016 Data
+h16 &lt;- read_csv(&quot;Happiness_Data/2016.csv&quot;)  
+h16 &lt;- h16 %&gt;%
+  dplyr::mutate(Year = 2016,
+      `Standard Error` = (`Upper Confidence Interval`-`Lower Confidence Interval`)/3.92) %&gt;%
+              # SE = (upper limit – lower limit) / 3.92. 
+              # This is for 95% CI
+  dplyr::select(-c(`Upper Confidence Interval`,`Lower Confidence Interval`)) %&gt;%
+  dplyr::rename(H_rank=`Happiness Rank`, # Modify variable names
+                H_score = `Happiness Score`,
+                GDP=`Economy (GDP per Capita)`,
+                Health=`Health (Life Expectancy)`,
+                Trust=`Trust (Government Corruption)`,
+                SE=`Standard Error`,
+                dystopia_res = `Dystopia Residual`)
+
+
+
+# Since we don&#39;t have a variable &#39;Region&#39; starting from 2017, we will create it for 
+# each year
+h_regions &lt;- dplyr::select(h16, Country, Region)
+
+
+
+# Read 2017 Data
+h17 &lt;- read_csv(&quot;Happiness_Data/2017.csv&quot;)  
+h17 &lt;- h17 %&gt;%
+  dplyr::mutate(Year = 2017,
+         `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %&gt;%
+  merge(h_regions,by=&quot;Country&quot;, all.x=T) %&gt;%
+  dplyr::select(-c(`Whisker.high`,`Whisker.low`)) %&gt;%
+    dplyr::rename(H_rank=`Happiness.Rank`, # Modify variable names
+                H_score = Happiness.Score,
+                GDP=Economy..GDP.per.Capita.,
+                Health=Health..Life.Expectancy.,
+                Trust=Trust..Government.Corruption.,
+                SE=`Standard Error`,
+                dystopia_res = Dystopia.Residual)
+
+
+# Read 2018 Data
+h18 &lt;- read_csv(&quot;Happiness_Data/2018.csv&quot;)  
+h18 &lt;- h18 %&gt;%
+  dplyr::mutate(Year = 2018) %&gt;%
+  dplyr::rename(H_rank=`Overall rank`, # Modify variable names
+                H_score = `Score`,
+                GDP=`GDP per capita`,
+                Country = `Country or region`,
+                Health=`Healthy life expectancy`,
+                Trust=`Perceptions of corruption`,
+                Freedom = `Freedom to make life choices`,
+                Family = `Social support`) %&gt;%
+  merge(h_regions,by=&quot;Country&quot;, all.x=T)
+
+
+# Read 2019 Data
+h19 &lt;- read_csv(&quot;Happiness_Data/2019.csv&quot;)  
+h19 &lt;- h19 %&gt;%
+  dplyr::mutate(Year = 2019) %&gt;%
+  dplyr::rename(H_rank=`Overall rank`, # Modify variable names
+                H_score = `Score`,
+                GDP=`GDP per capita`,
+                Country = `Country or region`,
+                Health=`Healthy life expectancy`,
+                Trust=`Perceptions of corruption`,
+                Freedom = `Freedom to make life choices`,
+                Family = `Social support`) %&gt;%
+  merge(h_regions,by=&quot;Country&quot;, all.x=T)
+
+# Combine all data into all_dat
+h_alldat &lt;- tibble(rbind.fill(h15,h16,h17,h18,h19))
+h_alldat &lt;- h_alldat %&gt;%
+  mutate(Country = tolower(Country))</code></pre>
+<p><br></p>
 </div>
 <div id="death-risk-factors-data" class="section level2">
 <h2>Death &amp; Risk Factors Data</h2>
+<pre class="r"><code># Read data in
+death_dat &lt;- read_csv(&#39;/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/number-of-deaths-by-risk-factor.csv&#39;)
+
+death_dat &lt;- death_dat %&gt;%
+  filter(Year &gt; 2015) %&gt;%
+  arrange(Year)</code></pre>
+<p><br></p>
+</div>
+<div id="country-profile-un" class="section level2">
+<h2>Country Profile UN</h2>
+<pre class="r"><code>country_profile &lt;- read_csv(&#39;/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/kiva_country_profile_variables.csv&#39;)
+
+country_profile &lt;- country_profile %&gt;%
+  mutate(country = tolower(country)) %&gt;%
+  dplyr::rename(Country = country) %&gt;%
+  select(-c(Region))
+
+h_p_alldat &lt;- merge(h_alldat, country_profile, by = &quot;Country&quot;)</code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="visualizations" class="section level1">
+<h1><strong>Visualizations</strong></h1>
+<hr />
+<p><br></p>
+<div id="top-10-mean-hppiness-scores-ranking-2015-2019" class="section level2">
+<h2>TOP 10 MEAN Hppiness Scores Ranking (2015 ~ 2019)</h2>
 <pre class="r"><code># Get Top 10 mean of happiness rank from 2015 ~ 2019
 
 ( top_10 &lt;- h_alldat %&gt;%
@@ -328,17 +519,21 @@ theme_set(theme_minimal())</code></pre>
 <pre><code>## # A tibble: 10 × 2
 ##    Country     mean_rank
 ##    &lt;chr&gt;           &lt;dbl&gt;
-##  1 Australia        10  
-##  2 Sweden            8.6
-##  3 New Zealand       8.2
-##  4 Canada            6.8
-##  5 Netherlands       6.2
-##  6 Finland           3.6
-##  7 Switzerland       3.6
-##  8 Iceland           3.2
-##  9 Norway            2.8
-## 10 Denmark           2.2</code></pre>
-<pre class="r"><code>ggplot(filter(h_alldat, Region != &quot;NA&quot;)) +
+##  1 australia        10  
+##  2 sweden            8.6
+##  3 new zealand       8.2
+##  4 canada            6.8
+##  5 netherlands       6.2
+##  6 finland           3.6
+##  7 switzerland       3.6
+##  8 iceland           3.2
+##  9 norway            2.8
+## 10 denmark           2.2</code></pre>
+<p><br></p>
+</div>
+<div id="boxplot-of-happiness-scores-in-different-regions" class="section level2">
+<h2>Boxplot of Happiness Scores in different Regions</h2>
+<pre class="r"><code>ggplot(dplyr::filter(h_alldat, Region != &quot;NA&quot;)) +
   geom_boxplot(aes(x = H_score, y=reorder(Region, H_score), color = Region))+
   theme(legend.position = &quot;None&quot;) +
   labs(x = &quot;Happiness Scores&quot;, y = &quot;Regions&quot;)</code></pre>
@@ -348,6 +543,8 @@ theme_set(theme_minimal())</code></pre>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -380,6 +577,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

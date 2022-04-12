@@ -2,15 +2,14 @@
 title: "Happiness Project"
 author: "Andy"
 date: "3/13/2022"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_float:
+      smooth_scroll: false
 ---
 
 <br>  
-
-```{r, include=FALSE}
-library(tidyverse)
-```
-
 
 
 ```{r, results='hide', message=FALSE}
@@ -27,13 +26,16 @@ theme_set(theme_minimal())
 
 <br>  
 
-# Data Wrangling
+# **Data Wrangling**
+
+---
+
 
 <br>  
 
 ## Happiness Data
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE, results=FALSE}
 # Read 2015 Data
 h15 <- read_csv("Happiness_Data/2015.csv")
 h15 <- h15 %>%
@@ -118,17 +120,47 @@ h19 <- h19 %>%
 
 # Combine all data into all_dat
 h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
+h_alldat <- h_alldat %>%
+  mutate(Country = tolower(Country))
 
 ```
 
+<br>  
 
 ## Death & Risk Factors Data
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE, results=FALSE}
 # Read data in
-death_dat <- read_csv('/Happiness_Data/number-of-deaths-by-risk-factors.csv')
+death_dat <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/number-of-deaths-by-risk-factor.csv')
+
+death_dat <- death_dat %>%
+  filter(Year > 2015) %>%
+  arrange(Year)
+
 ```
+<br>  
 
 
+## Country Profile UN
+```{r, echo=TRUE, warning=FALSE, message=FALSE, results=FALSE}
+country_profile <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/kiva_country_profile_variables.csv')
+
+country_profile <- country_profile %>%
+  mutate(country = tolower(country)) %>%
+  dplyr::rename(Country = country) %>%
+  select(-c(Region))
+
+h_p_alldat <- merge(h_alldat, country_profile, by = "Country")
+
+```
+<br>  
+
+# **Visualizations**
+
+---
+
+<br>  
+
+## TOP 10 MEAN Hppiness Scores Ranking (2015 ~ 2019)
 
 ```{r, echo = TRUE, eval = TRUE, out.width = "90%", fig.asp = .75, fig.align='center', warning = FALSE}
 # Get Top 10 mean of happiness rank from 2015 ~ 2019
@@ -140,10 +172,12 @@ death_dat <- read_csv('/Happiness_Data/number-of-deaths-by-risk-factors.csv')
   filter(mean_rank <= 10) )
 ```
 
+<br>  
 
+## Boxplot of Happiness Scores in different Regions
 
 ```{r}
-ggplot(filter(h_alldat, Region != "NA")) +
+ggplot(dplyr::filter(h_alldat, Region != "NA")) +
   geom_boxplot(aes(x = H_score, y=reorder(Region, H_score), color = Region))+
   theme(legend.position = "None") +
   labs(x = "Happiness Scores", y = "Regions")
