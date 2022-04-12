@@ -501,20 +501,7 @@ summary(work_finished_all)
 plot(work_finished_all )
 ```
 
-```{r, warning=FALSE}
-all_dat$pred_work_finished <- predict(work_finished_all, newdata = all_dat)
 
-# Explanatory variable: work_finished
-ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
-  geom_point(alpha = 0.5, color = "darkgray") +
-  geom_smooth(color = "darkblue") +
-  geom_line(aes(x = work_finished,
-                y = work_finished),   # Plotting the line, y = x
-            color = "red", linetype = 2) +
-  coord_cartesian( xlim = c(0, 1),
-                   ylim = c(0, 1) )  # Limits the range of the
-
-```
 
 ## Logistic Regression
 
