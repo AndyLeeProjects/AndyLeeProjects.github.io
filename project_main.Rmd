@@ -7,6 +7,11 @@ output: html_document
 
 <br>  
 
+```{r, include=FALSE}
+library(tidyverse)
+```
+
+
 
 ```{r, results='hide', message=FALSE}
 library(socviz)
@@ -22,9 +27,13 @@ theme_set(theme_minimal())
 
 <br>  
 
-### Data Wrangling
+# Data Wrangling
 
-```{r, echo=TRUE, warning=FALSE, message=FALSE}
+<br>  
+
+## Happiness Data
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Read 2015 Data
 h15 <- read_csv("Happiness_Data/2015.csv")
 h15 <- h15 %>%
@@ -110,15 +119,24 @@ h19 <- h19 %>%
 # Combine all data into all_dat
 h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
 
-glimpse(h_alldat)
 ```
+
+
+## Death & Risk Factors Data
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Read data in
+death_dat <- read_csv('/Happiness_Data/number-of-deaths-by-risk-factors.csv')
+```
+
+
 
 ```{r, echo = TRUE, eval = TRUE, out.width = "90%", fig.asp = .75, fig.align='center', warning = FALSE}
 # Get Top 10 mean of happiness rank from 2015 ~ 2019
+
 ( top_10 <- h_alldat %>%
   group_by(Country) %>%
-  summarise(mean_rank = mean(H_rank)) %>%
-  arrange(mean_rank, "DESC") %>%
+  dplyr::summarise(mean_rank = mean(H_rank)) %>%
+  arrange(desc(mean_rank)) %>%
   filter(mean_rank <= 10) )
 ```
 

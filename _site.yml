@@ -12,6 +12,8 @@ navbar:
       - text: '---------'
       - text: "Happiness Project"
         href: project_main.html
+      - text: "Happiness Project Proposal"
+        href: proposal_happiness.html
     - text: "My Website"
       href: website_redirect.html
   right:
