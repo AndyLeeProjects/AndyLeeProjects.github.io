@@ -19,6 +19,7 @@ library(tidyverse)
 library(margins)
 library(psych)
 library(grid)
+library(forcast)
 ```
 
 
@@ -600,4 +601,25 @@ ggplot(box_dat) +
   scale_fill_gradient(low = "white", high = "#C03B3B")
   
 ```
+
+
+<br>  
+```{r, message=FALSE, warning=FALSE}
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
 

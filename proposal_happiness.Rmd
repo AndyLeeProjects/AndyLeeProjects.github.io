@@ -1,5 +1,5 @@
 ---
-title: "Proposal"
+title: "Happiness Project Proposal"
 author: "Andy"
 date: "4/12/2022"
 output: html_document
