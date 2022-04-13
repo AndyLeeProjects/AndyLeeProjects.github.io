@@ -553,10 +553,10 @@ ggplot(data = ame_result) +
 <br>  
 <br>  
 
-# Main Variables: Time Series
+# **Main Variables: Time Series**
 <br>  
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 
 ats <- ts(all_dat, start = decimal_date(mdy("09/01/2020")),
                             frequency = 365.25 / 7)
@@ -572,7 +572,7 @@ p <- ggplot(data = all_dat) +
 p
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 myts <- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
 fit = ets(myts)
 plot(fit)
@@ -580,14 +580,14 @@ plot(fit)
 
 <br>  
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 box_dat <- all_dat %>%
   group_by(month) %>%
   mutate(my = make_date(year, month))
 
 ggplot(box_dat) +
-  geom_boxplot(aes(x = Date, y = Total, group = month))+
-  labs(title = "Time Seires", subtitle = "Total (%)", x = "")+    
+  geom_boxplot(aes(x = Date, y = Total, group = my, color = my))+
+  labs(title = "Time Seires", subtitle = "Total (%)", x = "")+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
