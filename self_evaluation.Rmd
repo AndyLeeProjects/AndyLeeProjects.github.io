@@ -583,14 +583,21 @@ plot(fit)
 ```{r, message=FALSE, warning=FALSE}
 box_dat <- all_dat %>%
   group_by(month) %>%
-  mutate(my = make_date(year, month))
+  mutate(my = make_date(year, month)) %>%
+  group_by(my) %>%
+  mutate(busy_scale = mean(Total_todo))
+
+dates = seq(as.Date('09/01/2020', format = "%m/%d/%Y"), 
+            by = "month", length.out = 19)
+dates_lb = format(seq(as.Date('09/01/2020', format = "%m/%d/%Y"), 
+                      by = "month", length.out = 19), "%m\n%y")
 
 ggplot(box_dat) +
-  geom_boxplot(aes(x = Date, y = Total, group = my, color = my))+
-  labs(title = "Time Seires", subtitle = "Total (%)", x = "")+
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())
+  geom_boxplot(aes(x = mdy(Date), y = Total, 
+                   fill = busy_scale, group = my))+
+  labs(title = "Time Seires", subtitle = "Total (%) & Busyness", x = "") +
+  scale_x_date(breaks = dates, labels = dates_lb)+
+  scale_fill_gradient(low = "white", high = "#C03B3B")
   
 ```
 
