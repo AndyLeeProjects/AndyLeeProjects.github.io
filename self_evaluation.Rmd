@@ -416,7 +416,8 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
-  labs(title = "Morning Routine checked & \n todo lists finished(excluding morning routine tasks)")
+  labs(title = "Morning Routine checked & \n todo lists finished(excluding morning routine tasks)")+
+  theme_minimal()
 ```
 
 
@@ -551,4 +552,45 @@ ggplot(data = ame_result) +
   
 <br>  
 <br>  
+
+# Main Variables: Time Series
+<br>  
+
+```{r}
+
+ats <- ts(all_dat, start = decimal_date(mdy("09/01/2020")),
+                            frequency = 365.25 / 7)
+
+p <- ggplot(data = all_dat) +
+  geom_line(aes(x = mdy(Date), y = Total))+
+  scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01","2021-04-01", "2021-07-01", "2021-10-01","2022-01-01", "2022-04-01"),
+                     labels=c("09/20", "01/21", "04/21", "07/21", 
+                                "10/21", "01/22","04/22"))+
+  labs(title = "Time Seires", subtitle = "Total (%)")
+  
+  
+p
+```
+
+```{r}
+myts <- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
+fit = ets(myts)
+plot(fit)
+```
+
+<br>  
+
+```{r}
+box_dat <- all_dat %>%
+  group_by(month) %>%
+  mutate(my = make_date(year, month))
+
+ggplot(box_dat) +
+  geom_boxplot(aes(x = Date, y = Total, group = month))+
+  labs(title = "Time Seires", subtitle = "Total (%)", x = "")+    
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+  
+```
 

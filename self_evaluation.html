@@ -557,7 +557,8 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
-  labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)</code></pre>
+  labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)+
+  theme_minimal()</code></pre>
 <p><img src="self_evaluation_files/figure-html/figures-side-2.png" width="672" /></p>
 <p><br></p>
 <p><br></p>
@@ -752,6 +753,41 @@ ame_result</code></pre>
 <br></p>
 </div>
 </div>
+</div>
+<div id="main-variables-time-series" class="section level1">
+<h1>Main Variables: Time Series</h1>
+<p><br></p>
+<pre class="r"><code>ats &lt;- ts(all_dat, start = decimal_date(mdy(&quot;09/01/2020&quot;)),
+                            frequency = 365.25 / 7)
+
+p &lt;- ggplot(data = all_dat) +
+  geom_line(aes(x = mdy(Date), y = Total))+
+  scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
+                     labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
+                                &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
+  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)
+  
+  
+p</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
+fit = ets(myts)</code></pre>
+<pre><code>## Warning in ets(myts): I can&#39;t handle data with frequency greater than 24. Seasonality
+## will be ignored. Try stlf() if you need seasonal forecasts.</code></pre>
+<pre class="r"><code>plot(fit)</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><br></p>
+<pre class="r"><code>box_dat &lt;- all_dat %&gt;%
+  group_by(month) %&gt;%
+  mutate(my = make_date(year, month))
+
+ggplot(box_dat) +
+  geom_boxplot(aes(x = Date, y = Total, group = month))+
+  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;, x = &quot;&quot;)+    
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())</code></pre>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 
 
