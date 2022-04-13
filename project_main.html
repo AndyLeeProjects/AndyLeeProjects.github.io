@@ -497,7 +497,7 @@ death_dat &lt;- death_dat %&gt;%
 country_profile &lt;- country_profile %&gt;%
   mutate(country = tolower(country)) %&gt;%
   dplyr::rename(Country = country) %&gt;%
-  select(-c(Region))
+  dplyr::select(-c(Region))
 
 h_p_alldat &lt;- merge(h_alldat, country_profile, by = &quot;Country&quot;)</code></pre>
 <p><br></p>

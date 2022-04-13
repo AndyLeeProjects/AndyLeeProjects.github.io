@@ -147,7 +147,7 @@ country_profile <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_websit
 country_profile <- country_profile %>%
   mutate(country = tolower(country)) %>%
   dplyr::rename(Country = country) %>%
-  select(-c(Region))
+  dplyr::select(-c(Region))
 
 h_p_alldat <- merge(h_alldat, country_profile, by = "Country")
 

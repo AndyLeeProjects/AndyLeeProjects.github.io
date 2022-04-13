@@ -489,18 +489,33 @@ ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
   
   
 ```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
-model <- lm(work_finished ~ Phone_pickups + Screen_time, data = all_morning_rt)
+model <- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
+              Reading, data = all_dat)
 summary(model)
 ```
 ## Actual vs Prediction Visualization for Work_done (all_dat)
 
 ```{r}
-work_finished_all <- lm(work_finished ~  Meditation + Screen_time,
-                        data = all_dat)
-summary(work_finished_all)
-plot(work_finished_all )
-```
+all_dat$pred_work_finished <- predict(model, newdata = all_dat)
 
+# Explanatory variable: work_finished
+ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
+  geom_point(alpha = 0.5, color = "darkgray") +
+  geom_smooth(color = "darkblue") +
+  geom_line(aes(x = work_finished,
+                y = work_finished),   # Plotting the line, y = x
+            color = "red", linetype = 2) +
+  coord_cartesian( xlim = c(0, 1),
+                   ylim = c(0, 1) ) +  # Limits the range of the
+  labs(title = "Multiple Regression",
+       subtitle = "Actual Tasks Finished (%) vs Predicted Values of Task Finished (%)",
+       y = "Tasks Finshed (y)", x = expression(hat(y)))+
+  theme(plot.title = element_text(face = "bold"))+
+  theme_minimal()
+
+```
+<br>  
+- Systematic Error can be observed
 
 
 ## Logistic Regression
@@ -520,7 +535,7 @@ ame_result
 
 ### How to interpret the Average Marginal Effect(AME) values
 * <font size = "3"> Interpret them as percentage points rather than percentage
-  + work_finished  .1911 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
+  + work_finished AME of .19 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
 <br>  
 
 ```{r, fig.align='center'}
@@ -533,106 +548,7 @@ ggplot(data = ame_result) +
 ```
 
 
-
-<br>  
-
-
-### Meditation with all_dat
-```{r, echo=FALSE}
-
-# Click below to see more about lm() summary function
-# https://www.learnbymarketing.com/tutorials/explaining-the-lm-summary-in-r/#:~:text=Summary%20in%20R-,Explaining%20the%20lm()%20Summary%20in%20R,the%20error%20of%20the%20model.
-
-meditation_all <- lm(Meditation ~ Multiple+ Phone_pickups+ Screen_time+ Drink+
-                       Reading+ Rise_time+ Total_todo + Total + work_finished, 
-                     data = all_dat)
-summary(meditation_all)
-
-```
-
-
-<br>  
-
-### Multiple with all_dat
-* Multiple data length: 450 + 
-```{r}
-# Multiple data all
-model <- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
-              Reading + Multiple, data = all_dat)
-all_dat$pred_work_finished <- predict(model, newdata = all_dat)
-multiple_all <- lm(Multiple ~ Phone_pickups+ Screen_time+ Drink+ Meditation+
-                     Reading+ Rise_time+ Run + Total_todo + Total , 
-                   data = all_dat)
-summary(multiple_all)
-```
-
   
 <br>  
 <br>  
-
-
-## Actual vs Prediction Residual Visualization for Work_done (all_dat)
-
-```{r, warning=FALSE}
-# graph for legibility# Plot of residual error as a function of prediction
-ggplot(data = all_dat, aes(x = pred_work_finished,
-                           y = pred_work_finished - work_finished)) +
-  geom_point(alpha = 0.2, color = "darkgray") +
-  geom_smooth(color = "darkblue") +
-  geom_line(aes(x = pred_work_finished,
-                y = 0),   # Plotting the line, y = 0
-            color = "red", linetype = 2) +
-  ylab("residual error (prediction - actual)")
-
-```
-
-<br>  
-
-
-## Testing Normality
-
-```{r}
-library(dplyr)
-set.seed(1234)
-dplyr::sample_n(all_dat, 10)
-
-# The central limit theorem tells us that no matter what distribution things 
-# have, the sampling distribution tends to be normal if the sample is large 
-# enough (n > 30).
-
-# The R function shapiro.test() can be used to perform the Shapiro-Wilk test 
-# of normality for one variable (univariate):
-
-shapiro.test(all_dat$Total)
-
-```
-<br>  
-
-  
-  
-##  Determining Distributions
-* Multiple(fit.normal)
-
-```{r}
-
-library(fitdistrplus)
-library(logspline)
-
-# The kurtosis and squared skewness of your sample is plotted as a blue point 
-# named "Observation".
-descdist(all_dat$Multiple, discrete = FALSE)
-descdist(all_dat$Screen_time, discrete = FALSE)
-
-wf <- c(na.omit(all_dat$work_finished))
-descdist(wf, discrete = FALSE)
-
-#fit.beta <- fitdist(wf, 'beta', method = "mme") 
-  # method = "mme": Moment matching estimation consists in equalizing theoretical
-  #                 and empirical moments. 
-#fit.gamma <- fitdist(all_dat$Screen_time, "gamma")
-fit.normal <- fitdist(all_dat$Multiple, "norm")
-#plot(fit.beta)
-#plot(fit.gamma)
-plot(fit.normal)
-```
 
