@@ -17,7 +17,7 @@
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -381,7 +381,8 @@ library(gridExtra)
 library(tidyverse)
 library(margins)
 library(psych)
-library(grid)</code></pre>
+library(grid)
+library(forecast)</code></pre>
 <p><br></p>
 <div id="main-variables-descriptive-statistics" class="section level1">
 <h1><strong>Main Variables: Descriptive Statistics</strong></h1>
@@ -600,20 +601,20 @@ summary(model)</code></pre>
 ## lm(formula = work_finished ~ Meditation, data = all_dat)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.61913 -0.09027  0.03438  0.12702  0.45108 
+##     Min      1Q  Median      3Q     Max 
+## -20.911  -4.167  -0.677   6.814  32.410 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 0.548925   0.013352   41.11   &lt;2e-16 ***
-## Meditation  0.019423   0.001215   15.99   &lt;2e-16 ***
+## (Intercept) 44.16680    0.44692   98.83   &lt;2e-16 ***
+## Meditation  -0.06996    0.28018   -0.25    0.803    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.1941 on 508 degrees of freedom
-##   (3 observations deleted due to missingness)
-## Multiple R-squared:  0.3348, Adjusted R-squared:  0.3335 
-## F-statistic: 255.7 on 1 and 508 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 8.698 on 483 degrees of freedom
+##   (10 observations deleted due to missingness)
+## Multiple R-squared:  0.0001291,  Adjusted R-squared:  -0.001941 
+## F-statistic: 0.06235 on 1 and 483 DF,  p-value: 0.8029</code></pre>
 <pre class="r"><code>ggplot(all_dat,aes(x=Meditation, y=work_finished))+
   geom_smooth(method = &quot;lm&quot;)+
   geom_point()+
@@ -630,19 +631,17 @@ summary(model)</code></pre>
 ## lm(formula = Phone_pickups ~ Rise_time, data = all_morning_rt)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -49.954 -21.348  -0.977  17.865  67.517 
+##      1      2      3 
+## -4.333 13.667 -9.333 
 ## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  96.9544     2.4036  40.338  &lt; 2e-16 ***
-## Rise_time    -0.1348     0.0263  -5.127 8.32e-07 ***
+## Coefficients: (1 not defined because of singularities)
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)   86.333      6.984   12.36  0.00648 **
+## Rise_time         NA         NA      NA       NA   
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 28.16 on 162 degrees of freedom
-## Multiple R-squared:  0.1396, Adjusted R-squared:  0.1343 
-## F-statistic: 26.28 on 1 and 162 DF,  p-value: 8.318e-07</code></pre>
+## Residual standard error: 12.1 on 2 degrees of freedom</code></pre>
 <pre class="r"><code>ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
   geom_smooth(method = &quot;lm&quot;)+
   geom_point()+
@@ -677,23 +676,31 @@ summary(model)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.54287 -0.09317  0.02174  0.11231  0.45057 
+## -21.5758  -4.8314   0.1119   4.7170  31.4530 
 ## 
 ## Coefficients:
-##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    6.451e-01  3.641e-02  17.720  &lt; 2e-16 ***
-## Screen_time   -3.769e-04  6.662e-05  -5.658 2.58e-08 ***
-## Meditation     1.398e-02  1.229e-03  11.382  &lt; 2e-16 ***
-## Rise_time     -4.327e-04  9.404e-05  -4.601 5.33e-06 ***
-## Phone_pickups  3.207e-04  2.747e-04   1.167    0.244    
-## Reading        3.425e-03  5.540e-04   6.183 1.30e-09 ***
+##                  Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     52.528851   6.549085   8.021 1.28e-14 ***
+## Screen_time     -0.021039   0.003678  -5.720 2.14e-08 ***
+## Meditation      -0.037408   1.192776  -0.031  0.97500    
+## Rise_time        5.803123   2.828084   2.052  0.04085 *  
+## Phone_pickups   -0.033248   0.012300  -2.703  0.00718 ** 
+## Reading⭐️⭐️     -0.603068   6.827839  -0.088  0.92966    
+## Reading⭐️⭐️⭐️   -5.727211   6.196956  -0.924  0.35596    
+## Reading⭐️⭐️⭐️⭐️ -2.565359   6.267936  -0.409  0.68256    
+## Reading0        -1.953476   6.325896  -0.309  0.75764    
+## Reading1.0      -5.233355   6.671488  -0.784  0.43327    
+## Reading2.0      -4.124952   5.795715  -0.712  0.47707    
+## Reading3.0      -0.765417   5.813796  -0.132  0.89533    
+## Reading4.0      -2.538123   6.003492  -0.423  0.67270    
+## Reading5.0       5.547131   6.403825   0.866  0.38691    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.1771 on 504 degrees of freedom
-##   (3 observations deleted due to missingness)
-## Multiple R-squared:  0.4505, Adjusted R-squared:  0.445 
-## F-statistic: 82.64 on 5 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 7.85 on 385 degrees of freedom
+##   (96 observations deleted due to missingness)
+## Multiple R-squared:  0.1465, Adjusted R-squared:  0.1176 
+## F-statistic: 5.082 on 13 and 385 DF,  p-value: 2.473e-08</code></pre>
 </div>
 <div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2">
 <h2>Actual vs Prediction Visualization for Work_done (all_dat)</h2>
@@ -714,9 +721,9 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   theme(plot.title = element_text(face = &quot;bold&quot;))+
   theme_minimal()</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 3 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 3 rows containing missing values (geom_point).</code></pre>
-<pre><code>## Warning: Removed 3 row(s) containing missing values (geom_path).</code></pre>
+<pre><code>## Warning: Removed 96 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 96 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 10 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-1.png" width="672" /> <br><br />
 - Systematic Error can be observed</p>
 </div>
@@ -730,8 +737,8 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 m = margins(model_logit) 
 ame_result = summary(m) 
 ame_result</code></pre>
-<pre><code>##           factor    AME     SE      z      p  lower  upper
-##  night_phoneTrue 0.1869 0.0772 2.4206 0.0155 0.0356 0.3382</code></pre>
+<pre><code>##           factor    AME     SE      z      p   lower  upper
+##  night_phoneTrue 0.5050 0.5385 0.9379 0.3483 -0.5503 1.5604</code></pre>
 <p><br></p>
 </div>
 <div id="how-to-interpret-the-average-marginal-effectame-values" class="section level3">
@@ -755,7 +762,7 @@ ame_result</code></pre>
 </div>
 </div>
 <div id="main-variables-time-series" class="section level1">
-<h1>Main Variables: Time Series</h1>
+<h1><strong>Main Variables: Time Series</strong></h1>
 <p><br></p>
 <pre class="r"><code>ats &lt;- ts(all_dat, start = decimal_date(mdy(&quot;09/01/2020&quot;)),
                             frequency = 365.25 / 7)
@@ -771,23 +778,29 @@ p &lt;- ggplot(data = all_dat) +
 p</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
-fit = ets(myts)</code></pre>
-<pre><code>## Warning in ets(myts): I can&#39;t handle data with frequency greater than 24. Seasonality
-## will be ignored. Try stlf() if you need seasonal forecasts.</code></pre>
-<pre class="r"><code>plot(fit)</code></pre>
+fit = ets(myts)
+plot(fit)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><br></p>
 <pre class="r"><code>box_dat &lt;- all_dat %&gt;%
   group_by(month) %&gt;%
-  mutate(my = make_date(year, month))
+  mutate(my = make_date(year, month)) %&gt;%
+  group_by(my) %&gt;%
+  mutate(busy_scale = mean(Total_todo))
+
+dates = seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
+            by = &quot;month&quot;, length.out = 19)
+dates_lb = format(seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
+                      by = &quot;month&quot;, length.out = 19), &quot;%m\n%y&quot;)
 
 ggplot(box_dat) +
-  geom_boxplot(aes(x = Date, y = Total, group = month))+
-  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;, x = &quot;&quot;)+    
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())</code></pre>
+  geom_boxplot(aes(x = mdy(Date), y = Total, 
+                   fill = busy_scale, group = my))+
+  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%) &amp; Busyness&quot;, x = &quot;&quot;) +
+  scale_x_date(breaks = dates, labels = dates_lb)+
+  scale_fill_gradient(low = &quot;white&quot;, high = &quot;#C03B3B&quot;)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><br></p>
 </div>
 
 
