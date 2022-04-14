@@ -583,11 +583,12 @@ plot(fit)
 <br>  
 
 ```{r, message=FALSE, warning=FALSE}
+detach(package:plyr)
 box_dat <- all_dat %>%
   group_by(month) %>%
-  dplyr::mutate(my = make_date(year, month)) %>%
+  mutate(my = make_date(year, month)) %>%
   group_by(my) %>%
-  dplyr::mutate(busy_scale = mean(Total_todo))
+  mutate(busy_scale = mean(Total_todo))
 
 dates = seq(as.Date('09/01/2020', format = "%m/%d/%Y"), 
             by = "month", length.out = 19)

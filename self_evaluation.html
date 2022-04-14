@@ -776,11 +776,12 @@ fit = ets(myts)
 plot(fit)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><br></p>
-<pre class="r"><code>box_dat &lt;- all_dat %&gt;%
+<pre class="r"><code>detach(package:plyr)
+box_dat &lt;- all_dat %&gt;%
   group_by(month) %&gt;%
-  dplyr::mutate(my = make_date(year, month)) %&gt;%
+  mutate(my = make_date(year, month)) %&gt;%
   group_by(my) %&gt;%
-  dplyr::mutate(busy_scale = mean(Total_todo))
+  mutate(busy_scale = mean(Total_todo))
 
 dates = seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
             by = &quot;month&quot;, length.out = 19)
