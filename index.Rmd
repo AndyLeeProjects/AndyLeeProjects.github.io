@@ -25,14 +25,14 @@ title: "Projects"
 
 <font size = "5">**Goals**</font>
 
-  - <font size = "3">**Data Manipulations**
+  1. <font size = "3">**Data Manipulations**
       - Merge the data with 2 other data sets
           - Death Data: Total annual number of deaths by country/risk factor
           - UN Country Data: Indicators of all the countries present in UN Data
-  - **Various visualizations using ggplot2**
+  2. **Various visualizations using ggplot2**
       - Happiness Rankings throughout countries
       - Change in happiness rankings
-  - **Statistical Analysis**
+  3. **Statistical Analysis**
       - Linear Regressions & Multiple Regressions
       - Clustering
       - Time Series</font>

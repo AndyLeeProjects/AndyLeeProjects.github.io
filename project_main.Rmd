@@ -7,6 +7,7 @@ output:
     toc: true
     toc_float:
       smooth_scroll: false
+    theme: cerulean
 ---
 
 <br>  
@@ -20,6 +21,7 @@ library(ggthemes)
 library(ggrepel)
 library(ggridges)
 library(plyr)
+library(skimr)
 library(tidyverse)
 theme_set(theme_minimal())
 ```
@@ -35,7 +37,7 @@ theme_set(theme_minimal())
 
 ## Happiness Data
 
-```{r, echo=TRUE, warning=FALSE, message=FALSE, results=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # Read 2015 Data
 h15 <- read_csv("Happiness_Data/2015.csv")
 h15 <- h15 %>%
@@ -121,14 +123,19 @@ h19 <- h19 %>%
 # Combine all data into all_dat
 h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
 h_alldat <- h_alldat %>%
-  mutate(Country = tolower(Country))
+  dplyr::mutate(Country = as.factor(tolower(Country)),
+                Region = as.factor(Region))
+
+#rmarkdown::paged_table(h_alldat)
+
+knitr::kable(papeR::summarize_numeric(h_alldat, type = "numeric", group = "Region",variables = c("H_rank"),  test = FALSE))
 
 ```
 
 <br>  
 
 ## Death & Risk Factors Data
-```{r, echo=TRUE, warning=FALSE, message=FALSE, results=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # Read data in
 death_dat <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/number-of-deaths-by-risk-factor.csv')
 
@@ -136,12 +143,13 @@ death_dat <- death_dat %>%
   filter(Year > 2015) %>%
   arrange(Year)
 
+rmarkdown::paged_table(death_dat)
 ```
 <br>  
 
 
-## Country Profile UN
-```{r, echo=TRUE, warning=FALSE, message=FALSE, results=FALSE}
+## Country Profile UN Data
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 country_profile <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/kiva_country_profile_variables.csv')
 
 country_profile <- country_profile %>%
@@ -151,7 +159,10 @@ country_profile <- country_profile %>%
 
 h_p_alldat <- merge(h_alldat, country_profile, by = "Country")
 
+rmarkdown::paged_table(country_profile)
 ```
+<br>  
+<br>  
 <br>  
 
 # **Visualizations**
