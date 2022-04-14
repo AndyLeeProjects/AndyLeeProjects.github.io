@@ -695,6 +695,8 @@ summary(model)</code></pre>
 ##   (28 observations deleted due to missingness)
 ## Multiple R-squared:  0.5023, Adjusted R-squared:  0.4969 
 ## F-statistic: 93.06 on 5 and 461 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><br><br />
+<br></p>
 </div>
 <div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2">
 <h2>Actual vs Prediction Visualization for Work_done (all_dat)</h2>
@@ -714,10 +716,6 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
        y = &quot;Tasks Finshed (y)&quot;, x = expression(hat(y)))+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
   theme_minimal()</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<pre><code>## Warning: Removed 28 rows containing non-finite values (stat_smooth).</code></pre>
-<pre><code>## Warning: Removed 28 rows containing missing values (geom_point).</code></pre>
-<pre><code>## Warning: Removed 3 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-1.png" width="672" /> <br><br />
 - Systematic Error can be observed</p>
 </div>
@@ -776,11 +774,10 @@ fit = ets(myts)
 plot(fit)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><br></p>
-<pre class="r"><code>detach(package:plyr)
-box_dat &lt;- all_dat %&gt;%
-  group_by(month) %&gt;%
+<pre class="r"><code>box_dat &lt;- all_dat %&gt;%
+  dplyr::group_by(month) %&gt;%
   mutate(my = make_date(year, month)) %&gt;%
-  group_by(my) %&gt;%
+  dplyr::group_by(my) %&gt;%
   mutate(busy_scale = mean(Total_todo))
 
 dates = seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 

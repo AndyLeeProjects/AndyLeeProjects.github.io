@@ -496,9 +496,13 @@ model <- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups
               Reading, data = all_dat)
 summary(model)
 ```
+<br>  
+<br>  
+
+
 ## Actual vs Prediction Visualization for Work_done (all_dat)
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 all_dat$pred_work_finished <- predict(model, newdata = all_dat)
 
 # Explanatory variable: work_finished
@@ -583,11 +587,10 @@ plot(fit)
 <br>  
 
 ```{r, message=FALSE, warning=FALSE}
-detach(package:plyr)
 box_dat <- all_dat %>%
-  group_by(month) %>%
+  dplyr::group_by(month) %>%
   mutate(my = make_date(year, month)) %>%
-  group_by(my) %>%
+  dplyr::group_by(my) %>%
   mutate(busy_scale = mean(Total_todo))
 
 dates = seq(as.Date('09/01/2020', format = "%m/%d/%Y"), 
