@@ -587,16 +587,21 @@ plot(fit)
 <br>  
 
 ```{r, message=FALSE, warning=FALSE}
+
+
 box_dat <- all_dat %>%
-  dplyr::group_by(month) %>%
-  mutate(my = make_date(year, month)) %>%
-  dplyr::group_by(my) %>%
-  mutate(busy_scale = mean(Total_todo))
+  group_by(month) %>%
+  dplyr::mutate(my = make_date(year, month)) %>%
+  group_by(my) %>%
+  dplyr::mutate(busy_scale = mean(Total_todo))
+
+# Total months 
+tot_month = length(unique(box_dat$my))
 
 dates = seq(as.Date('09/01/2020', format = "%m/%d/%Y"), 
-            by = "month", length.out = 19)
+            by = "month", length.out = tot_month)
 dates_lb = format(seq(as.Date('09/01/2020', format = "%m/%d/%Y"), 
-                      by = "month", length.out = 19), "%m\n%y")
+                      by = "month", length.out = tot_month), "%m\n%y")
 
 ggplot(box_dat) +
   geom_boxplot(aes(x = mdy(Date), y = Total, 
@@ -607,16 +612,5 @@ ggplot(box_dat) +
   theme_classic()
   
 ```
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -775,15 +775,18 @@ plot(fit)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><br></p>
 <pre class="r"><code>box_dat &lt;- all_dat %&gt;%
-  dplyr::group_by(month) %&gt;%
-  mutate(my = make_date(year, month)) %&gt;%
-  dplyr::group_by(my) %&gt;%
-  mutate(busy_scale = mean(Total_todo))
+  group_by(month) %&gt;%
+  dplyr::mutate(my = make_date(year, month)) %&gt;%
+  group_by(my) %&gt;%
+  dplyr::mutate(busy_scale = mean(Total_todo))
+
+# Total months 
+tot_month = length(unique(box_dat$my))
 
 dates = seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
-            by = &quot;month&quot;, length.out = 19)
+            by = &quot;month&quot;, length.out = tot_month)
 dates_lb = format(seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
-                      by = &quot;month&quot;, length.out = 19), &quot;%m\n%y&quot;)
+                      by = &quot;month&quot;, length.out = tot_month), &quot;%m\n%y&quot;)
 
 ggplot(box_dat) +
   geom_boxplot(aes(x = mdy(Date), y = Total, 
