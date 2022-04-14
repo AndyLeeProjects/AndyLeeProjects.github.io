@@ -33,10 +33,10 @@ morning_rt = read.csv('/Volumes/Programming/Spring 2022/Project/morning_routine.
 
 
 colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
-                       'Screen_time','Created','Date','Drink','Key_words',
+                       'Screen_time','Created','Date','Drink',
                        'Meditation','Mentality','Satisfaction',
                        'Reading','Productivity','Rise_time','Run','Social',
-                       'Tech','Total','Total_todo','Work_done')
+                       'Tech','Total','Total_todo','Work_done','Key_words')
 
 
 
@@ -585,9 +585,9 @@ plot(fit)
 ```{r, message=FALSE, warning=FALSE}
 box_dat <- all_dat %>%
   group_by(month) %>%
-  mutate(my = make_date(year, month)) %>%
+  dplyr::mutate(my = make_date(year, month)) %>%
   group_by(my) %>%
-  mutate(busy_scale = mean(Total_todo))
+  dplyr::mutate(busy_scale = mean(Total_todo))
 
 dates = seq(as.Date('09/01/2020', format = "%m/%d/%Y"), 
             by = "month", length.out = 19)
@@ -597,19 +597,11 @@ dates_lb = format(seq(as.Date('09/01/2020', format = "%m/%d/%Y"),
 ggplot(box_dat) +
   geom_boxplot(aes(x = mdy(Date), y = Total, 
                    fill = busy_scale, group = my))+
-  labs(title = "Time Seires", subtitle = "Total (%) & Busyness", x = "") +
+  labs(title = "Time Seires", subtitle = "Total (%) & Busyness", x = "Dates") +
   scale_x_date(breaks = dates, labels = dates_lb)+
-  scale_fill_gradient(low = "white", high = "#C03B3B")
+  scale_fill_gradient(low = "white", high = "#C03B3B")+
+  theme_classic()
   
-```
-
-
-<br>  
-```{r, message=FALSE, warning=FALSE}
-
-
-
-
 ```
 
 
