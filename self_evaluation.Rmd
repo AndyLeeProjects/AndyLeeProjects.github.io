@@ -494,7 +494,7 @@ ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
   
 ```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
 model <- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
-              Reading, data = all_dat)
+              Reading + Drink + Total_todo + Multiple,  data = all_dat)
 summary(model)
 ```
 <br>  
@@ -523,15 +523,19 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 
 ```
 <br>  
+
 - Systematic Error can be observed
+    - NOT a perfect prediction model, but the the model is reasonable
 
 
 ## Logistic Regression
 
 <br>  
+<font size="4">**Single Logistic Regression**</font>
+<br>  
 
 
-### Single Logistic Regression
+
 ```{r, message=FALSE, warning=FALSE}
 model_logit <- glm(work_finished_mr_exc ~ night_phone,
                    data = all_morning_rt, family = binomial(link = "logit"))
@@ -541,7 +545,8 @@ ame_result
 ```
 <br>  
 
-### How to interpret the Average Marginal Effect(AME) values
+<font size="4">**Interpretation of the Average Marginal Effect(AME)**</font>
+
 * <font size = "3"> Interpret them as percentage points rather than percentage
   + work_finished AME of .19 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
 <br>  
@@ -568,15 +573,12 @@ ggplot(data = ame_result) +
 ats <- ts(all_dat, start = decimal_date(mdy("09/01/2020")),
                             frequency = 365.25 / 7)
 
-p <- ggplot(data = all_dat) +
+ggplot(data = all_dat) +
   geom_line(aes(x = mdy(Date), y = Total))+
   scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01","2021-04-01", "2021-07-01", "2021-10-01","2022-01-01", "2022-04-01"),
                      labels=c("09/20", "01/21", "04/21", "07/21", 
                                 "10/21", "01/22","04/22"))+
   labs(title = "Time Seires", subtitle = "Total (%)")
-  
-  
-p
 ```
 
 ```{r, message=FALSE, warning=FALSE}

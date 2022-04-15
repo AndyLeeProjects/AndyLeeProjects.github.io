@@ -670,32 +670,36 @@ summary(model)</code></pre>
 </ul></li>
 </ul>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
-              Reading, data = all_dat)
+              Reading + Drink + Total_todo + Multiple,  data = all_dat)
 summary(model)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = work_finished ~ Screen_time + Meditation + Rise_time + 
-##     Phone_pickups + Reading, data = all_dat)
+##     Phone_pickups + Reading + Drink + Total_todo + Multiple, 
+##     data = all_dat)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.50337 -0.09223  0.02035  0.10697  0.39576 
+## -0.35870 -0.08452  0.00956  0.09246  0.42468 
 ## 
 ## Coefficients:
 ##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    6.569e-01  3.618e-02  18.157  &lt; 2e-16 ***
-## Screen_time   -4.295e-04  6.660e-05  -6.449 2.85e-10 ***
-## Meditation     1.512e-02  1.202e-03  12.574  &lt; 2e-16 ***
-## Rise_time     -3.440e-04  9.267e-05  -3.712  0.00023 ***
-## Phone_pickups  1.108e-04  2.710e-04   0.409  0.68284    
-## Reading        3.606e-03  5.307e-04   6.795 3.34e-11 ***
+## (Intercept)    2.001e-01  5.572e-02   3.591 0.000366 ***
+## Screen_time   -6.149e-05  6.246e-05  -0.984 0.325473    
+## Meditation     1.171e-02  1.038e-03  11.281  &lt; 2e-16 ***
+## Rise_time     -2.054e-04  7.937e-05  -2.588 0.009972 ** 
+## Phone_pickups  9.798e-05  2.293e-04   0.427 0.669404    
+## Reading        2.540e-03  4.538e-04   5.596 3.81e-08 ***
+## Drink         -4.843e-02  1.163e-02  -4.165 3.73e-05 ***
+## Total_todo     4.494e-03  2.498e-03   1.799 0.072654 .  
+## Multiple       1.042e-01  8.059e-03  12.930  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.167 on 462 degrees of freedom
-##   (28 observations deleted due to missingness)
-## Multiple R-squared:  0.5023, Adjusted R-squared:  0.4969 
-## F-statistic: 93.24 on 5 and 462 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.1375 on 450 degrees of freedom
+##   (37 observations deleted due to missingness)
+## Multiple R-squared:  0.6653, Adjusted R-squared:  0.6593 
+## F-statistic: 111.8 on 8 and 450 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br><br />
 <br></p>
 </div>
@@ -717,14 +721,18 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
        y = &quot;Tasks Finshed (y)&quot;, x = expression(hat(y)))+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
   theme_minimal()</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-1.png" width="672" /> <br><br />
-- Systematic Error can be observed</p>
+<p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-1.png" width="672" /> <br></p>
+<ul>
+<li>Systematic Error can be observed
+<ul>
+<li>NOT a perfect prediction model, but the the model is reasonable</li>
+</ul></li>
+</ul>
 </div>
 <div id="logistic-regression" class="section level2">
 <h2>Logistic Regression</h2>
-<p><br></p>
-<div id="single-logistic-regression" class="section level3">
-<h3>Single Logistic Regression</h3>
+<p><br><br />
+<font size="4"><strong>Single Logistic Regression</strong></font> <br></p>
 <pre class="r"><code>model_logit &lt;- glm(work_finished_mr_exc ~ night_phone,
                    data = all_morning_rt, family = binomial(link = &quot;logit&quot;))
 m = margins(model_logit) 
@@ -733,9 +741,7 @@ ame_result</code></pre>
 <pre><code>##           factor    AME     SE      z      p  lower  upper
 ##  night_phoneTrue 0.1847 0.0883 2.0911 0.0365 0.0116 0.3579</code></pre>
 <p><br></p>
-</div>
-<div id="how-to-interpret-the-average-marginal-effectame-values" class="section level3">
-<h3>How to interpret the Average Marginal Effect(AME) values</h3>
+<p><font size="4"><strong>Interpretation of the Average Marginal Effect(AME)</strong></font></p>
 <ul>
 <li><font size = "3"> Interpret them as percentage points rather than percentage
 <ul>
@@ -753,22 +759,18 @@ ame_result</code></pre>
 <br></p>
 </div>
 </div>
-</div>
 <div id="main-variables-time-series" class="section level1">
 <h1><strong>Main Variables: Time Series</strong></h1>
 <p><br></p>
 <pre class="r"><code>ats &lt;- ts(all_dat, start = decimal_date(mdy(&quot;09/01/2020&quot;)),
                             frequency = 365.25 / 7)
 
-p &lt;- ggplot(data = all_dat) +
+ggplot(data = all_dat) +
   geom_line(aes(x = mdy(Date), y = Total))+
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
                                 &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
-  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)
-  
-  
-p</code></pre>
+  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)</code></pre>
 <p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
 fit = ets(myts)

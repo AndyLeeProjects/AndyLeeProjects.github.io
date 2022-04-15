@@ -161,6 +161,22 @@ h_p_alldat <- merge(h_alldat, country_profile, by = "Country")
 
 rmarkdown::paged_table(country_profile)
 ```
+<br>
+
+## TOP 10 AVG Hppiness Scores (2015 ~ 2019)
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+# Get Top 10 mean of happiness rank from 2015 ~ 2019
+
+top_10 <- h_alldat %>%
+  group_by(Country) %>%
+  dplyr::summarise(mean_rank = mean(H_rank)) %>%
+  arrange(desc(mean_rank)) %>%
+  filter(mean_rank <= 10)
+
+rmarkdown::paged_table(top_10)
+```
+
 <br>  
 <br>  
 <br>  
@@ -171,19 +187,6 @@ rmarkdown::paged_table(country_profile)
 
 <br>  
 
-## TOP 10 MEAN Hppiness Scores Ranking (2015 ~ 2019)
-
-```{r, echo = TRUE, eval = TRUE, out.width = "90%", fig.asp = .75, fig.align='center', warning = FALSE}
-# Get Top 10 mean of happiness rank from 2015 ~ 2019
-
-( top_10 <- h_alldat %>%
-  group_by(Country) %>%
-  dplyr::summarise(mean_rank = mean(H_rank)) %>%
-  arrange(desc(mean_rank)) %>%
-  filter(mean_rank <= 10) )
-```
-
-<br>  
 
 ## Boxplot of Happiness Scores in different Regions
 
