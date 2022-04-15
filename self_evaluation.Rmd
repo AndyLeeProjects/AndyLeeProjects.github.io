@@ -266,6 +266,7 @@ ggplot(data = all_dat)+
 ## Time Trend (Total %)
 ```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE, message=FALSE}
 all_dat_month <- all_dat %>%
+  dplyr::filter(!is.na(Rise_time)) %>%
   dplyr::group_by(year, month) %>%
   dplyr::summarise(Total = mean(Total),
             Rise_time = mean(Rise_time)) %>%
@@ -607,6 +608,7 @@ ggplot(box_dat) +
   geom_boxplot(aes(x = mdy(Date), y = Total, 
                    fill = busy_scale, group = my))+
   labs(title = "Time Seires", subtitle = "Total (%) & Busyness", x = "Dates") +
+  theme(plot.title = element_text(face = "bold")) +
   scale_x_date(breaks = dates, labels = dates_lb)+
   scale_fill_gradient(low = "white", high = "#C03B3B")+
   theme_classic()
