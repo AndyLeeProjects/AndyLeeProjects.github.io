@@ -36,6 +36,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -555,7 +557,7 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
   facet_wrap(~total_checked)+
   labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)+
   theme_classic()</code></pre>
-<p><img src="self_main_analysis_files/figure-html/figures-side-1.png" width="672" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>
 # see how number of morning routine checks affects the total todo lists checked
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
@@ -563,7 +565,7 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
   facet_wrap(~total_checked)+
   labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)+
   theme_classic()</code></pre>
-<p><img src="self_main_analysis_files/figure-html/figures-side-2.png" width="672" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 <p><br></p>
 <p><br></p>
 <p><br></p>
@@ -598,26 +600,13 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 </ul>
 <p><br></p>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Meditation, data = all_dat)
-summary(model)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = work_finished ~ Meditation, data = all_dat)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.63112 -0.09888  0.02612  0.11941  0.44970 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 0.550304   0.013094   42.03   &lt;2e-16 ***
-## Meditation  0.019905   0.001183   16.83   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.1866 on 494 degrees of freedom
-##   (4 observations deleted due to missingness)
-## Multiple R-squared:  0.3644, Adjusted R-squared:  0.3631 
-## F-statistic: 283.2 on 1 and 494 DF,  p-value: &lt; 2.2e-16</code></pre>
+pretty_lm &lt;- prettify(summary(model))
+rmarkdown::paged_table(pretty_lm)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.55030387","3":"0.52457779","4":"0.57602995","5":"0.013093634","6":"42.02835","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01990537","3":"0.01758142","4":"0.02222933","5":"0.001182806","6":"16.82894","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Meditation, y=work_finished))+
   geom_smooth(method = &quot;lm&quot;)+
   geom_point()+
@@ -626,15 +615,15 @@ summary(model)</code></pre>
        y = &quot;Total to-do lists finished (%)&quot;, x = &quot;Meditation in minutes&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
   theme_classic()</code></pre>
-<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Screen_time, data = all_dat)
-(pretty_lm &lt;- prettify(summary(model)))</code></pre>
-<pre><code>##                    Estimate    CI (lower)    CI (upper)   Std. Error   t value Pr(&gt;|t|)
-## 1 (Intercept)  0.8842831679  0.8440922672  0.9244740686 2.045580e-02 43.228971   &lt;0.001
-## 2 Screen_time -0.0007172021 -0.0008716481 -0.0005627561 7.860775e-05 -9.123808   &lt;0.001
-##      
-## 1 ***
-## 2 ***</code></pre>
+pretty_lm &lt;- prettify(summary(model))
+rmarkdown::paged_table(pretty_lm)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8842831679","3":"0.8440922672","4":"0.9244740686","5":"2.045580e-02","6":"43.228971","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007172021","3":"-0.0008716481","4":"-0.0005627561","5":"7.860775e-05","6":"-9.123808","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
   geom_smooth(method = &quot;lm&quot;)+
   geom_point()+
@@ -643,7 +632,7 @@ summary(model)</code></pre>
        y = &quot;Number of Phone pickups\n&quot;, x = &quot;\nRise time&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
   theme_classic()</code></pre>
-<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
 <p><br><br />
 <br><br />
 <br></p>
@@ -662,27 +651,13 @@ summary(model)</code></pre>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
               Reading + Drink + Total_todo + Multiple,  data = all_dat)
 
-(pretty_lm &lt;- prettify(summary(model)))</code></pre>
-<pre><code>##                      Estimate    CI (lower)    CI (upper)   Std. Error    t value
-## 1   (Intercept)  1.997604e-01  0.0903117125  3.092091e-01 5.569333e-02  3.5867922
-## 2   Screen_time -5.860220e-05 -0.0001813896  6.418517e-05 6.248076e-05 -0.9379239
-## 3    Meditation  1.178700e-02  0.0097496004  1.382440e-02 1.036738e-03 11.3693168
-## 4     Rise_time -2.037900e-04 -0.0003598218 -4.775830e-05 7.939727e-05 -2.5667135
-## 5 Phone_pickups  7.793601e-05 -0.0003703018  5.261738e-04 2.280873e-04  0.3416938
-## 6       Reading  2.530312e-03  0.0016379954  3.422628e-03 4.540580e-04  5.5726613
-## 7         Drink -4.905697e-02 -0.0718848394 -2.622910e-02 1.161604e-02 -4.2232110
-## 8    Total_todo  4.337842e-03 -0.0005697259  9.245411e-03 2.497232e-03  1.7370600
-## 9      Multiple  1.049627e-01  0.0891593216  1.207660e-01 8.041577e-03 13.0524960
-##   Pr(&gt;|t|)    
-## 1   &lt;0.001 ***
-## 2    0.349    
-## 3   &lt;0.001 ***
-## 4    0.011   *
-## 5    0.733    
-## 6   &lt;0.001 ***
-## 7   &lt;0.001 ***
-## 8    0.083   .
-## 9   &lt;0.001 ***</code></pre>
+pretty_lm &lt;- prettify(summary(model))
+rmarkdown::paged_table(pretty_lm)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"1.997604e-01","3":"0.0903117125","4":"3.092091e-01","5":"5.569333e-02","6":"3.5867922","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-5.860220e-05","3":"-0.0001813896","4":"6.418517e-05","5":"6.248076e-05","6":"-0.9379239","7":"0.349","8":""},{"1":"Meditation","2":"1.178700e-02","3":"0.0097496004","4":"1.382440e-02","5":"1.036738e-03","6":"11.3693168","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-2.037900e-04","3":"-0.0003598218","4":"-4.775830e-05","5":"7.939727e-05","6":"-2.5667135","7":"0.011","8":"*"},{"1":"Phone_pickups","2":"7.793601e-05","3":"-0.0003703018","4":"5.261738e-04","5":"2.280873e-04","6":"0.3416938","7":"0.733","8":""},{"1":"Reading","2":"2.530312e-03","3":"0.0016379954","4":"3.422628e-03","5":"4.540580e-04","6":"5.5726613","7":"<0.001","8":"***"},{"1":"Drink","2":"-4.905697e-02","3":"-0.0718848394","4":"-2.622910e-02","5":"1.161604e-02","6":"-4.2232110","7":"<0.001","8":"***"},{"1":"Total_todo","2":"4.337842e-03","3":"-0.0005697259","4":"9.245411e-03","5":"2.497232e-03","6":"1.7370600","7":"0.083","8":"."},{"1":"Multiple","2":"1.049627e-01","3":"0.0891593216","4":"1.207660e-01","5":"8.041577e-03","6":"13.0524960","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br><br />
 <br></p>
 </div>
@@ -704,7 +679,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
        y = &quot;Tasks Finshed (y)&quot;, x = expression(hat(y)))+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
   theme_classic()</code></pre>
-<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /> <br></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-15-1.png" width="672" /> <br></p>
 <ul>
 <li>Systematic Error can be observed
 <ul>
@@ -733,11 +708,11 @@ ggplot(data = all_dat) +
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
                                 &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
   labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)</code></pre>
-<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
 fit = ets(myts)
 plot(fit)</code></pre>
-<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p><br></p>
 <pre class="r"><code>box_dat &lt;- all_dat %&gt;%
   group_by(month) %&gt;%
@@ -761,7 +736,7 @@ ggplot(box_dat) +
   scale_x_date(breaks = dates, labels = dates_lb)+
   scale_fill_gradient(low = &quot;white&quot;, high = &quot;#C03B3B&quot;)+
   theme_classic()</code></pre>
-<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 </div>
 
 

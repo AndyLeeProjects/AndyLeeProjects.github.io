@@ -409,7 +409,7 @@ Note that they are all discrete/ categorical variables
   + Reading
   + Morning journal </font>
   
-```{r, collapse=TRUE, figures-side, fig.asp = .75,  warning = FALSE}
+```{r, collapse=TRUE, fig.asp = .75,  warning = FALSE}
 
 # see how number of morning routine checks affects the Total %
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
@@ -458,7 +458,8 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 
 ```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
 model <- lm(work_finished ~ Meditation, data = all_dat)
-summary(model)
+pretty_lm <- prettify(summary(model))
+rmarkdown::paged_table(pretty_lm)
 ggplot(all_dat,aes(x=Meditation, y=work_finished))+
   geom_smooth(method = "lm")+
   geom_point()+
@@ -472,7 +473,8 @@ ggplot(all_dat,aes(x=Meditation, y=work_finished))+
   
 ```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
 model <- lm(work_finished ~ Screen_time, data = all_dat)
-(pretty_lm <- prettify(summary(model)))
+pretty_lm <- prettify(summary(model))
+rmarkdown::paged_table(pretty_lm)
 ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
   geom_smooth(method = "lm")+
   geom_point()+
@@ -499,7 +501,8 @@ ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
 model <- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
               Reading + Drink + Total_todo + Multiple,  data = all_dat)
 
-(pretty_lm <- prettify(summary(model)))
+pretty_lm <- prettify(summary(model))
+rmarkdown::paged_table(pretty_lm)
 
 ```
 <br>  
