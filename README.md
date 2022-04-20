@@ -13,6 +13,6 @@
 
 ## Projects
   - **[Self-Evaluation Project](https://alin-96.github.io/self_evaluation.html)** (R)
-    - [Code](https://github.com/aLin-96/aLin-96.github.io/blob/main/self_main_analysis.Rmd)
+    - [Code](https://github.com/aLin-96/aLin-96.github.io/blob/main/selfeval_main.Rmd)
   - **[Happiness Project using](https://alin-96.github.io/project_main.html)** (R)
     - [Code](https://github.com/aLin-96/aLin-96.github.io/blob/main/happiness_main.Rmd)
