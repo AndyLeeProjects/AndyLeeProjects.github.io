@@ -204,6 +204,7 @@ ggplot(dplyr::filter(h_alldat, Region != "NA")) +
   labs(x = "Happiness Scores", y = "Regions")
 ```
 
+<br>  
 
 ```{r}
 ggplot(dplyr::filter(h_alldat, Region != "NA"), aes(x = GDP, y=H_score, color = Region)) +
@@ -211,7 +212,30 @@ ggplot(dplyr::filter(h_alldat, Region != "NA"), aes(x = GDP, y=H_score, color = 
   theme_classic()
 
 ```
+<br>  
 
+
+```{r, warning=FALSE, message=FALSE}
+base <- h_alldat %>%
+  plot_ly(x = ~GDP, y = ~H_score, 
+          text = ~Country, hoverinfo = "text",
+          width = 800, height = 500) 
+
+base %>%
+  add_markers(color = ~Region, frame = ~Year, ids = ~Country) %>%
+  animation_opts(1000, easing = "elastic", redraw = FALSE) %>%
+  animation_button(
+    x = 1, xanchor = "right", y = 0, yanchor = "bottom"
+  ) %>%
+  animation_slider(
+    currentvalue = list(prefix = "YEAR ", font = list(color="red"))
+  ) 
+
+```
+
+
+<br>  
+<br>  
 
 # World Map Data
 
@@ -231,7 +255,6 @@ world <- world_map %>%
             "congo (brazzaville)", Country),
          Country = as.factor(Country))
 
-
 h_alldat_world <- left_join(h_alldat, world, by = "Country",all.x=TRUE)
 
 p <- ggplot(h_alldat_world, aes(long, lat, group = group,
@@ -249,22 +272,6 @@ p %>%
 ```
 
 
-```{r}
-base <- h_alldat_world %>%
-  plot_ly(x = ~GDP, y = ~H_score, 
-          text = ~Country, hoverinfo = "text") %>%
-  layout(xaxis = list(type = "log"))
-
-base %>%
-  add_markers(color = ~Region, frame = ~Year, ids = ~Country) %>%
-  animation_opts(1000, easing = "elastic", redraw = FALSE) %>%
-  animation_button(
-    x = 1, xanchor = "right", y = 0, yanchor = "bottom"
-  ) %>%
-  animation_slider(
-    currentvalue = list(prefix = "YEAR ", font = list(color="red"))
-  )
-```
 
 
 
