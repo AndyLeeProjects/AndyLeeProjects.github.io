@@ -448,7 +448,8 @@ pairs.panels(correlation_plot, lm = TRUE)</code></pre>
   labs(title = &quot;Density Plot of Work Finished% for different School periods&quot;,
        x = &quot;Work Finished (%)&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
-  scale_color_discrete(name = &quot;School Qtrs&quot;)</code></pre>
+  scale_color_discrete(name = &quot;School Qtrs&quot;)+
+  theme_classic()</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-6-1.png" width="672" /> <br><br />
 <br><br />
 <br></p>
@@ -464,7 +465,8 @@ ggplot(data = all_dat)+
   labs(title = &quot;Work finished % by week days&quot;,
        subtitle = &quot;Data: all_dat (500+ observations)&quot;,
        x = &quot;&quot;, y = &quot;Work Finished (%)&quot;)+
-  theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
+  theme(plot.title = element_text(face = &quot;bold&quot;))+
+  theme_classic()</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-7-1.png" width="672" /> <br><br />
 <br></p>
 </div>
@@ -486,7 +488,8 @@ ggplot(all_dat_month)+
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
-                                &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))</code></pre>
+                                &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
+  theme_classic()</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p><br><br />
 <br></p>
@@ -499,7 +502,8 @@ ggplot(all_dat_month)+
               subtitle = &quot;Larger positive differnce indicates higher productivity&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;, &quot;2021-06-01&quot;,
-                                &quot;2022-01-01&quot;))</code></pre>
+                                &quot;2022-01-01&quot;))+
+  theme_classic()</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-9-1.png" width="672" /> <br></p>
 <ul>
 <li><font size="3">Note for Rise time:
@@ -649,13 +653,13 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
 </ul></li>
 </ul>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
-              Reading + Drink + Total_todo + Multiple,  data = all_dat)
+              Reading + Drink + Total_todo + Social,  data = all_dat)
 
 pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"1.997604e-01","3":"0.0903117125","4":"3.092091e-01","5":"5.569333e-02","6":"3.5867922","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-5.860220e-05","3":"-0.0001813896","4":"6.418517e-05","5":"6.248076e-05","6":"-0.9379239","7":"0.349","8":""},{"1":"Meditation","2":"1.178700e-02","3":"0.0097496004","4":"1.382440e-02","5":"1.036738e-03","6":"11.3693168","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-2.037900e-04","3":"-0.0003598218","4":"-4.775830e-05","5":"7.939727e-05","6":"-2.5667135","7":"0.011","8":"*"},{"1":"Phone_pickups","2":"7.793601e-05","3":"-0.0003703018","4":"5.261738e-04","5":"2.280873e-04","6":"0.3416938","7":"0.733","8":""},{"1":"Reading","2":"2.530312e-03","3":"0.0016379954","4":"3.422628e-03","5":"4.540580e-04","6":"5.5726613","7":"<0.001","8":"***"},{"1":"Drink","2":"-4.905697e-02","3":"-0.0718848394","4":"-2.622910e-02","5":"1.161604e-02","6":"-4.2232110","7":"<0.001","8":"***"},{"1":"Total_todo","2":"4.337842e-03","3":"-0.0005697259","4":"9.245411e-03","5":"2.497232e-03","6":"1.7370600","7":"0.083","8":"."},{"1":"Multiple","2":"1.049627e-01","3":"0.0891593216","4":"1.207660e-01","5":"8.041577e-03","6":"13.0524960","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.5864830617","3":"0.4790888995","4":"0.6938772240","5":"5.464787e-02","6":"10.7320382","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003790691","3":"-0.0005103351","4":"-0.0002478032","5":"6.679509e-05","6":"-5.6751050","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0145606478","3":"0.0122639331","4":"0.0168573625","5":"1.168691e-03","6":"12.4589391","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0003861481","3":"-0.0005636416","4":"-0.0002086547","5":"9.031814e-05","6":"-4.2754219","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0001372521","3":"-0.0003782202","4":"0.0006527243","5":"2.622997e-04","6":"0.5232643","7":"0.601","8":""},{"1":"Reading","2":"0.0027858640","3":"0.0017436800","4":"0.0038280480","5":"5.303188e-04","6":"5.2531877","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0683266558","3":"-0.0942489707","4":"-0.0424043409","5":"1.319066e-02","6":"-5.1799289","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0080372735","3":"0.0023169055","4":"0.0137576415","5":"2.910828e-03","6":"2.7611639","7":"0.006","8":"**"},{"1":"Social","2":"-0.0212346300","3":"-0.0302691361","4":"-0.0122001239","5":"4.597238e-03","6":"-4.6189971","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><br><br />
@@ -683,7 +687,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 <ul>
 <li>Systematic Error can be observed
 <ul>
-<li>NOT a perfect prediction model, but the the model is reasonable</li>
+<li>NOT a perfect prediction model, but the the model is reasonably accurate</li>
 </ul></li>
 </ul>
 <p><br></p>
@@ -707,7 +711,8 @@ ggplot(data = all_dat) +
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
                                 &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
-  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)</code></pre>
+  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)+
+  theme_classic()</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
 fit = ets(myts)

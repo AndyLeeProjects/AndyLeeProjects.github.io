@@ -240,7 +240,8 @@ ggplot(data = all_dat, aes(x = work_finished,
   labs(title = "Density Plot of Work Finished% for different School periods",
        x = "Work Finished (%)")+
   theme(plot.title = element_text(face = "bold")) +
-  scale_color_discrete(name = "School Qtrs")
+  scale_color_discrete(name = "School Qtrs")+
+  theme_classic()
 ```
 <br>  
 <br>  
@@ -259,7 +260,8 @@ ggplot(data = all_dat)+
   labs(title = "Work finished % by week days",
        subtitle = "Data: all_dat (500+ observations)",
        x = "", y = "Work Finished (%)")+
-  theme(plot.title = element_text(face = "bold"))
+  theme(plot.title = element_text(face = "bold"))+
+  theme_classic()
 ```
 <br>  
 <br>  
@@ -283,7 +285,8 @@ ggplot(all_dat_month)+
   theme(plot.title = element_text(face = "bold")) +
   scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01","2021-04-01", "2021-07-01", "2021-10-01","2022-01-01", "2022-04-01"),
                      labels=c("09/20", "01/21", "04/21", "07/21", 
-                                "10/21", "01/22","04/22"))
+                                "10/21", "01/22","04/22"))+
+  theme_classic()
   
 
 ```
@@ -300,7 +303,8 @@ ggplot(all_dat_month)+
               subtitle = "Larger positive differnce indicates higher productivity")+
   theme(plot.title = element_text(face = "bold")) +
   scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01", "2021-06-01",
-                                "2022-01-01"))
+                                "2022-01-01"))+
+  theme_classic()
   
 ```
 <br>  
@@ -499,7 +503,7 @@ ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
   
 ```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
 model <- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
-              Reading + Drink + Total_todo + Multiple,  data = all_dat)
+              Reading + Drink + Total_todo + Social,  data = all_dat)
 
 pretty_lm <- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)
@@ -533,7 +537,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 <br>  
 
 - Systematic Error can be observed
-    - NOT a perfect prediction model, but the the model is reasonable
+    - NOT a perfect prediction model, but the the model is reasonably accurate
 
 
 
@@ -579,7 +583,8 @@ ggplot(data = all_dat) +
   scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01","2021-04-01", "2021-07-01", "2021-10-01","2022-01-01", "2022-04-01"),
                      labels=c("09/20", "01/21", "04/21", "07/21", 
                                 "10/21", "01/22","04/22"))+
-  labs(title = "Time Seires", subtitle = "Total (%)")
+  labs(title = "Time Seires", subtitle = "Total (%)")+
+  theme_classic()
 ```
 
 ```{r, message=FALSE, warning=FALSE}
