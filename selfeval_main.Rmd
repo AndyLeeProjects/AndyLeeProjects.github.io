@@ -47,7 +47,8 @@ all_dat <- all_dat %>%
   dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
   dplyr::mutate(work_finished = round(Finished/Total_todo,4),
          Drink = lag(Drink),
-         Total = Total*100)%>%
+         Total = Total*100) %>%
+  dplyr::filter(Multiple < 6) %>%
   tibble()
 
 # Correct the date format for earlier Dates

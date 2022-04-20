@@ -24,6 +24,7 @@ library(plyr)
 library(skimr)
 library(tidyverse)
 library(gganimate)
+library(plotly)
 theme_set(theme_minimal())
 ```
 
@@ -198,6 +199,7 @@ rmarkdown::paged_table(top_10)
 ```{r}
 ggplot(dplyr::filter(h_alldat, Region != "NA")) +
   geom_boxplot(aes(x = H_score, y=reorder(Region, H_score), color = Region))+
+  theme_classic() +
   theme(legend.position = "None") +
   labs(x = "Happiness Scores", y = "Regions")
 ```
@@ -213,11 +215,20 @@ ggplot(dplyr::filter(h_alldat, Region != "NA"), aes(x = GDP, y=H_score, color = 
 
 # World Map Data
 
-```{r, fig.show='hide'}
+```{r}
 world_map <- map_data("world")
 world <- world_map %>%
   dplyr::rename(Country = region) %>%
-  mutate(Country = ifelse(str_to_lower(Country) == "usa", "united states", str_to_lower(Country)),
+  dplyr::mutate(Country = str_to_lower(Country),
+         Country = ifelse(
+            Country == "usa",
+            "united states", Country),
+         Country = ifelse(
+            Country == "democratic republic of the congo",
+            "congo (kinshasa)", Country),
+         Country = ifelse(
+            Country == "republic of congo",
+            "congo (brazzaville)", Country),
          Country = as.factor(Country))
 
 
@@ -226,17 +237,15 @@ h_alldat_world <- left_join(h_alldat, world, by = "Country",all.x=TRUE)
 ggplot(data = h_alldat_world,
              mapping = aes(x = long, y = lat, group = group, fill = H_score))
 
-p <- ggplot(h_alldat_world, aes(long, lat, group = group))+
-  geom_polygon()+
-  geom_point(aes(size = H_score),
-             colour = 'purple', alpha = .1, na.rm = TRUE) +
-  #scale_fill_gradient(low = "white", high = "orange", na.value = NA) +
-  theme_map() +
-  facet_wrap(~Year)
+p <- ggplot(h_alldat_world, aes(long, lat, group = group, frame = Year))+
+  geom_polygon(aes(fill = H_score),
+             alpha = 1, na.rm = TRUE)+
+  scale_fill_gradient(low = "white", high = "#FD8104", na.value = NA) +
+  theme_map()
 
 
-#transition_time(Year) +
-#ease_aes("linear")
+plotly::ggplotly(p)
+
 
 ```
 
