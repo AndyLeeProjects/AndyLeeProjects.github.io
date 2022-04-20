@@ -8,10 +8,10 @@ navbar:
     - text: "Projects"
       menu:
       - text: "Self-Evaluation Project"
-        href: self_evaluation.html
+        href: selfeval_main.html
       - text: '---------'
       - text: "Happiness Project"
-        href: project_main.html
+        href: happiness_main.html
       - text: "Happiness Project Proposal"
         href: proposal_happiness.html
     - text: "My Website"
