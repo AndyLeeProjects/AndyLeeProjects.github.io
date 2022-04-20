@@ -387,6 +387,7 @@ library(ggridges)
 library(plyr)
 library(skimr)
 library(tidyverse)
+library(gganimate)
 theme_set(theme_minimal())</code></pre>
 <p><br></p>
 <div id="data-wrangling" class="section level1">
@@ -741,12 +742,37 @@ rmarkdown::paged_table(top_10)</code></pre>
   geom_boxplot(aes(x = H_score, y=reorder(Region, H_score), color = Region))+
   theme(legend.position = &quot;None&quot;) +
   labs(x = &quot;Happiness Scores&quot;, y = &quot;Regions&quot;)</code></pre>
-<p><img src="project_main_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="happiness_main_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(dplyr::filter(h_alldat, Region != &quot;NA&quot;), aes(x = GDP, y=H_score, color = Region)) +
   geom_point() +
   theme_classic()</code></pre>
-<p><img src="project_main_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="happiness_main_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
+</div>
+<div id="world-map-data" class="section level1">
+<h1>World Map Data</h1>
+<pre class="r"><code>world_map &lt;- map_data(&quot;world&quot;)
+world &lt;- world_map %&gt;%
+  dplyr::rename(Country = region) %&gt;%
+  mutate(Country = ifelse(str_to_lower(Country) == &quot;usa&quot;, &quot;united states&quot;, str_to_lower(Country)),
+         Country = as.factor(Country))
+
+
+h_alldat_world &lt;- left_join(h_alldat, world, by = &quot;Country&quot;,all.x=TRUE)
+
+ggplot(data = h_alldat_world,
+             mapping = aes(x = long, y = lat, group = group, fill = H_score))</code></pre>
+<pre class="r"><code>p &lt;- ggplot(h_alldat_world, aes(long, lat, group = group))+
+  geom_polygon()+
+  geom_point(aes(size = H_score),
+             colour = &#39;purple&#39;, alpha = .1, na.rm = TRUE) +
+  #scale_fill_gradient(low = &quot;white&quot;, high = &quot;orange&quot;, na.value = NA) +
+  theme_map() +
+  facet_wrap(~Year)
+
+
+#transition_time(Year) +
+#ease_aes(&quot;linear&quot;)</code></pre>
 </div>
 
 

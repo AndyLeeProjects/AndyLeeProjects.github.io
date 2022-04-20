@@ -378,17 +378,18 @@ div.tocify {
 <p><br></p>
 <pre class="r"><code>library(lubridate)
 library(gridExtra)
-library(tidyverse)
 library(margins)
 library(psych)
 library(grid)
-library(forecast)</code></pre>
+library(forecast)
+library(papeR)
+library(tidyverse)</code></pre>
 <p><br></p>
 <div id="main-variables-descriptive-statistics" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> <strong>Main Variables: Descriptive Statistics</strong></h1>
 <hr />
 <p><br></p>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /> <br></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /> <br></p>
 <div id="main-varibles-descriptions" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Main Varibles Descriptions</h2>
 <ul>
@@ -434,7 +435,7 @@ library(forecast)</code></pre>
            Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-5-1.png" width="864" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-5-1.png" width="864" /></p>
 <p><br></p>
 </div>
 <div id="school-variable" class="section level2" number="1.3">
@@ -446,7 +447,7 @@ pairs.panels(correlation_plot, lm = TRUE)</code></pre>
        x = &quot;Work Finished (%)&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
   scale_color_discrete(name = &quot;School Qtrs&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="672" /> <br><br />
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /> <br><br />
 <br><br />
 <br></p>
 </div>
@@ -462,7 +463,7 @@ ggplot(data = all_dat)+
        subtitle = &quot;Data: all_dat (500+ observations)&quot;,
        x = &quot;&quot;, y = &quot;Work Finished (%)&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /> <br><br />
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /> <br><br />
 <br></p>
 </div>
 <div id="time-trend-total" class="section level2" number="1.5">
@@ -484,7 +485,7 @@ ggplot(all_dat_month)+
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
                                 &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p><br><br />
 <br></p>
 </div>
@@ -497,7 +498,7 @@ ggplot(all_dat_month)+
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;, &quot;2021-06-01&quot;,
                                 &quot;2022-01-01&quot;))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="672" /> <br></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /> <br></p>
 <ul>
 <li><font size="3">Note for Rise time:
 <ul>
@@ -517,7 +518,7 @@ ggplot(all_dat_month)+
 <p><br></p>
 <p><span class="math display">\[&quot;The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start.&quot;\\ -Jim\ Kwik\]</span> <br><br />
 <br></p>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /> <br></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /> <br></p>
 <p><br></p>
 <div id="morning-routine-descriptions" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Morning Routine Descriptions</h2>
@@ -552,16 +553,17 @@ ggplot(all_dat_month)+
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(Total))+
   facet_wrap(~total_checked)+
-  labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/figures-side-1.png" width="672" /></p>
+  labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)+
+  theme_classic()</code></pre>
+<p><img src="self_main_analysis_files/figure-html/figures-side-1.png" width="672" /></p>
 <pre class="r"><code>
 # see how number of morning routine checks affects the total todo lists checked
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
   labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)+
-  theme_minimal()</code></pre>
-<p><img src="self_evaluation_files/figure-html/figures-side-2.png" width="672" /></p>
+  theme_classic()</code></pre>
+<p><img src="self_main_analysis_files/figure-html/figures-side-2.png" width="672" /></p>
 <p><br></p>
 <p><br></p>
 <p><br></p>
@@ -623,37 +625,25 @@ summary(model)</code></pre>
        subtitle = &quot;y = Total to-do lists finished (%) \nx = Meditation in minutes&quot;,
        y = &quot;Total to-do lists finished (%)&quot;, x = &quot;Meditation in minutes&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
-  theme_minimal()</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
-<pre class="r"><code>model &lt;- lm(Phone_pickups ~ Rise_time, data = all_morning_rt)
-summary(model)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = Phone_pickups ~ Rise_time, data = all_morning_rt)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -51.067 -17.664  -2.067  16.726  66.466 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 97.84537    2.55046  38.364  &lt; 2e-16 ***
-## Rise_time   -0.13149    0.02866  -4.588 1.02e-05 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 27.53 on 133 degrees of freedom
-## Multiple R-squared:  0.1367, Adjusted R-squared:  0.1302 
-## F-statistic: 21.05 on 1 and 133 DF,  p-value: 1.021e-05</code></pre>
-<pre class="r"><code>ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
+  theme_classic()</code></pre>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
+<pre class="r"><code>model &lt;- lm(work_finished ~ Screen_time, data = all_dat)
+(pretty_lm &lt;- prettify(summary(model)))</code></pre>
+<pre><code>##                    Estimate    CI (lower)    CI (upper)   Std. Error   t value Pr(&gt;|t|)
+## 1 (Intercept)  0.8842831679  0.8440922672  0.9244740686 2.045580e-02 43.228971   &lt;0.001
+## 2 Screen_time -0.0007172021 -0.0008716481 -0.0005627561 7.860775e-05 -9.123808   &lt;0.001
+##      
+## 1 ***
+## 2 ***</code></pre>
+<pre class="r"><code>ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
   geom_smooth(method = &quot;lm&quot;)+
   geom_point()+
   labs(title = &quot;Linear Regression&quot;,
        subtitle = &quot;y = The number of Phone pickups\nx = Rise time&quot;,
        y = &quot;Number of Phone pickups\n&quot;, x = &quot;\nRise time&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
-  theme_minimal()</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+  theme_classic()</code></pre>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
 <p><br><br />
 <br><br />
 <br></p>
@@ -671,35 +661,28 @@ summary(model)</code></pre>
 </ul>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
               Reading + Drink + Total_todo + Multiple,  data = all_dat)
-summary(model)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = work_finished ~ Screen_time + Meditation + Rise_time + 
-##     Phone_pickups + Reading + Drink + Total_todo + Multiple, 
-##     data = all_dat)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.35672 -0.08500  0.00849  0.09278  0.42399 
-## 
-## Coefficients:
-##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    1.998e-01  5.569e-02   3.587 0.000371 ***
-## Screen_time   -5.860e-05  6.248e-05  -0.938 0.348782    
-## Meditation     1.179e-02  1.037e-03  11.369  &lt; 2e-16 ***
-## Rise_time     -2.038e-04  7.940e-05  -2.567 0.010586 *  
-## Phone_pickups  7.794e-05  2.281e-04   0.342 0.732739    
-## Reading        2.530e-03  4.541e-04   5.573 4.31e-08 ***
-## Drink         -4.906e-02  1.162e-02  -4.223 2.91e-05 ***
-## Total_todo     4.338e-03  2.497e-03   1.737 0.083055 .  
-## Multiple       1.050e-01  8.042e-03  13.052  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.1376 on 454 degrees of freedom
-##   (37 observations deleted due to missingness)
-## Multiple R-squared:  0.6672, Adjusted R-squared:  0.6613 
-## F-statistic: 113.8 on 8 and 454 DF,  p-value: &lt; 2.2e-16</code></pre>
+
+(pretty_lm &lt;- prettify(summary(model)))</code></pre>
+<pre><code>##                      Estimate    CI (lower)    CI (upper)   Std. Error    t value
+## 1   (Intercept)  1.997604e-01  0.0903117125  3.092091e-01 5.569333e-02  3.5867922
+## 2   Screen_time -5.860220e-05 -0.0001813896  6.418517e-05 6.248076e-05 -0.9379239
+## 3    Meditation  1.178700e-02  0.0097496004  1.382440e-02 1.036738e-03 11.3693168
+## 4     Rise_time -2.037900e-04 -0.0003598218 -4.775830e-05 7.939727e-05 -2.5667135
+## 5 Phone_pickups  7.793601e-05 -0.0003703018  5.261738e-04 2.280873e-04  0.3416938
+## 6       Reading  2.530312e-03  0.0016379954  3.422628e-03 4.540580e-04  5.5726613
+## 7         Drink -4.905697e-02 -0.0718848394 -2.622910e-02 1.161604e-02 -4.2232110
+## 8    Total_todo  4.337842e-03 -0.0005697259  9.245411e-03 2.497232e-03  1.7370600
+## 9      Multiple  1.049627e-01  0.0891593216  1.207660e-01 8.041577e-03 13.0524960
+##   Pr(&gt;|t|)    
+## 1   &lt;0.001 ***
+## 2    0.349    
+## 3   &lt;0.001 ***
+## 4    0.011   *
+## 5    0.733    
+## 6   &lt;0.001 ***
+## 7   &lt;0.001 ***
+## 8    0.083   .
+## 9   &lt;0.001 ***</code></pre>
 <p><br><br />
 <br></p>
 </div>
@@ -720,41 +703,20 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
        subtitle = &quot;Actual Tasks Finished (%) vs Predicted Values of Task Finished (%)&quot;,
        y = &quot;Tasks Finshed (y)&quot;, x = expression(hat(y)))+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
-  theme_minimal()</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-14-1.png" width="672" /> <br></p>
+  theme_classic()</code></pre>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /> <br></p>
 <ul>
 <li>Systematic Error can be observed
 <ul>
 <li>NOT a perfect prediction model, but the the model is reasonable</li>
 </ul></li>
 </ul>
-</div>
-<div id="logistic-regression" class="section level2" number="3.4">
-<h2><span class="header-section-number">3.4</span> Logistic Regression</h2>
-<p><br><br />
-<font size="4"><strong>Single Logistic Regression</strong></font> <br></p>
-<pre class="r"><code>model_logit &lt;- glm(work_finished_mr_exc ~ night_phone,
-                   data = all_morning_rt, family = binomial(link = &quot;logit&quot;))
-m = margins(model_logit) 
-ame_result = summary(m) 
-ame_result</code></pre>
-<pre><code>##           factor    AME     SE      z      p  lower  upper
-##  night_phoneTrue 0.1870 0.0878 2.1282 0.0333 0.0148 0.3591</code></pre>
 <p><br></p>
-<p><font size="4"><strong>Interpretation of the Average Marginal Effect(AME)</strong></font></p>
-<ul>
-<li><font size = "3"> Interpret them as percentage points rather than percentage
-<ul>
-<li>work_finished AME of .19 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font> <br></li>
-</ul></li>
-</ul>
-<pre class="r"><code>ggplot(data = ame_result) +
-  geom_point(aes(factor , AME)) +
-  geom_errorbar(aes(x = factor, ymin = lower, ymax = upper),
-  width = .5) + geom_hline ( yintercept = 0) +
-  theme_minimal ( ) +
-  theme(axis.text.x = element_text(angle = 90))</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<!-- <font size="4">**Interpretation of the Average Marginal Effect(AME)**</font>
+
+* <font size = "3"> Interpret them as percentage points rather than percentage
+  + work_finished AME of .19 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
+<br>   -->
 <p><br><br />
 <br></p>
 </div>
@@ -771,11 +733,11 @@ ggplot(data = all_dat) +
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
                                 &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
   labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
 fit = ets(myts)
 plot(fit)</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><br></p>
 <pre class="r"><code>box_dat &lt;- all_dat %&gt;%
   group_by(month) %&gt;%
@@ -799,7 +761,7 @@ ggplot(box_dat) +
   scale_x_date(breaks = dates, labels = dates_lb)+
   scale_fill_gradient(low = &quot;white&quot;, high = &quot;#C03B3B&quot;)+
   theme_classic()</code></pre>
-<p><img src="self_evaluation_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="self_main_analysis_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 
 

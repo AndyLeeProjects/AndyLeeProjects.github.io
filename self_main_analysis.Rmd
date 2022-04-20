@@ -4,6 +4,7 @@ author: "Andy"
 date: "3/13/2022"
 output:
   html_document:
+    number_sections: true
     toc: true
     toc_float:
       smooth_scroll: false
@@ -16,11 +17,12 @@ output:
 ```{r, results='hide', message=FALSE}
 library(lubridate)
 library(gridExtra)
-library(tidyverse)
 library(margins)
 library(psych)
 library(grid)
 library(forecast)
+library(papeR)
+library(tidyverse)
 ```
 
 
@@ -413,14 +415,15 @@ Note that they are all discrete/ categorical variables
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(Total))+
   facet_wrap(~total_checked)+
-  labs(title = "Morning Routine checked & \nTotal %")
+  labs(title = "Morning Routine checked & \nTotal %")+
+  theme_classic()
 
 # see how number of morning routine checks affects the total todo lists checked
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
   labs(title = "Morning Routine checked & \n todo lists finished(excluding morning routine tasks)")+
-  theme_minimal()
+  theme_classic()
 ```
 
 
@@ -463,21 +466,21 @@ ggplot(all_dat,aes(x=Meditation, y=work_finished))+
        subtitle = "y = Total to-do lists finished (%) \nx = Meditation in minutes",
        y = "Total to-do lists finished (%)", x = "Meditation in minutes")+
   theme(plot.title = element_text(face = "bold"))+
-  theme_minimal()
+  theme_classic()
 ```
   
   
 ```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
-model <- lm(Phone_pickups ~ Rise_time, data = all_morning_rt)
-summary(model)
-ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
+model <- lm(work_finished ~ Screen_time, data = all_dat)
+(pretty_lm <- prettify(summary(model)))
+ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
   geom_smooth(method = "lm")+
   geom_point()+
   labs(title = "Linear Regression",
        subtitle = "y = The number of Phone pickups\nx = Rise time",
        y = "Number of Phone pickups\n", x = "\nRise time")+
   theme(plot.title = element_text(face = "bold"))+
-  theme_minimal()
+  theme_classic()
 ```
 
 <br>  
@@ -489,13 +492,15 @@ ggplot(all_dat,aes(x=Rise_time, y=Phone_pickups))+
   + y = Dependent Variable
   + $x_1,...x_n$ = n independent/explanatory variables
   + $\alpha$ = Constant or intercept
-  + $\beta$ = weights for each $x_1,...x_n$ </font>
+  + $\beta$ = weights for each $x_1,...x_n$ </f   ont>
   
   
 ```{r, echo = TRUE, eval = TRUE, fig.width = 6, fig.height = 5, warning = FALSE, message=FALSE}
 model <- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
               Reading + Drink + Total_todo + Multiple,  data = all_dat)
-summary(model)
+
+(pretty_lm <- prettify(summary(model)))
+
 ```
 <br>  
 <br>  
@@ -519,7 +524,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
        subtitle = "Actual Tasks Finished (%) vs Predicted Values of Task Finished (%)",
        y = "Tasks Finshed (y)", x = expression(hat(y)))+
   theme(plot.title = element_text(face = "bold"))+
-  theme_minimal()
+  theme_classic()
 
 ```
 <br>  
@@ -528,15 +533,8 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
     - NOT a perfect prediction model, but the the model is reasonable
 
 
-## Logistic Regression
 
-<br>  
-<font size="4">**Single Logistic Regression**</font>
-<br>  
-
-
-
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 model_logit <- glm(work_finished_mr_exc ~ night_phone,
                    data = all_morning_rt, family = binomial(link = "logit"))
 m = margins(model_logit) 
@@ -545,13 +543,13 @@ ame_result
 ```
 <br>  
 
-<font size="4">**Interpretation of the Average Marginal Effect(AME)**</font>
+<!-- <font size="4">**Interpretation of the Average Marginal Effect(AME)**</font>
 
 * <font size = "3"> Interpret them as percentage points rather than percentage
   + work_finished AME of .19 : Indicates that if I do not touch my phone the night before, I am 19.06 percentage point more likely to get more tasks done. </font>
-<br>  
+<br>   -->
 
-```{r, fig.align='center'}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.show='hide'}
 ggplot(data = ame_result) +
   geom_point(aes(factor , AME)) +
   geom_errorbar(aes(x = factor, ymin = lower, ymax = upper),
@@ -616,5 +614,4 @@ ggplot(box_dat) +
   theme_classic()
   
 ```
-
 

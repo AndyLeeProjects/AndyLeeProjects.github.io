@@ -23,6 +23,7 @@ library(ggridges)
 library(plyr)
 library(skimr)
 library(tidyverse)
+library(gganimate)
 theme_set(theme_minimal())
 ```
 
@@ -48,7 +49,7 @@ h15 <- h15 %>%
                 Health=`Health (Life Expectancy)`,
                 Trust=`Trust (Government Corruption)`,
                 SE=`Standard Error`,
-                dystopia_res = `Dystopia Residual`)
+                dystopia_res = `Dystopia Residual`) 
 
 
 # Read 2016 Data
@@ -79,7 +80,7 @@ h_regions <- dplyr::select(h16, Country, Region)
 h17 <- read_csv("Happiness_Data/2017.csv")  
 h17 <- h17 %>%
   dplyr::mutate(Year = 2017,
-         `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92) %>%
+                `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92,) %>%
   merge(h_regions,by="Country", all.x=T) %>%
   dplyr::select(-c(`Whisker.high`,`Whisker.low`)) %>%
     dplyr::rename(H_rank=`Happiness.Rank`, # Modify variable names
@@ -103,7 +104,9 @@ h18 <- h18 %>%
                 Trust=`Perceptions of corruption`,
                 Freedom = `Freedom to make life choices`,
                 Family = `Social support`) %>%
-  merge(h_regions,by="Country", all.x=T)
+  merge(h_regions,by="Country", all.x=T) %>%
+  dplyr::mutate(dystopia_res = H_score - (GDP + Family + Health + Freedom + Generosity + as.numeric(Trust)))
+
 
 
 # Read 2019 Data
@@ -118,7 +121,9 @@ h19 <- h19 %>%
                 Trust=`Perceptions of corruption`,
                 Freedom = `Freedom to make life choices`,
                 Family = `Social support`) %>%
-  merge(h_regions,by="Country", all.x=T)
+  merge(h_regions,by="Country", all.x=T) %>%
+  dplyr::mutate(dystopia_res = H_score - 
+                  (GDP + Family + Health + Freedom + Generosity + as.numeric(Trust)))
 
 # Combine all data into all_dat
 h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
@@ -198,8 +203,42 @@ ggplot(dplyr::filter(h_alldat, Region != "NA")) +
 ```
 
 
+```{r}
+ggplot(dplyr::filter(h_alldat, Region != "NA"), aes(x = GDP, y=H_score, color = Region)) +
+  geom_point() +
+  theme_classic()
+
+```
 
 
+# World Map Data
+
+```{r, fig.show='hide'}
+world_map <- map_data("world")
+world <- world_map %>%
+  dplyr::rename(Country = region) %>%
+  mutate(Country = ifelse(str_to_lower(Country) == "usa", "united states", str_to_lower(Country)),
+         Country = as.factor(Country))
+
+
+h_alldat_world <- left_join(h_alldat, world, by = "Country",all.x=TRUE)
+
+ggplot(data = h_alldat_world,
+             mapping = aes(x = long, y = lat, group = group, fill = H_score))
+
+p <- ggplot(h_alldat_world, aes(long, lat, group = group))+
+  geom_polygon()+
+  geom_point(aes(size = H_score),
+             colour = 'purple', alpha = .1, na.rm = TRUE) +
+  #scale_fill_gradient(low = "white", high = "orange", na.value = NA) +
+  theme_map() +
+  facet_wrap(~Year)
+
+
+#transition_time(Year) +
+#ease_aes("linear")
+
+```
 
 
 

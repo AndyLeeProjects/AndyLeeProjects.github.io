@@ -9,14 +9,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Andy" />
 
 
-<title>Projects</title>
+<title>Self-Evaluation: Morning Variables Analysis</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -29,6 +30,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -220,6 +224,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -227,6 +294,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -291,50 +368,26 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Projects</h1>
+<h1 class="title toc-ignore">Self-Evaluation: Morning Variables Analysis</h1>
+<h4 class="author">Andy</h4>
+<h4 class="date">3/13/2022</h4>
 
 </div>
 
 
-<p><span style="float:right"><strong>Last Updated Time</strong>: 2022-04-19 21:04:44</span></p>
-<hr />
 <p><br></p>
-<div id="self-evaluation-project" class="section level2">
-<h2><a href="https://alin-96.github.io/self_evaluation.html">Self-Evaluation Project</a></h2>
-<p><font size="3"> Towards the end of my military service, I tried to find ways to maintain a high-disciplinary lifestyle even after my release. After much contemplation, I decided to develop a grading system for my day-to-day life, which sprouted from the concept of math exams. The graded exams allow us to improve our mathematical knowledge by analyzing our weaknesses and strengths. Thus, by utilizing quantifiable variables that best represent the fullness of my lifestyle and by implementing various mathematical models, I was able to construct an effective grading system for my day-to-day life.</p>
-<p>The self-evaluation project comprises three main procedures: collecting meaningful data, applying statistical analysis, and visualizing indicative findings in daily life. The goal is to find numerous insights and unique patterns with over 500 days’ worth of data using R. Also, a more comprehensive understanding of the lifestyle will be obtained by utilizing advanced statistical concepts such as linear regressions and various correlation tests. Ultimately, these findings will provide better guidance for me to achieve healthier life patterns in the future.</font></p>
-<p><br><br />
-<br></p>
+<pre class="r"><code>library(lubridate)
+library(gridExtra)
+library(tidyverse)
+library(margins)
+library(psych)
+library(grid)
+library(forecast)</code></pre>
+
+
+
 </div>
-<div id="happiness-project" class="section level2">
-<h2><a href="https://alin-96.github.io/project_main.html">Happiness Project</a></h2>
-<p><font size="3"> The data was collected from Gallup World Poll. Their survey consisted of questions that asked participants to rank their own life on a Cantril ladder with a scale from 1 to 10, 10 being the best ideal way of living and 0 being the worst. This data set focuses on the happiness score of each country, which ranges from 0 to 10. Each country is ranked based on that averaged happiness score for participants. The team recorded scores for these factors: economy or GDP per Capita, family or social support, health or life expectancy, and freedom to help explain the happiness score of each country. </font></p>
-<p><font size = "5"><strong>Goals</strong></font></p>
-<ol style="list-style-type: decimal">
-<li><font size = "3"><strong>Data Manipulations</strong>
-<ul>
-<li>Merge the data with 2 other data sets
-<ul>
-<li>Death Data: Total annual number of deaths by country/risk factor</li>
-<li>UN Country Data: Indicators of all the countries present in UN Data</li>
-</ul></li>
-</ul></li>
-<li><strong>Various visualizations using ggplot2</strong>
-<ul>
-<li>Happiness Rankings throughout countries</li>
-<li>Change in happiness rankings</li>
-</ul></li>
-<li><strong>Statistical Analysis</strong>
-<ul>
-<li>Linear Regressions &amp; Multiple Regressions</li>
-<li>Clustering</li>
-<li>Time Series</font></li>
-</ul></li>
-</ol>
 </div>
-
-
-
 
 </div>
 
@@ -367,6 +420,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
