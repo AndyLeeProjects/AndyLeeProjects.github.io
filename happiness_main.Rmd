@@ -134,7 +134,7 @@ h_alldat <- h_alldat %>%
 
 #rmarkdown::paged_table(h_alldat)
 
-knitr::kable(papeR::summarize_numeric(h_alldat, type = "numeric", group = "Region",variables = c("H_rank"),  test = FALSE))
+knitr::kable(papeR::summarize_numeric(h_alldat, type = "numeric", group = "Region",variables = c("H_rank", "H_score"),  test = FALSE))
 
 ```
 
@@ -234,34 +234,37 @@ world <- world_map %>%
 
 h_alldat_world <- left_join(h_alldat, world, by = "Country",all.x=TRUE)
 
-ggplot(data = h_alldat_world,
-             mapping = aes(x = long, y = lat, group = group, fill = H_score))
-
-p <- ggplot(h_alldat_world, aes(long, lat, group = group, frame = Year))+
-  geom_polygon(aes(fill = H_score),
-             alpha = 1, na.rm = TRUE)+
+p <- ggplot(h_alldat_world, aes(long, lat, group = group,
+                                fill = H_score,
+                                frame = Year))+
+  geom_polygon(na.rm = TRUE)+
   scale_fill_gradient(low = "white", high = "#FD8104", na.value = NA) +
   theme_map()
 
-
-plotly::ggplotly(p)
+p %>%
+  plotly::ggplotly() %>%
+  animation_opts(1000, easing = "elastic",transition = 0,  redraw = FALSE)
 
 
 ```
 
 
+```{r}
+base <- h_alldat_world %>%
+  plot_ly(x = ~GDP, y = ~H_score, 
+          text = ~Country, hoverinfo = "text") %>%
+  layout(xaxis = list(type = "log"))
 
-
-
-
-
-
-
-
-
-
-
-
+base %>%
+  add_markers(color = ~Region, frame = ~Year, ids = ~Country) %>%
+  animation_opts(1000, easing = "elastic", redraw = FALSE) %>%
+  animation_button(
+    x = 1, xanchor = "right", y = 0, yanchor = "bottom"
+  ) %>%
+  animation_slider(
+    currentvalue = list(prefix = "YEAR ", font = list(color="red"))
+  )
+```
 
 
 
