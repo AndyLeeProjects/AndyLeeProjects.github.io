@@ -275,13 +275,16 @@ p %>%
 
 # Regressions
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, results='asis'}
 country_formula <- H_score ~ GDP + Family + Health + Freedom + Generosity
 country_model <- lm(country_formula, data = h_p_alldat)
 
 stargazer(country_model, type = "html", omit = c("Constant"))
 
 ```
+<br>  
+<br>  
+
 
 ```{r, warning=FALSE, message=FALSE}
 colors <- c("Fredom" = "red", "GDP" = "blue")
