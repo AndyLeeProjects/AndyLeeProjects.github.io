@@ -27,6 +27,8 @@ library(tidyverse)
 library(gganimate)
 library(plotly)
 theme_set(theme_minimal())
+library(stargazer)  # regression tables
+library(ggstatsplot)
 ```
 
 <br>  
@@ -207,27 +209,27 @@ ggplot(dplyr::filter(h_alldat, Region != "NA")) +
 
 <br>  
 
+## Happiness Scores vs GDP 
+
+
 ```{r}
 ggplot(dplyr::filter(h_alldat, Region != "NA"), aes(x = GDP, y=H_score, color = Region)) +
   geom_point() +
-  theme_classic()
+  theme_classic()+
+  labs(title = "Happiness Scores vs GDP by Region\n")
 
 ```
 <br>  
-
 
 ```{r, warning=FALSE, message=FALSE}
 base <- h_alldat %>%
   plot_ly(x = ~GDP, y = ~H_score, 
           text = ~Country, hoverinfo = "text",
-          width = 800, height = 500) 
+          width = 800, height = 500, size = 2) 
 
 base %>%
   add_markers(color = ~Region, frame = ~Year, ids = ~Country) %>%
   animation_opts(1000, easing = "elastic", redraw = FALSE) %>%
-  animation_button(
-    x = 1, xanchor = "right", y = 0, yanchor = "bottom"
-  ) %>%
   animation_slider(
     currentvalue = list(prefix = "YEAR ", font = list(color="red"))
   ) 
@@ -236,11 +238,10 @@ base %>%
 
 
 <br>  
-<br>  
 
-# World Map Data
+## World Map by Happiness Scores
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 world_map <- map_data("world")
 world <- world_map %>%
   dplyr::rename(Country = region) %>%
@@ -272,8 +273,25 @@ p %>%
 
 ```
 
+# Regressions
+
+```{r, warning=FALSE, message=FALSE}
+country_formula <- H_score ~ GDP + Family + Health + Freedom + Generosity
+country_model <- lm(country_formula, data = h_p_alldat)
+
+stargazer(country_model, type = "html", omit = c("Constant"))
+
+```
+
 ```{r}
-# Use stargazer when reporting linear regression results
+colors <- c("Fredom" = "red", "GDP" = "blue")
+
+ggplot(data = h_alldat)+
+  geom_smooth(aes(x = Freedom, y = H_score, color = 'Freedom'), method = "lm")+
+  geom_point(aes(x = Freedom, y = H_score, color = 'Freedom'), alpha = .3)+
+geom_smooth(aes(x = GDP, y = H_score, color = 'GDP',), method = "lm")+
+  geom_point(aes(x = GDP, y = H_score, color = 'GDP'), alpha = .3)
+
 ```
 
 
