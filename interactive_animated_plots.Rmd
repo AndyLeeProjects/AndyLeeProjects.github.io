@@ -1,0 +1,127 @@
+---
+title: "Interactive and animated plots"
+author: "Andy"
+date: "4/25/2022"
+output: html_document
+---
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+library(gganimate)
+library(tidyverse)
+library(ggiraph)
+library(socviz)
+library(ggthemes)
+```
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+imf_growth <-  read_csv(url('https://bcdanl.github.io/data/imf_growth_quarterly.csv')) %>%
+  rename(qt_v = qt) %>%
+  mutate(country = as.factor(country)) %>%
+  group_by(qt_v) %>%
+  mutate(rank = rank(gy))
+
+ggplot(data = imf_growth) +
+  geom_col(aes(y = reorder(rank,gy), x = gy, fill = country))+
+  geom_text(aes(y = reorder(rank,gy), x = gy, label = round(gy,2), color = country))+
+  geom_text(aes(x = if_else(gy>0, -.012,.052),y = reorder(rank,gy),  
+                label = country, color = country), hjust = 1, vjust=0)+
+  labs(title = "Growth Rate of GDP per worker: {closest_state}", 
+       x = "", y = "") +
+  coord_cartesian(clip = "off") + 
+  theme_minimal()+
+  theme(legend.position = "None")+
+  transition_states(qt_v, state_length = 10, transition_length = 50)+
+  ease_aes('cubic-in-out')#+
+  #view_follow() NOT WORKING
+  
+
+```
+
+## ggiraph
+
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+climate_opinion_long <- read_csv(
+  'https://bcdanl.github.io/data/climate_opinion_2021.csv')
+
+# Use `county_map` data from the `socviz` package.
+# Do not use coord_map().
+
+### Variable description
+# happening: Estimated % of adults who think global warming is happening in 2021.
+
+# human: Estimated % of adults who think global warming is mostly caused by human activities in 2021
+
+county_map <- county_map
+county_map$id <- as.integer(county_map$id)
+county_full <- left_join(county_map, climate_opinion_long)
+
+
+na_map <- function(yr){
+  county_full_na <- filter(county_full, is.na(belief)) %>% 
+    select(-belief) %>% 
+    mutate( belief = yr)
+}
+
+for (val in  levels( factor(county_full$belief) )  ){
+  county_full <- rbind(county_full, na_map(val))
+}
+
+county_full <- county_full %>% 
+  mutate(belief_desc = ifelse(belief == "happening",
+                              "Global warming is happening.",
+                              "Global warming is mostly caused by human activities."),
+         tooltip_text = paste0(GeoName, '\n',perc))
+
+p1 <- ggplot(data = filter(county_full, belief_desc == "Global warming is mostly caused by human activities.")) + 
+  geom_polygon(mapping = aes(x = long, y = lat, 
+                             group = group, fill = perc, tooltip = tooltip_text,
+                             data_id = id),
+                              color = "grey60", size = 0.1) 
+
+
+p2 <- p1 + scale_fill_gradient2( 
+  low = '#2E74C0',  
+  high = '#CB454A',  
+  mid = 'white', # transparent white
+  na.value = "grey80",
+  midpoint = 50,
+  breaks = c(quantile(county_full$perc, 0, na.rm = T),
+             quantile(county_full$perc, .25, na.rm = T),
+             quantile(county_full$perc, .5, na.rm = T),
+             quantile(county_full$perc, .75, na.rm = T),
+             quantile(county_full$perc, 1, na.rm = T)),
+  labels = c(paste(round(quantile(county_full$perc, 0, na.rm = T), 1),"\n(Min)"),
+             paste(round(quantile(county_full$perc, .25, na.rm = T), 1),"\n(25th)"),
+             paste(round(quantile(county_full$perc, .5, na.rm = T), 1),"\n(50th)"),
+             paste(round(quantile(county_full$perc, .75, na.rm = T), 1),"\n(75th)"),
+             paste(round(quantile(county_full$perc, 1, na.rm = T), 1),"\n(Max)")
+  ),
+  guide = guide_colorbar( direction = "horizontal",
+                          barwidth = 25,
+                          title.vjust = 1 )
+) 
+
+p <- p2 + labs(fill = "Percent\nBelief", title = "U.S. Climate Opinion, 2021",
+          caption = "Sources: Yale Program on Climate Change Communication\n(https://climatecommunication.yale.edu/visualizations-data/ycom-us/)") +
+  theme_map() + 
+  theme(plot.margin = unit( c(1, 1, 3.85, 0.5), "cm"),
+        legend.position = c(.5, -.3),
+        legend.justification = c(.5,.5),
+        strip.background = element_rect( colour = "black",
+                                         fill = "white",
+                                         color = "grey80" )
+  ) +
+  guides(fill = guide_colourbar(direction = "horizontal", barwidth = 25, title.vjust = -1))
+
+
+
+widgetframe::frameWidget(ggiraph(code=print(p)))
+
+  
+```
+
+
+
+
+
