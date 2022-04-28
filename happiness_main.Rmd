@@ -283,7 +283,7 @@ stargazer(country_model, type = "html", omit = c("Constant"))
 
 ```
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 colors <- c("Fredom" = "red", "GDP" = "blue")
 
 ggplot(data = h_alldat)+
