@@ -4,6 +4,7 @@ author: "Andy"
 date: "3/13/2022"
 output:
   html_document:
+    number_sections: true
     toc: true
     toc_float:
       smooth_scroll: false
@@ -30,7 +31,7 @@ theme_set(theme_minimal())
 
 <br>  
 
-# **Data Wrangling**
+# Data Wrangling
 
 ---
 
@@ -187,7 +188,7 @@ rmarkdown::paged_table(top_10)
 <br>  
 <br>  
 
-# **Visualizations**
+# Visualizations
 
 ---
 
@@ -271,6 +272,9 @@ p %>%
 
 ```
 
+```{r}
+# Use stargazer when reporting linear regression results
+```
 
 
 

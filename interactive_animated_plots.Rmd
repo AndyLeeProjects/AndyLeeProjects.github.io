@@ -74,7 +74,7 @@ county_full <- county_full %>%
          tooltip_text = paste0(GeoName, '\n',perc))
 
 p1 <- ggplot(data = filter(county_full, belief_desc == "Global warming is mostly caused by human activities.")) + 
-  geom_polygon(mapping = aes(x = long, y = lat, 
+  geom_polygon_interactive(mapping = aes(x = long, y = lat, 
                              group = group, fill = perc, tooltip = tooltip_text,
                              data_id = id),
                               color = "grey60", size = 0.1) 
