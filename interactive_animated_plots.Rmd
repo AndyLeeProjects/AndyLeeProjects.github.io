@@ -115,8 +115,8 @@ p <- p2 + labs(fill = "Percent\nBelief", title = "U.S. Climate Opinion, 2021",
   guides(fill = guide_colourbar(direction = "horizontal", barwidth = 25, title.vjust = -1))
 
 
-
-widgetframe::frameWidget(ggiraph(code=print(p)))
+#ggiraph(code=print(p))
+#widgetframe::frameWidget(ggiraph(code=print(p)))
 
   
 ```

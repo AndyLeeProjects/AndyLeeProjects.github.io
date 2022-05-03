@@ -285,6 +285,7 @@ stargazer(country_model, type = "html", omit = c("Constant"))
 <br>  
 <br>  
 
+## Noticable Relationships: GDP & Freedom
 
 ```{r, warning=FALSE, message=FALSE}
 colors <- c("Fredom" = "red", "GDP" = "blue")
