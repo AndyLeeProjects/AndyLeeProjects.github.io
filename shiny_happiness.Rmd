@@ -1,0 +1,10 @@
+---
+title: "Happiness Project: Shiny"
+subtitle: "GDP vs Happiness Scores"
+---
+````{=html}
+<style>iframe{height: 1200px; width: 800px}</style>
+<iframe height="100%" width="100%" frameborder="no"
+src="https://anddylee.shinyapps.io/Shiny_Happiness/">
+</iframe>
+````

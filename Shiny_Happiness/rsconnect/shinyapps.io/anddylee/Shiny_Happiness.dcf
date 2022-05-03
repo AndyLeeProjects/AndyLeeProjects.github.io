@@ -1,0 +1,13 @@
+name: Shiny_Happiness
+title: Shiny_Happiness
+username:
+account: anddylee
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6224815
+bundleId: 5865845
+url: https://anddylee.shinyapps.io/Shiny_Happiness/
+when: 1651603692.58323
+lastSyncTime: 1651603692.58324
+asMultiple: FALSE
+asStatic: FALSE

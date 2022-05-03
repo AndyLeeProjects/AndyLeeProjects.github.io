@@ -136,7 +136,7 @@ h_alldat <- h_alldat %>%
                 Region = as.factor(Region))
 
 #rmarkdown::paged_table(h_alldat)
-
+save(h_alldat, file = 'h_alldat.RData')
 knitr::kable(papeR::summarize_numeric(h_alldat, type = "numeric", group = "Region",variables = c("H_rank", "H_score"),  test = FALSE))
 
 ```

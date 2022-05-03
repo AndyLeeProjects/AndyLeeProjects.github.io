@@ -14,6 +14,8 @@ navbar:
         href: happiness_main.html
       - text: "Happiness Project Proposal"
         href: proposal_happiness.html
+      - text: "Shiny: GDP vs Happiness"
+        href: shiny_happiness.html
       - text: '---------'
       - text: "Animation & Interactive Plots"
         href: interactive_animated_plots.html
