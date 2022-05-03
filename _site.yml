@@ -18,6 +18,7 @@ navbar:
       - text: "Animation & Interactive Plots"
         href: interactive_animated_plots.html
       - text: '---------'
+      - text: "Shiny App"
         href: shinyApp.html
     - text: "My Website"
       href: website_redirect.html
