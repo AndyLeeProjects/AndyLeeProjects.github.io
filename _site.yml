@@ -6,7 +6,6 @@ navbar:
     - text: "Home"
       href: home.html
     - text: "Projects"
-      href: projects.html
       menu:
       - text: "Self-Evaluation Project"
         href: selfeval_main.html
