@@ -33,9 +33,7 @@ navbar:
       href: github_redirect.html
 output:
   html_document:
-    theme: united
-    css: custome.css
-    
+    theme: sandstone
     
   
   

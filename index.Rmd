@@ -120,47 +120,25 @@ Don't hesitate to get in touch with me via email or connect with me on LinkedIn 
 
 
 
-:::::::::::::::::: {.cols data-latex=""}
+
+
+
+ 
+<font size="5">**Website Links** </font>:
 
 <font size="3">
 
-::: {.column width="10%" data-latex="{0.10\textwidth}"}
-**Websites**:
-:::
-
-::: {.column width="3%" data-latex="{0.03\textwidth}"}
-\  
-
-:::
-
-::: {.column width="11%" data-latex="{0.11\textwidth}"}
- [Portfolio](https://www.andyleeproject.com/)
-:::
-
-::: {.column width="11%" data-latex="{0.11\textwidth}"}
- [Projects](https://alin-96.github.io/)
-:::
-
-::: {.column width="11%" data-latex="{0.11\textwidth}"}
-
- [Github](https://github.com/aLin-96)  
-:::
-
-::: {.column width="11%" data-latex="{0.11\textwidth}"}
+ - Personal Websites: [Portfolio](https://www.andyleeproject.com/),  [Projects](https://alin-96.github.io/)
  
- [LinkedIn](https://www.linkedin.com/in/jaehyungandylee/)  
-:::
+ - Social Networks: [Github](https://github.com/aLin-96),  [LinkedIn](https://www.linkedin.com/in/jaehyungandylee/)  
 
-::: {.column width="11%" data-latex="{0.11\textwidth}"}
+ - [Resume `r fa("fas fa-file-pdf", fill = "red")`](Jaehyung Lee Resume.pdf)
  
- [Resume `r fa("fas fa-file-pdf", fill = "red")`](Jaehyung Lee Resume.pdf)
-:::
 
 </font>
 
-::::::::::::::::::
 
-Contact Information: anddy0622@gmail.com
+  Contact Information: anddy0622@gmail.com
 
 
 
