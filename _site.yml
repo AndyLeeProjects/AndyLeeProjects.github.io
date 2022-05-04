@@ -24,6 +24,8 @@ navbar:
         href: shinyApp.html
     - text: "My Website (Portfolio)"
       href: website_redirect.html
+    - text: "Resume"
+      href: Jaehyung Lee Resume.pdf
   right:
     - icon: fa-linkedin
       href: linkedin_redirect.html
