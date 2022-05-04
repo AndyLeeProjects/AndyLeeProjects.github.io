@@ -1,6 +1,5 @@
 ---
-title: "<br>Jaehyung Andy Lee<br><br>"
-menu: main
+title: "<br>**Jaehyung Andy Lee**<br><br><br>"
 output: 
   html_document:
     df_print: paged
@@ -74,7 +73,7 @@ blank_year_when_repeated <- function(cv_entry_tibble){
 
 :::::: {.cols data-latex=""}
 
-::: {.column width="66%" data-latex="{0.66\textwidth}"}
+::: {.column width="71%" data-latex="{0.71\textwidth}"}
 
 
 Coding in **Python, R, and SQL** is my passion and has enabled me to [automate numerous redundant daily tasks](https://github.com/aLin-96/notion_automation), perform statistical analyses for various projects, and even create [personal websites](https://alin-96.github.io/). 
