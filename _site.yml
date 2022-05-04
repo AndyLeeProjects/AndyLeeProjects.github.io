@@ -2,9 +2,10 @@ name: "personal-website"
 output_dir: "."
 navbar:
   title: "Jaehyung Lee"
+  href: index.html
   left:
     - text: "Home"
-      href: home.html
+      href: index.html
     - text: "Projects"
       menu:
       - text: "Self-Evaluation Project"
