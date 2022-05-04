@@ -33,7 +33,8 @@ navbar:
       href: github_redirect.html
 output:
   html_document:
-    theme: cosmo
+    theme: united
+    css: custome.css
     
     
   
