@@ -8,8 +8,16 @@ output:
     toc: true
     toc_float:
       smooth_scroll: false
-    theme: united
 ---
+
+# Project Description
+
+<br>  
+
+<font size="3">   Towards the end of my military service, I tried to find ways to maintain a high-disciplinary lifestyle even after my release. After much contemplation, I decided to develop a grading system for my day-to-day life, which sprouted from the concept of math exams. The graded exams allow us to improve our mathematical knowledge by analyzing our weaknesses and strengths. Thus, by utilizing quantifiable variables that best represent the fullness of my lifestyle and by implementing various mathematical models, I was able to construct an effective grading system for my day-to-day life. 
+    
+  The self-evaluation project comprises three main procedures: collecting meaningful data, applying statistical analysis, and visualizing indicative findings in daily life. The goal is to find numerous insights and unique patterns with over 500 days' worth of data using R. Also, a more comprehensive understanding of the lifestyle will be obtained by utilizing advanced statistical concepts such as linear regressions and various correlation tests. Ultimately, these findings will provide better guidance for me to achieve healthier life patterns in the future.</font>
+
 
 <br>  
 

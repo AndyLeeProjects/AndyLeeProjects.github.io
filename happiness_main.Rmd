@@ -8,8 +8,27 @@ output:
     toc: true
     toc_float:
       smooth_scroll: false
-    theme: cerulean
 ---
+
+# Project Description
+
+<br>  
+
+<font size="3">   The data was collected from Gallup World Poll. Their survey consisted of questions that asked participants to rank their own life on a Cantril ladder with a scale from 1 to 10, 10 being the best ideal way of living and 0 being the worst. This data set focuses on the happiness score of each country, which ranges from 0 to 10. Each country is ranked based on that averaged happiness score for participants. The team recorded scores for these factors: economy or GDP per Capita, family or social support, health or life expectancy, and freedom to help explain the happiness score of each country. </font>
+
+<font size = "5">**Goals**</font>
+
+  1. <font size = "3">**Data Manipulations**
+      - Merge the data with 2 other data sets
+          - Death Data: Total annual number of deaths by country/risk factor
+          - UN Country Data: Indicators of all the countries present in UN Data
+  2. **Various visualizations using ggplot2**
+      - Happiness Rankings throughout countries
+      - Change in happiness rankings
+  3. **Statistical Analysis**
+      - Linear Regressions & Multiple Regressions
+      - Clustering
+      - Time Series</font>
 
 <br>  
 

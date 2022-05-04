@@ -17,7 +17,7 @@
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -388,6 +388,11 @@ div.tocify {
 </div>
 
 
+<div id="project-description" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Project Description</h1>
+<p><br></p>
+<p><font size="3"> Towards the end of my military service, I tried to find ways to maintain a high-disciplinary lifestyle even after my release. After much contemplation, I decided to develop a grading system for my day-to-day life, which sprouted from the concept of math exams. The graded exams allow us to improve our mathematical knowledge by analyzing our weaknesses and strengths. Thus, by utilizing quantifiable variables that best represent the fullness of my lifestyle and by implementing various mathematical models, I was able to construct an effective grading system for my day-to-day life.</p>
+<p>The self-evaluation project comprises three main procedures: collecting meaningful data, applying statistical analysis, and visualizing indicative findings in daily life. The goal is to find numerous insights and unique patterns with over 500 days’ worth of data using R. Also, a more comprehensive understanding of the lifestyle will be obtained by utilizing advanced statistical concepts such as linear regressions and various correlation tests. Ultimately, these findings will provide better guidance for me to achieve healthier life patterns in the future.</font></p>
 <p><br></p>
 <pre class="r"><code>library(lubridate)
 library(gridExtra)
@@ -398,13 +403,14 @@ library(forecast)
 library(papeR)
 library(tidyverse)</code></pre>
 <p><br></p>
-<div id="main-variables-descriptive-statistics" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Main Variables: Descriptive Statistics</h1>
+</div>
+<div id="main-variables-descriptive-statistics" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Main Variables: Descriptive Statistics</h1>
 <hr />
 <p><br></p>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /> <br></p>
-<div id="main-varibles-descriptions" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Main Varibles Descriptions</h2>
+<div id="main-varibles-descriptions" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Main Varibles Descriptions</h2>
 <ul>
 <li><font size="3"><strong>Reading</strong>: reading duration in minutes</font></li>
 <li><font size="3"><strong>Meditation</strong>: meditation duration in minutes</font></li>
@@ -427,8 +433,8 @@ library(tidyverse)</code></pre>
 <p><br><br />
 <br></p>
 </div>
-<div id="main-variables-correlations" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Main Variables Correlations</h2>
+<div id="main-variables-correlations" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Main Variables Correlations</h2>
 <p><font size="4">To find the relationships between these variables and how they affect my lifestyle, we will first observe the relationships within variables</font></p>
 <ul>
 <li><font size="3">Use <strong>pairs.panels function</strong> in psych module
@@ -451,8 +457,8 @@ pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-5-1.png" width="864" /></p>
 <p><br></p>
 </div>
-<div id="school-variable" class="section level2" number="1.3">
-<h2><span class="header-section-number">1.3</span> School Variable</h2>
+<div id="school-variable" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> School Variable</h2>
 <pre class="r"><code>ggplot(data = all_dat, aes(x = work_finished,
                            color = School))+
   geom_density()+
@@ -465,8 +471,8 @@ pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 <br><br />
 <br></p>
 </div>
-<div id="weekday-variable" class="section level2" number="1.4">
-<h2><span class="header-section-number">1.4</span> Weekday Variable</h2>
+<div id="weekday-variable" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Weekday Variable</h2>
 <pre class="r"><code>all_dat$Weekdays &lt;- factor(all_dat$Weekdays,levels = c(&quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;,&quot;Friday&quot;,&quot;Saturday&quot;,&quot;Sunday&quot;))
 
 ggplot(data = all_dat)+
@@ -481,8 +487,8 @@ ggplot(data = all_dat)+
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-7-1.png" width="672" /> <br><br />
 <br></p>
 </div>
-<div id="time-trend-total" class="section level2" number="1.5">
-<h2><span class="header-section-number">1.5</span> Time Trend (Total %)</h2>
+<div id="time-trend-total" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Time Trend (Total %)</h2>
 <pre class="r"><code>all_dat_month &lt;- all_dat %&gt;%
   dplyr::filter(!is.na(Rise_time)) %&gt;%
   dplyr::group_by(year, month) %&gt;%
@@ -505,8 +511,8 @@ ggplot(all_dat_month)+
 <p><br><br />
 <br></p>
 </div>
-<div id="time-trend-total---rise-time" class="section level2" number="1.6">
-<h2><span class="header-section-number">1.6</span> Time Trend (Total % - Rise time)</h2>
+<div id="time-trend-total---rise-time" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Time Trend (Total % - Rise time)</h2>
 <pre class="r"><code>ggplot(all_dat_month)+
   geom_line(aes(x=Date, y=Total-Rise_time))+
   labs(title = &quot;Trend of Total% - Rise time&quot;,
@@ -529,16 +535,16 @@ ggplot(all_dat_month)+
 <p><br></p>
 </div>
 </div>
-<div id="morning-routine-varables-descriptive-statistics" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Morning Routine Varables: Descriptive Statistics</h1>
+<div id="morning-routine-varables-descriptive-statistics" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Morning Routine Varables: Descriptive Statistics</h1>
 <hr />
 <p><br></p>
 <p><span class="math display">\[&quot;The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start.&quot;\\ -Jim\ Kwik\]</span> <br><br />
 <br></p>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /> <br></p>
 <p><br></p>
-<div id="morning-routine-descriptions" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> Morning Routine Descriptions</h2>
+<div id="morning-routine-descriptions" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Morning Routine Descriptions</h2>
 <p>Note that they are all discrete/ categorical variables <br></p>
 <ul>
 <li><font size="3"><strong>Total_checked</strong>: The number of morning routine tasks completed</font></li>
@@ -552,8 +558,8 @@ ggplot(all_dat_month)+
 <p><br><br />
 <br></p>
 </div>
-<div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Test how Total_checked variable affects the outcome of the day</h2>
+<div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Test how Total_checked variable affects the outcome of the day</h2>
 <ul>
 <li><font size = "4">The morning routine tasks:
 <ul>
@@ -586,11 +592,11 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 <p><br></p>
 </div>
 </div>
-<div id="main-variables-linear-regressions" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Main Variables: Linear Regressions</h1>
+<div id="main-variables-linear-regressions" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Main Variables: Linear Regressions</h1>
 <hr />
-<div id="simple-linear-regression" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Simple Linear Regression</h2>
+<div id="simple-linear-regression" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Simple Linear Regression</h2>
 <ul>
 <li><font size = "3">Set:
 <ul>
@@ -652,8 +658,8 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
 <br><br />
 <br></p>
 </div>
-<div id="multiple-regressions" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Multiple regressions</h2>
+<div id="multiple-regressions" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Multiple regressions</h2>
 <ul>
 <li><font size = "3">Set:
 <ul>
@@ -676,8 +682,8 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
 <p><br><br />
 <br></p>
 </div>
-<div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2" number="3.3">
-<h2><span class="header-section-number">3.3</span> Actual vs Prediction Visualization for Work_done (all_dat)</h2>
+<div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Actual vs Prediction Visualization for Work_done (all_dat)</h2>
 <pre class="r"><code>all_dat$pred_work_finished &lt;- predict(model, newdata = all_dat)
 
 # Explanatory variable: work_finished
@@ -711,8 +717,8 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 <br></p>
 </div>
 </div>
-<div id="main-variables-time-series" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Main Variables: Time Series</h1>
+<div id="main-variables-time-series" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Main Variables: Time Series</h1>
 <p><br></p>
 <pre class="r"><code>ats &lt;- ts(all_dat, start = decimal_date(mdy(&quot;09/01/2020&quot;)),
                             frequency = 365.25 / 7)

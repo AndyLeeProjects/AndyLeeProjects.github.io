@@ -226,9 +226,9 @@ cv_entries %>%
 cv_entries %>% 
   dplyr::filter(type == 'technical') %>% 
   dplyr::mutate(icon = case_when(
-    str_detect(what, "Programming") ~ "fa-bar-chart",
+    str_detect(what, "Programming") ~ "fa-laptop",
     str_detect(what, "Speaking") ~ "fa-flask",
-    str_detect(what, "Soft") ~ "fa-laptop"
+    str_detect(what, "Soft") ~ "fa-earth-americas"
   )) %>% 
   dplyr::mutate(what = str_c("<i class='fa fa-lg ", icon, "'></i> &nbsp;<span class='cv-entry-title'>", what, "</span> ", additional_info)) %>% 
   dplyr::select(type, what) %>% 
