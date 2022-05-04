@@ -389,6 +389,14 @@ div.tocify {
 
 
 <p><br></p>
+<pre class="r"><code>library(lubridate)
+library(gridExtra)
+library(margins)
+library(psych)
+library(grid)
+library(forecast)
+library(papeR)
+library(tidyverse)</code></pre>
 <p><br></p>
 <div id="main-variables-descriptive-statistics" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Main Variables: Descriptive Statistics</h1>
@@ -557,7 +565,22 @@ ggplot(all_dat_month)+
 <li>Morning journal </font></li>
 </ul></li>
 </ul>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="selfeval_main_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<pre class="r"><code>
+# see how number of morning routine checks affects the Total %
+ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
+  geom_density(aes(Total))+
+  facet_wrap(~total_checked)+
+  labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)+
+  theme_classic()</code></pre>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code>
+# see how number of morning routine checks affects the total todo lists checked
+ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
+  geom_density(aes(work_finished_mr_exc))+
+  facet_wrap(~total_checked)+
+  labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)+
+  theme_classic()</code></pre>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 <p><br></p>
 <p><br></p>
 <p><br></p>
@@ -655,6 +678,22 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
 </div>
 <div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Actual vs Prediction Visualization for Work_done (all_dat)</h2>
+<pre class="r"><code>all_dat$pred_work_finished &lt;- predict(model, newdata = all_dat)
+
+# Explanatory variable: work_finished
+ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
+  geom_point(alpha = 0.5, color = &quot;darkgray&quot;) +
+  geom_smooth(color = &quot;darkblue&quot;) +
+  geom_line(aes(x = work_finished,
+                y = work_finished),   # Plotting the line, y = x
+            color = &quot;red&quot;, linetype = 2) +
+  coord_cartesian( xlim = c(0, 1),
+                   ylim = c(0, 1) ) +  # Limits the range of the
+  labs(title = &quot;Multiple Regression&quot;,
+       subtitle = &quot;Actual Tasks Finished (%) vs Predicted Values of Task Finished (%)&quot;,
+       y = &quot;Tasks Finshed (y)&quot;, x = expression(hat(y)))+
+  theme(plot.title = element_text(face = &quot;bold&quot;))+
+  theme_classic()</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-15-1.png" width="672" /> <br></p>
 <ul>
 <li>Systematic Error can be observed
@@ -675,9 +714,44 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
 <div id="main-variables-time-series" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Main Variables: Time Series</h1>
 <p><br></p>
+<pre class="r"><code>ats &lt;- ts(all_dat, start = decimal_date(mdy(&quot;09/01/2020&quot;)),
+                            frequency = 365.25 / 7)
+
+ggplot(data = all_dat) +
+  geom_line(aes(x = mdy(Date), y = Total))+
+  scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
+                     labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
+                                &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
+  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)+
+  theme_classic()</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
+fit = ets(myts)
+plot(fit)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p><br></p>
+<pre class="r"><code>box_dat &lt;- all_dat %&gt;%
+  group_by(month) %&gt;%
+  dplyr::mutate(my = make_date(year, month)) %&gt;%
+  group_by(my) %&gt;%
+  dplyr::mutate(busy_scale = mean(Total_todo))
+
+# Total months 
+tot_month = length(unique(box_dat$my))
+
+dates = seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
+            by = &quot;month&quot;, length.out = tot_month)
+dates_lb = format(seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
+                      by = &quot;month&quot;, length.out = tot_month), &quot;%m\n%y&quot;)
+
+ggplot(box_dat) +
+  geom_boxplot(aes(x = mdy(Date), y = Total, 
+                   fill = busy_scale, group = my))+
+  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%) &amp; Busyness&quot;, x = &quot;Dates&quot;) +
+  theme(plot.title = element_text(face = &quot;bold&quot;)) +
+  scale_x_date(breaks = dates, labels = dates_lb)+
+  scale_fill_gradient(low = &quot;white&quot;, high = &quot;#C03B3B&quot;)+
+  theme_classic()</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 </div>
 

@@ -87,7 +87,7 @@ h17 <- h17 %>%
                 `Standard Error` = (`Whisker.high`-`Whisker.low`)/3.92,) %>%
   merge(h_regions,by="Country", all.x=T) %>%
   dplyr::select(-c(`Whisker.high`,`Whisker.low`)) %>%
-    dplyr::rename(H_rank=`Happiness.Rank`, # Modify variable names
+  dplyr::rename(H_rank=`Happiness.Rank`, # Modify variable names
                 H_score = Happiness.Score,
                 GDP=Economy..GDP.per.Capita.,
                 Health=Health..Life.Expectancy.,
@@ -162,7 +162,7 @@ rmarkdown::paged_table(death_dat)
 country_profile <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/kiva_country_profile_variables.csv')
 
 country_profile <- country_profile %>%
-  mutate(country = tolower(country)) %>%
+  dplyr::mutate(country = tolower(country)) %>%
   dplyr::rename(Country = country) %>%
   dplyr::select(-c(Region))
 
