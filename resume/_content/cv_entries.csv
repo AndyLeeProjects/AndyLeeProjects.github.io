@@ -1,6 +1,8 @@
 type,exclude,date,date_end,what,what_translation,institution,department,where,additional_info,additional_info2,url,slides,video,short_cv,order,academic,professional_2_page,website,one_column_paged,brief_no_pubs,humanities,humanities_description
 current_positions,NA,10/1/21,present,Data Analytics Tutor,NA,NA,NA,"[School of Business, SUNY Geneseo](https://www.geneseo.edu/business/)",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-education,NA,8/26/16,8/13/21,B.A. in Mathematics,NA,NA,NA,SUNY Geneseo,NA,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
+education,NA,8/26/20,5/19/22,B.A. in Mathematics,NA,NA,NA,SUNY Geneseo,NA,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
+education,NA,11/12/18,6/23/20,Korean Military,NA,NA,NA,"JSA Panmunjom, South Korea",NA,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
+education,NA,8/26/15,12/19/17,B.A. in Mathematics,NA,NA,NA,SUNY Geneseo,NA,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
 poster,NA,6/18/18,NA,What the Anti-Distraction Market Tells Us About Digital Technology and Self-Regulation,NA,University of Oxford,Oxford Internet Institute,[Connected Life Conference 2018](https://connectedlife.oii.ox.ac.uk/past-conferences/conference-life-2018/),NA,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
 poster,NA,4/21/18,NA,A Cognitive Design Space for Supporting Self-Regulation of ICT Use,NA,2018 CHI Conference on Human Factors in Computing Systems,NA,[3rd Symposium on Computing and Mental Health](https://dl.acm.org/doi/10.1145/3170427.3170665),"Montreal, Canada",NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
 poster,NA,7/27/17,NA,"“It’s More Fun With My Phone"": A Replication Study of Cell Phone Presence and Task Performance",NA,[39th Annual Conference of the Cognitive Science Society](https://cogsci.mindmodeling.org/2017/),NA,NA,London,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
@@ -9,9 +11,8 @@ poster,NA,5/8/17,NA,"Curiosity, ICTs and Attention Management: Evaluating the Em
 poster,NA,6/22/14,NA,Wild Cooperation: Studying Real-World Reciprocity Using Couchsurfing.org,NA,Central European University,NA,[Morality: Evolutionary Origins and Cognitive Mechanisms](https://summeruniversity.ceu.edu/morality-2014),Budapest,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
 poster,NA,7/20/11,NA,Priming Effects of Religious Concepts on Moral Judgment – Between Mean Values and Variation,NA,[33rd Annual Conference of the Cognitive Science Society](http://toc.proceedings.com/12584webtoc.pdf),NA,NA,"Boston, MA",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
 position,NA,7/1/20,present,Visiting researcher,NA,NA,NA,"Dept. of Computer Science, University of Copenhagen",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-work,NA,10/1/21,present,Lecturer in Data Analytics,NA,NA,NA,"[School of Business, SUNY Geneseo](https://www.geneseo.edu/business/)",I teach data analytics for undergraduate students.,NA,NA,NA,NA,NA,NA,NA,y,NA,NA,y,NA,NA
-work,NA,6/22/21,8/15/21,Data Manager,NA,NA,NA,"Jeju, South Korea","I was in charge of business operations, marketing, and data management. ",,,,,,,,,,,,,
+work,NA,6/22/21,8/15/21,Data Manager,NA,NA,NA,"Jeju, South Korea","In charge of business operations, marketing, and data management. ",,,,,,,,,,,,,
 work,NA,11/18/18,06/23/202,Translator/ Sergeant,NA,NA,NA,Panmunjom,"Served approximately 2 years at JSA, Panmunjom",NA,NA,NA,NA,NA,NA,NA,y,NA,NA,y,NA,NA
-technical,NA,NA,NA,"Programming, data analysis and visualisation",NA,NA,NA,NA,"in R (tidyverse), Python, and D3.js",NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
-technical,NA,NA,NA,Reproducible research,NA,NA,NA,NA,"with R Markdown (bookdown, xaringan, pagedown) + LaTeX + HTML",NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
-technical,NA,NA,NA,Web development,NA,NA,NA,NA,"(HTML, CSS, JavaScript, Hugo, blogdown, Jekyll, GitHub Pages, Netlify)",NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
+technical,NA,NA,NA,Programming Languages: ,NA,NA,NA,NA,"R, Python, SQL, Tableau, HTML, and CSS",NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
+technical,NA,NA,NA,Speaking Languages: ,NA,NA,NA,NA,Fluent in Enlighs and Korean,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
+technical,NA,NA,NA,Soft Skills: ,NA,NA,NA,NA,"Commuication, Problem-solving, Creativity, and Attention to detail",NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA

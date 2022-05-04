@@ -142,7 +142,7 @@ all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
   
 <br>  
 
-# **Main Variables: Descriptive Statistics**
+# Main Variables: Descriptive Statistics
 
 ---
 
@@ -324,7 +324,7 @@ ggplot(all_dat_month)+
 
 
 
-# **Morning Routine Varables: Descriptive Statistics**
+# Morning Routine Varables: Descriptive Statistics
 
 ---
 
@@ -440,7 +440,7 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 
 
 
-# **Main Variables: Linear Regressions**
+# Main Variables: Linear Regressions
 
 ---
 
@@ -571,7 +571,7 @@ ggplot(data = ame_result) +
 <br>  
 <br>  
 
-# **Main Variables: Time Series**
+# Main Variables: Time Series
 <br>  
 
 ```{r, message=FALSE, warning=FALSE}

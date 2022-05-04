@@ -4,8 +4,9 @@ navbar:
   title: "Jaehyung Lee"
   left:
     - text: "Home"
-      href: index.html
+      href: home.html
     - text: "Projects"
+      href: project.html
       menu:
       - text: "Self-Evaluation Project"
         href: selfeval_main.html
