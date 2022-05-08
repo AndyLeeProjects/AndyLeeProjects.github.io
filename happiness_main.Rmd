@@ -18,6 +18,8 @@ output:
 <font size="3">   The data was collected from Gallup World Poll. Their survey consisted of questions that asked participants to rank their own life on a Cantril ladder with a scale from 1 to 10, 10 being the best ideal way of living and 0 being the worst. This data set focuses on the happiness score of each country, which ranges from 0 to 10. Each country is ranked based on that averaged happiness score for participants. The team recorded scores for these factors: economy or GDP per Capita, family or social support, health or life expectancy, and freedom to help explain the happiness score of each country. </font>
 
 <br>  
+<br>  
+
 
 
 ```{r, results='hide', message=FALSE}
@@ -150,22 +152,27 @@ knitr::kable(papeR::summarize_numeric(h_alldat, type = "numeric", group = "Regio
 ```
 
 <br>  
+<br>  
 
-## MERGE: Death and Risk Factors Data & Happiness Data
+
+## Death and Risk Factors Data
+
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # Read data in
 death_dat <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/number-of-deaths-by-risk-factor.csv')
 
 death_dat <- death_dat %>%
-  filter(Year > 2015) %>%
+  filter(Year >= 2015) %>%
+  rename(Country = Entity) %>%
+  mutate(Country = tolower(Country)) %>%
   arrange(Year)
-
-rmarkdown::paged_table(death_dat)
 ```
+<br>  
 <br>  
 
 
-## MERGE: Country Profile UN Data & Happiness Data
+## Country Profile UN Data
+
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 country_profile <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/kiva_country_profile_variables.csv')
 
@@ -199,58 +206,33 @@ country_profile <- country_profile %>%
                                      "Under Average",
                                      "Above Average")) # Change the Life_expectancy variables into categorical variables
   
+# Merge: Happiness & Country Infrastructure Data
+h_p_dat <- merge(h_alldat, country_profile, by = "Country")
 
-h_p_alldat <- merge(h_alldat, country_profile, by = "Country")
-
-rmarkdown::paged_table(country_profile)
-```
-<br>  
-
-<br>  
-
-
-<font size="5">**Find Meaningful Variables related to Happiness Score**</font>
-
-<font size="3">Top 10 Positive & Negative Correlation Coefficients</font>
-
-```{r, warning=FALSE, message=FALSE}
-h_p_corr <- data.matrix(h_p_alldat, rownames.force = NA) %>%
-    correlate() %>% 
-    stretch() %>% 
-    filter(x != y & x == "H_score" & 
-             y != "H_rank" & 
-             y != "Net Official Development Assist. received (% of GNI)") %>%
-    arrange(desc(r))
-
-# Top 10 Positive Correlation Coefficients
-h_p_corr_positive10 <- h_p_corr %>%
-  head(10)
-# Top 10 Negative Correlation Coefficients
-h_p_corr_negative10 <- h_p_corr %>%
-  arrange(r) %>%
-  head(10)
+# Merge: Happiness & Death/ Risk factors Data
+h_d_dat <- merge(h_alldat, death_dat, by = c("Country","Year"))
 ```
 
 <br>  
 
-<font size="4">**Top 10 Positive Correlation Coefficients**</font>
+<br>  
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-rmarkdown::paged_table(h_p_corr_positive10)
-```
+# Happiness Data Analysis
+
+---  
 
 <br>  
 
-<font size="4">**Top 10 Negative Correlation Coefficients**</font>
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-rmarkdown::paged_table(h_p_corr_negative10)
+## Column Names
+```{r, echo=FALSE}
+rmarkdown::paged_table(data.frame(colnames(h_alldat)))
 ```
 
 
 <br>  
+<br>  
 
-## TOP 10 AVG Hppiness Scores (2015 ~ 2019)
+## TOP 10 AVG Hppiness Scores
 
 ```{r, echo = TRUE, eval = TRUE, warning = FALSE}
 # Get Top 10 mean of happiness rank from 2015 ~ 2019
@@ -258,7 +240,7 @@ rmarkdown::paged_table(h_p_corr_negative10)
 top_10 <- h_alldat %>%
   group_by(Country) %>%
   dplyr::summarise(mean_rank = mean(H_rank)) %>%
-  arrange(desc(mean_rank)) %>%
+  arrange(mean_rank) %>%
   filter(mean_rank <= 10)
 
 rmarkdown::paged_table(top_10)
@@ -266,16 +248,8 @@ rmarkdown::paged_table(top_10)
 
 <br>  
 <br>  
-<br>  
 
-# Visualizations
-
----
-
-<br>  
-
-
-## Boxplot of Happiness Scores in different Regions
+## Boxplot of H_Scores by Regions
 
 ```{r}
 ggplot(dplyr::filter(h_alldat, Region != "NA")) +
@@ -286,8 +260,9 @@ ggplot(dplyr::filter(h_alldat, Region != "NA")) +
 ```
 
 <br>  
+<br>  
 
-## Happiness Scores vs GDP 
+## H_Scores vs GDP 
 
 
 ```{r}
@@ -297,7 +272,11 @@ ggplot(dplyr::filter(h_alldat, Region != "NA"), aes(x = GDP, y=H_score, color = 
   labs(title = "Happiness Scores vs GDP by Region\n")
 
 ```
+
 <br>  
+<br>  
+
+## H_Scores vs GDP: Animation
 
 ```{r, warning=FALSE, message=FALSE}
 base <- h_alldat %>%
@@ -317,7 +296,7 @@ base %>%
 
 <br>  
 
-## World Map by Happiness Scores
+## World Map by H_Scores
 
 ```{r, warning=FALSE, message=FALSE}
 world_map <- map_data("world")
@@ -352,18 +331,13 @@ p %>%
 ```
 
 <br>  
-
 <br>  
 
-# Regressions
-
----
-
-
+## Regression Model
 
 ```{r, warning=FALSE, message=FALSE, results='asis'}
 country_formula <- H_score ~ GDP + Family + Health + Freedom + Generosity
-country_model <- lm(country_formula, data = h_p_alldat)
+country_model <- lm(country_formula, data = h_alldat)
 
 stargazer(country_model, type = "html", omit = c("Constant"))
 
@@ -371,7 +345,7 @@ stargazer(country_model, type = "html", omit = c("Constant"))
 <br>  
 <br>  
 
-## Noticable Relationships: GDP & Freedom
+## Key Corr: GDP & Freedom
 
 ```{r, warning=FALSE, message=FALSE}
 colors <- c("Fredom" = "red", "GDP" = "blue")
@@ -387,10 +361,84 @@ geom_smooth(aes(x = GDP, y = H_score, color = 'GDP',), method = "lm")+
 
 ```
 
+<br>  
+<br>  
+<br>  
+
+# Happiness & Country Profile Analysis
+
+---  
+
+## Column Names
+
+```{r, echo=FALSE}
+rmarkdown::paged_table(data.frame(colnames(h_p_dat)))
+```
+
+<br>  
+<br>  
+
+
+<font size="5">**Find Meaningful Variables related to Happiness Score**</font>
+
+<font size="3">Top 10 Positive & Negative Correlation Coefficients</font>
+
+```{r, warning=FALSE, message=FALSE}
+h_p_corr <- data.matrix(h_p_dat, rownames.force = NA) %>%
+    correlate() %>% 
+    stretch() %>% 
+    filter(x != y & x == "H_score" & 
+             y != "H_rank" & 
+             y != "Net Official Development Assist. received (% of GNI)") %>%
+    arrange(desc(r))
+
+# Top 10 Positive Correlation Coefficients
+h_p_corr_positive10 <- h_p_corr %>%
+  head(10)
+
+# Top 10 Negative Correlation Coefficients
+h_p_corr_negative10 <- h_p_corr %>%
+  arrange(r) %>%
+  head(10)
+
+```
+
+<br>  
+
+<font size="4">**Top 10 Positive Correlation Coefficients**</font>
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+rmarkdown::paged_table(h_p_corr_positive10)
+```
+
+**GVA_services**: Economic Services and other activity (% of GVA)  
+
+**Phone_subscriptions**: Mobile-cellular subscriptions (per 100 inhabitants)  
+
+**Energy_production**: Energy production, primary (Petajoules)
+
+<br>  
+
+<font size="4">**Top 10 Negative Correlation Coefficients**</font>
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+rmarkdown::paged_table(h_p_corr_negative10)
+```
+
+**GVA_agriculture**:Economy Agriculture (% of GVA)  
+**Sanitation_facilities** = Pop. using improved sanitation facilities (urban/rural, %)  
+**Urban_pop_growthrate** = Urban population growth rate (average annual %)  
+**Fertility_rate** = Fertility rate, total (live births per woman)
+
+
+<br>  
+
+<br>  
+
 
 ```{r}
-formula = H_score ~ GDP*Freedom
-model = lm(formula, data = h_alldat)
+formula = H_score ~ GDP*Life_expectancy_M
+model = lm(formula, data = h_p_dat)
 summary(model)
 
 
@@ -399,7 +447,7 @@ Formula = H_score ~ Urban_pop + Life_expectancy_F + Life_expectancy_M +
   Fertility_rate + Sanitation_facilities + Urban_pop_growthrate + GVA_agriculture + 
   Energy_production
 
-model <- lm(Formula, data = h_p_alldat)
+model <- lm(Formula, data = h_p_dat)
 summary(model)
 ```
 

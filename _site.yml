@@ -10,7 +10,7 @@ navbar:
       - text: "Self-Evaluation Project"
         href: selfeval_main.html
       - text: '---------'
-      - text: "**Happiness Project**"
+      - text: "Happiness Project"
         href: happiness_main.html
       - text: "Happiness Project Proposal"
         href: proposal_happiness.html
