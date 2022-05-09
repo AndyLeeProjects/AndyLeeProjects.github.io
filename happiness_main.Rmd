@@ -148,11 +148,12 @@ h_alldat <- h_alldat %>%
   dplyr::mutate(Country = as.factor(tolower(Country)),
                 Continent = case_when(
     grepl('Europe', as.character(Region)) ~ "Europe",
-    grepl('America', as.character(Region)) ~ "America",
+    grepl('Latin', as.character(Region)) ~ "South America",
     grepl('Australia', as.character(Region)) ~ "Oceania",
-    grepl('Middle East', as.character(Region)) ~ "Middle East",
+    grepl('Middle East', as.character(Region)) ~ "Asia",
     grepl('Africa', as.character(Region)) ~ "Africa",
-    grepl('Asia', as.character(Region)) ~ "Asia"),
+    grepl('Asia', as.character(Region)) ~ "Asia",
+    grepl('North America', as.character(Region)) ~ "North America"),
     Region = as.factor(Region))
 
 rmarkdown::paged_table(h_alldat)
@@ -606,6 +607,8 @@ ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
 <br>  
 <br>  
 
+## Multi Regression using Meaningful Variables
+
 ```{r, warning=FALSE, message=FALSE, results='asis'}
 Formula1 = H_score ~ GDP + Urban_pop + Health + Phone_subscriptions + 
   dystopia_res + Life_expectancy_F + Infant_mortality + Life_expectancy_M + 
@@ -614,6 +617,20 @@ Formula1 = H_score ~ GDP + Urban_pop + Health + Phone_subscriptions +
 model <- lm(Formula1, data = h_p_dat)
 stargazer(model, type = "html", omit = c("Constant"))
 ```
+<br>  
+<br>  
+
+```{r, warning=FALSE, message=FALSE}
+h_p_dat$pred <- predict(model, data = h_p_dat)
+
+ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
+  geom_point(alpha = 0.2, color = "red") + geom_smooth(color = "darkblue") +
+  geom_line(aes(x = pred, y = 0), color = "red", linetype = 2) +
+  xlab("prediction") + ylab("residual error (actual prediction)")
+
+
+```
+
 
 <br>  
 <br>  
@@ -649,7 +666,7 @@ pscale <- attr(pmatrix, "scaled:scale")
 ```
 
 ```{r, warning=FALSE, message=FALSE, results='hide'}
-H_cluster <- kmeans(na.omit(pmatrix), 5, nstart = 10)
+H_cluster <- kmeans(na.omit(pmatrix), 3, nstart = 10)
 groups <- H_cluster$cluster
 h_alldat_c <- cbind(h_alldat_new, cluster = groups)
 unique(groups)
@@ -659,18 +676,24 @@ unique(groups)
 
 ```{r, warning=FALSE, message=FALSE}
 ggplot(h_alldat_c)+
-  geom_bar(aes(x=cluster, fill = Continent))
+  geom_bar(aes(x=cluster, fill = Continent)) + 
+  labs(title = "K-Means Clustering", 
+       subtitle = "H_Scores across Continents\n")
 ```
 
 
 ```{r, warning=FALSE, message=FALSE}
-ggplot(data = h_alldat_c) +
+ggplot(h_alldat_c) +
   geom_point(aes(x = GDP, 
                  y = H_score, color = Continent)) +
-  facet_grid(as.factor(cluster) ~ Continent)
+  facet_grid(cluster ~ Continent, scales = "free_y") +
+  theme(legend.position = "None") +
+  labs(title = "K-Means Clustering", subtitle = "H_Scores across Continents")
 
 ```
 
+<br>  
+<br>  
 
 ## Hierarchical Clustering
 
@@ -678,15 +701,15 @@ ggplot(data = h_alldat_c) +
 h_alldat_new <- data.frame(h_alldat %>%
   select(Continent, everything(), -c(Trust, Country, Region)) %>%
   group_by(Continent) %>%
-  summarise(H_score_mean = mean(H_score),
+  dplyr::summarise(H_score_mean = mean(H_score),
             H_rank_mean = mean(H_rank)) %>%
   na.omit())
 numbers_only <- h_alldat_new[,-1]
 rownames(numbers_only) <- h_alldat_new[,1]
 # Applying Ward Hierarchical Clustering
 d   <- dist(numbers_only, method="euclidean")
-fit <- hclust(d, method="ward")
-plot(fit)
+fit <- hclust(d, method="complete")
+plot(fit, xlab = "Continents", y = "H_Scores Cluster Groups")
 ```
 
 
