@@ -643,7 +643,7 @@ ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
 <br>  
 
 
-## K-means Clustering
+## K-means Method
 
 ```{r, warning=FALSE, message=FALSE, results='hide'}
 h_alldat_new <- h_alldat %>%
@@ -703,7 +703,7 @@ ggplot(h_alldat_c) +
 <br>  
 <br>  
 
-## Hierarchical Clustering
+## Hierarchical Method
 
 ```{r, warning=FALSE, message=FALSE}
 h_alldat_new <- data.frame(h_alldat %>%
@@ -720,7 +720,7 @@ d   <- dist(numbers_only, method="euclidean")
 
 <br>  
 
-<font size="3">**Hierarchical Clustering**: Complete Method</font> 
+<font size="4">**Hierarchical Clustering**: Complete Method</font> 
 
 ```{r, warning=FALSE, message=FALSE}
 fit <- hclust(d, method="complete")
@@ -729,7 +729,7 @@ plot(fit, xlab = "Continents", y = "H_Scores Cluster Groups")
 
 <br>  
 
-<font size="3">**Hierarchical Clustering**: Ward Method</font> 
+<font size="4">**Hierarchical Clustering**: Ward Method</font> 
 
 ```{r, warning=FALSE, message=FALSE}
 fit <- hclust(d, method="ward")
