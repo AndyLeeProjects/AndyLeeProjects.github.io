@@ -683,10 +683,15 @@ ggplot(h_alldat_c)+
 
 
 ```{r, warning=FALSE, message=FALSE}
+
+# Reorder the facet_grid
+h_alldat_c$cluster_f = factor(h_alldat_c$cluster, levels=c(2,3,1))
+
+# Plot
 ggplot(h_alldat_c) +
   geom_point(aes(x = GDP, 
                  y = H_score, color = Continent)) +
-  facet_grid(cluster ~ Continent, scales = "free_y") +
+  facet_grid(cluster_f ~ Continent, scales = "free_y") +
   theme(legend.position = "None") +
   labs(title = "K-Means Clustering", subtitle = "H_Scores across Continents")
 
