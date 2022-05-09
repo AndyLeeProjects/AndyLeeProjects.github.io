@@ -142,9 +142,18 @@ h19 <- h19 %>%
 
 # Combine all data into all_dat
 h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
+
+# Create Continent Variable
 h_alldat <- h_alldat %>%
   dplyr::mutate(Country = as.factor(tolower(Country)),
-                Region = as.factor(Region))
+                Continent = case_when(
+    grepl('Europe', as.character(Region)) ~ "Europe",
+    grepl('America', as.character(Region)) ~ "America",
+    grepl('Australia', as.character(Region)) ~ "Oceania",
+    grepl('Middle East', as.character(Region)) ~ "Middle East",
+    grepl('Africa', as.character(Region)) ~ "Africa",
+    grepl('Asia', as.character(Region)) ~ "Asia"),
+    Region = as.factor(Region))
 
 rmarkdown::paged_table(h_alldat)
 save(h_alldat, file = 'h_alldat.RData')
@@ -166,7 +175,11 @@ death_dat <- death_dat %>%
   filter(Year >= 2015) %>%
   rename(Country = Entity) %>%
   mutate(Country = tolower(Country)) %>%
-  arrange(Year)
+  arrange(Year) %>%
+  rename(unsafe_water = `Unsafe water source`,
+         unsafe_sanitation = `Unsafe sanitation`,
+         alcohol_use = `Alcohol use`,
+         drug_use = `Drug use`)
 
 rmarkdown::paged_table(data.frame(colnames(death_dat)))
 ```
@@ -593,3 +606,79 @@ Formula1 = H_score ~ GDP + Urban_pop + Health + Phone_subscriptions +
 model <- lm(Formula1, data = h_p_dat)
 stargazer(model, type = "html", omit = c("Constant"))
 ```
+
+<br>  
+<br>  
+<br>  
+
+# Clustering Analysis
+
+---  
+
+<br>  
+
+
+## K-means Clustering
+
+```{r, warning=FALSE, message=FALSE, results='hide'}
+h_alldat_new <- h_alldat %>%
+  select(-SE) %>%
+  na.omit()
+
+# Uses all the columns except the first column
+vars_to_use <- h_alldat_new %>%
+  select(-c(Trust, Region, Continent, Country, Year))
+
+vars_to_use = colnames(vars_to_use)
+
+# Stores the scaling attributes using scale()
+# -> Changes to standardized normal distribution for each column
+pmatrix <- scale(h_alldat_new[, vars_to_use])
+pmatrix
+
+pcenter <- attr(pmatrix, "scaled:center") 
+pscale <- attr(pmatrix, "scaled:scale")
+```
+
+```{r, warning=FALSE, message=FALSE, results='hide'}
+H_cluster <- kmeans(na.omit(pmatrix), 5, nstart = 10)
+groups <- H_cluster$cluster
+h_alldat_c <- cbind(h_alldat_new, cluster = groups)
+unique(groups)
+
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(h_alldat_c)+
+  geom_bar(aes(x=cluster, fill = Continent))
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(data = h_alldat_c) +
+  geom_point(aes(x = GDP, 
+                 y = H_score, color = Continent)) +
+  facet_grid(as.factor(cluster) ~ Continent)
+
+```
+
+
+## Hierarchical Clustering
+
+```{r, warning=FALSE, message=FALSE}
+h_alldat_new <- data.frame(h_alldat %>%
+  select(Continent, everything(), -c(Trust, Country, Region)) %>%
+  group_by(Continent) %>%
+  summarise(H_score_mean = mean(H_score),
+            H_rank_mean = mean(H_rank)) %>%
+  na.omit())
+numbers_only <- h_alldat_new[,-1]
+rownames(numbers_only) <- h_alldat_new[,1]
+# Applying Ward Hierarchical Clustering
+d   <- dist(numbers_only, method="euclidean")
+fit <- hclust(d, method="ward")
+plot(fit)
+```
+
+
