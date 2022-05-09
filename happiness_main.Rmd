@@ -681,11 +681,13 @@ ggplot(h_alldat_c)+
        subtitle = "H_Scores across Continents\n")
 ```
 
+<br>  
+
 
 ```{r, warning=FALSE, message=FALSE}
 
 # Reorder the facet_grid
-h_alldat_c$cluster_f = factor(h_alldat_c$cluster, levels=c(2,1,3))
+h_alldat_c$cluster_f = factor(h_alldat_c$cluster, levels=c(3,1,2))
 
 # Plot
 ggplot(h_alldat_c) +
@@ -714,11 +716,22 @@ numbers_only <- h_alldat_new[,-1]
 rownames(numbers_only) <- h_alldat_new[,1]
 # Applying Ward Hierarchical Clustering
 d   <- dist(numbers_only, method="euclidean")
+```
+
+<br>  
+
+<font size="3">**Hierarchical Clustering**: Complete Method</font> 
+
+```{r, warning=FALSE, message=FALSE}
 fit <- hclust(d, method="complete")
 plot(fit, xlab = "Continents", y = "H_Scores Cluster Groups")
 ```
 
-```{r}
+<br>  
+
+<font size="3">**Hierarchical Clustering**: Ward Method</font> 
+
+```{r, warning=FALSE, message=FALSE}
 fit <- hclust(d, method="ward")
 plot(fit, xlab = "Continents", y = "H_Scores Cluster Groups")
 ```
