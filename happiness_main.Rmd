@@ -685,7 +685,7 @@ ggplot(h_alldat_c)+
 ```{r, warning=FALSE, message=FALSE}
 
 # Reorder the facet_grid
-h_alldat_c$cluster_f = factor(h_alldat_c$cluster, levels=c(2,3,1))
+h_alldat_c$cluster_f = factor(h_alldat_c$cluster, levels=c(2,1,3))
 
 # Plot
 ggplot(h_alldat_c) +
@@ -693,7 +693,8 @@ ggplot(h_alldat_c) +
                  y = H_score, color = Continent)) +
   facet_grid(cluster_f ~ Continent, scales = "free_y") +
   theme(legend.position = "None") +
-  labs(title = "K-Means Clustering", subtitle = "H_Scores across Continents")
+  labs(title = "K-Means Clustering", 
+       subtitle = "Happiness Disparity within Continents")
 
 ```
 
@@ -717,4 +718,8 @@ fit <- hclust(d, method="complete")
 plot(fit, xlab = "Continents", y = "H_Scores Cluster Groups")
 ```
 
+```{r}
+fit <- hclust(d, method="ward")
+plot(fit, xlab = "Continents", y = "H_Scores Cluster Groups")
+```
 
