@@ -402,6 +402,14 @@ geom_smooth(aes(x = GDP, y = H_score, color = 'GDP',), method = "lm")+
 ## Column Names
 
 ```{r, echo=FALSE}
+sanitation_dat <- h_d_dat %>%
+  select(Country, Year, unsafe_sanitation) %>%
+  mutate(Sanitation_Level = if_else(unsafe_sanitation > median(unsafe_sanitation),
+                 "Lower Sanitation Level", "Higher Sanitation Level"))
+
+# Add Sanitation Variable from Death/ Risk Factor Data Set
+h_p_dat <- merge(h_p_dat, sanitation_dat, by=c("Country", "Year"))
+
 rmarkdown::paged_table(data.frame(colnames(h_p_dat)))
 ```
 
@@ -509,7 +517,7 @@ ggplot(data = h_p_dat, aes(x = GDP, y = H_score,
 ## Model 3
 
 ```{r, warning=FALSE, message=FALSE}
-formula3 = H_score ~ GDP * Sanitation_facilities_level * Life_expectancy_F
+formula3 = H_score ~ GDP * Sanitation_Level * Life_expectancy_F
 model3 = lm(formula3, data = h_p_dat)
 ```
 
@@ -518,7 +526,7 @@ model3 = lm(formula3, data = h_p_dat)
 
 ```{r, warning=FALSE, message=FALSE}
 
-h_p_dat$Sanitation_facilities_level <- factor(h_p_dat$Sanitation_facilities_level,      # Reordering group factor levels
+h_p_dat$Sanitation_Level <- factor(h_p_dat$Sanitation_Level,      # Reordering group factor levels
                          levels = c("Lower Sanitation Level",
                                     "Higher Sanitation Level"))
 
@@ -526,9 +534,9 @@ ggplot(data = h_p_dat,
        aes(x = GDP, y = H_score, color = Life_expectancy_F )) +
   geom_point(size = .75, alpha = 0.25) +
   geom_smooth(method=lm, se=F) +
-  facet_wrap(Sanitation_facilities_level~.)+
+  facet_wrap(Sanitation_Level~.)+
   labs(title = "H_Score VS GDP: Female Life Expectancy",
-       subtitle = "Levels: Usage of Santiation Facilities")
+       subtitle = "Levels: Usage of Safe Sanitation Facilities")
 
 ```
 
@@ -581,7 +589,7 @@ ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
 <br>  
 <br>  
 
-<font size="5">**Residual Plot**: Model 1</font>  
+<font size="5">**Residual Plot**: Model 3</font>  
 <font size="3">**Formula**: `r as.character(formula3)`</font>
 
 ```{r, warning=FALSE, message=FALSE}
