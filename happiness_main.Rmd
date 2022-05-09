@@ -216,9 +216,11 @@ country_profile <- country_profile %>%
   dplyr::select(-c(Region)) %>%
   mutate(Life_expectancy_F = as.numeric(Life_expectancy_F),
          Life_expectancy_M = as.numeric(Life_expectancy_M),
-         Life_expectancy_F = if_else(Life_expectancy_F < mean(Life_expectancy_F),
-                                     "Under Average",
-                                     "Above Average"),
+         Life_expectancy_F = case_when(
+Life_expectancy_F < quantile(Life_expectancy_F,.66)[[1]] &
+Life_expectancy_F > quantile(Life_expectancy_F,.33)[[1]]~ "Medium Life Expectancy",
+Life_expectancy_F < quantile(Life_expectancy_F,.33)[[1]] ~ "Low Life Expectancy",
+quantile(Life_expectancy_F,.66)[[1]] < Life_expectancy_F ~ "High Life Expectancy"),
          Life_expectancy_M = if_else(Life_expectancy_M < mean(Life_expectancy_M),
                                      "Under Average",
                                      "Above Average"),
