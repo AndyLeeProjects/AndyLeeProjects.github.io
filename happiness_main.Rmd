@@ -37,6 +37,7 @@ library(plotly)
 library(stargazer)  # regression tables
 library(ggstatsplot)
 library(corrr)
+library(moderndive)
 theme_set(theme_classic())
 ```
 <br>  
@@ -145,9 +146,9 @@ h_alldat <- h_alldat %>%
   dplyr::mutate(Country = as.factor(tolower(Country)),
                 Region = as.factor(Region))
 
-#rmarkdown::paged_table(h_alldat)
+rmarkdown::paged_table(h_alldat)
 save(h_alldat, file = 'h_alldat.RData')
-knitr::kable(papeR::summarize_numeric(h_alldat, type = "numeric", group = "Region",variables = c("H_rank"),  test = FALSE))
+#knitr::kable(papeR::summarize_numeric(h_alldat, type = "numeric", group = #"Region",variables = c("H_rank"),  test = FALSE))
 
 ```
 
@@ -166,6 +167,8 @@ death_dat <- death_dat %>%
   rename(Country = Entity) %>%
   mutate(Country = tolower(Country)) %>%
   arrange(Year)
+
+rmarkdown::paged_table(data.frame(colnames(death_dat)))
 ```
 <br>  
 <br>  
@@ -204,8 +207,19 @@ country_profile <- country_profile %>%
                                      "Above Average"),
          Life_expectancy_M = if_else(Life_expectancy_M < mean(Life_expectancy_M),
                                      "Under Average",
-                                     "Above Average")) # Change the Life_expectancy variables into categorical variables
+                                     "Above Average"),
+         Age_distribution_below14 = as.numeric(Age_distribution_below14),
+         Age_distribution_above60 = as.numeric(Age_distribution_above60),
+         Infant_mortality_aboveAVG = 
+           if_else(Infant_mortality > mean(Infant_mortality),
+                   "High Infant Mortality","Low Infant Mortality"),
+         Sanitation_facilities_level = 
+           if_else(Sanitation_facilities > median(Sanitation_facilities),
+                   "Lower Sanitation Level", "Higher Sanitation Level")) # Change the Life_expectancy variables into categorical variables
   
+# Display Column names of Country Profile Data
+rmarkdown::paged_table(data.frame(colnames(country_profile)))
+
 # Merge: Happiness & Country Infrastructure Data
 h_p_dat <- merge(h_alldat, country_profile, by = "Country")
 
@@ -214,7 +228,7 @@ h_d_dat <- merge(h_alldat, death_dat, by = c("Country","Year"))
 ```
 
 <br>  
-
+<br>  
 <br>  
 
 # Happiness Data Analysis
@@ -295,6 +309,7 @@ base %>%
 
 
 <br>  
+<br>  
 
 ## World Map by H_Scores
 
@@ -369,6 +384,8 @@ geom_smooth(aes(x = GDP, y = H_score, color = 'GDP',), method = "lm")+
 
 ---  
 
+<br>  
+
 ## Column Names
 
 ```{r, echo=FALSE}
@@ -404,6 +421,9 @@ h_p_corr_negative10 <- h_p_corr %>%
 ```
 
 <br>  
+<br>  
+
+## Test Correlations
 
 <font size="4">**Top 10 Positive Correlation Coefficients**</font>
 
@@ -411,12 +431,11 @@ h_p_corr_negative10 <- h_p_corr %>%
 rmarkdown::paged_table(h_p_corr_positive10)
 ```
 
-**GVA_services**: Economic Services and other activity (% of GVA)  
-
+**GVA_services**: Economic Services and other activity (% of Gross Value Added)  
 **Phone_subscriptions**: Mobile-cellular subscriptions (per 100 inhabitants)  
-
 **Energy_production**: Energy production, primary (Petajoules)
 
+<br>  
 <br>  
 
 <font size="4">**Top 10 Negative Correlation Coefficients**</font>
@@ -425,31 +444,152 @@ rmarkdown::paged_table(h_p_corr_positive10)
 rmarkdown::paged_table(h_p_corr_negative10)
 ```
 
-**GVA_agriculture**:Economy Agriculture (% of GVA)  
+**GVA_agriculture**:Economy Agriculture (% of Gross Value Added)  
 **Sanitation_facilities** = Pop. using improved sanitation facilities (urban/rural, %)  
 **Urban_pop_growthrate** = Urban population growth rate (average annual %)  
 **Fertility_rate** = Fertility rate, total (live births per woman)
 
 
 <br>  
-
 <br>  
+
+## Model 1
 
 
 ```{r}
-formula = H_score ~ GDP*Life_expectancy_M
-model = lm(formula, data = h_p_dat)
-summary(model)
+formula1 = H_score ~ GDP + Life_expectancy_F
+model1 = lm(formula1, data = h_p_dat)
+```
 
+<br>  
+<br>  
 
-Formula = H_score ~ Urban_pop + Life_expectancy_F + Life_expectancy_M + 
-  Phone_subscriptions + Employment_rate + GVA_services + Infant_mortality + 
-  Fertility_rate + Sanitation_facilities + Urban_pop_growthrate + GVA_agriculture + 
-  Energy_production
+```{r}
+ggplot(data = h_p_dat, aes(x = H_score, y = GDP, 
+                      color = Life_expectancy_F )) +
+  geom_point(size = .75, alpha = 0.25) +
+  geom_parallel_slopes(se=F)+
+  labs(title = "H_Score VS GDP: Female Life Expectancy",
+       subtitle = "Parellel Slopes")
 
-model <- lm(Formula, data = h_p_dat)
-summary(model)
+```
+
+## Model 2
+
+```{r, warning=FALSE, message=FALSE}
+formula2 = H_score ~ GDP * Life_expectancy_F
+model2 = lm(formula2, data = h_p_dat)
+```
+
+<br>  
+<br>  
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(data = h_p_dat, aes(x = GDP, y = H_score, 
+                      color = Life_expectancy_F )) +
+  geom_point(size = .75, alpha = 0.25) +
+  geom_smooth(method = lm, se=FALSE) +
+  labs(title = "H_Score VS GDP: Female Life Expectancy\n")
+  
+```
+
+## Model 3
+
+```{r, warning=FALSE, message=FALSE}
+formula3 = H_score ~ GDP * Sanitation_facilities_level * Life_expectancy_F
+model3 = lm(formula3, data = h_p_dat)
+```
+
+<br>  
+<br>  
+
+```{r, warning=FALSE, message=FALSE}
+
+h_p_dat$Sanitation_facilities_level <- factor(h_p_dat$Sanitation_facilities_level,      # Reordering group factor levels
+                         levels = c("Lower Sanitation Level",
+                                    "Higher Sanitation Level"))
+
+ggplot(data = h_p_dat,
+       aes(x = GDP, y = H_score, color = Life_expectancy_F )) +
+  geom_point(size = .75, alpha = 0.25) +
+  geom_smooth(method=lm, se=F) +
+  facet_wrap(Sanitation_facilities_level~.)+
+  labs(title = "H_Score VS GDP: Female Life Expectancy",
+       subtitle = "Levels: Usage of Santiation Facilities")
+
 ```
 
 
+<br>  
+<br>  
 
+## Model Comparisons
+
+```{r, warning=FALSE, message=FALSE, results='asis'}
+stargazer(model1, model2, model3, type = "html", omit = c("Constant"))
+```
+
+
+<br>  
+<br>  
+
+<font size="5">**Residual Plot**: Model 1</font>  
+<font size="3">**Formula**: `r as.character(formula1)`</font>
+
+```{r, warning=FALSE, message=FALSE}
+
+h_p_dat$pred <- predict(model1, data = h_p_dat)
+
+ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
+  geom_point(alpha = 0.2, color = "red") + geom_smooth(color = "darkblue") +
+  geom_line(aes(x = pred, y = 0), color = "red", linetype = 2) +
+  xlab("prediction") + ylab("residual error (actual prediction)")
+
+```
+
+<br>  
+<br>  
+
+<font size="5">**Residual Plot**: Model 2</font>  
+<font size="3">**Formula**: `r as.character(formula2)`</font>
+
+```{r, warning=FALSE, message=FALSE}
+
+h_p_dat$pred <- predict(model2, data = h_p_dat)
+
+ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
+  geom_point(alpha = 0.2, color = "red") + geom_smooth(color = "darkblue") +
+  geom_line(aes(x = pred, y = 0), color = "red", linetype = 2) +
+  xlab("prediction") + ylab("residual error (actual prediction)")
+
+```
+
+
+<br>  
+<br>  
+
+<font size="5">**Residual Plot**: Model 1</font>  
+<font size="3">**Formula**: `r as.character(formula3)`</font>
+
+```{r, warning=FALSE, message=FALSE}
+
+h_p_dat$pred <- predict(model3, data = h_p_dat)
+
+ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
+  geom_point(alpha = 0.2, color = "red") + geom_smooth(color = "darkblue") +
+  geom_line(aes(x = pred, y = 0), color = "red", linetype = 2) +
+  xlab("prediction") + ylab("residual error (actual prediction)")
+
+```
+
+<br>  
+<br>  
+
+```{r, warning=FALSE, message=FALSE, results='asis'}
+Formula1 = H_score ~ GDP + Urban_pop + Health + Phone_subscriptions + 
+  dystopia_res + Life_expectancy_F + Infant_mortality + Life_expectancy_M + 
+  Age_distribution_below14 + Fertility_rate
+
+model <- lm(Formula1, data = h_p_dat)
+stargazer(model, type = "html", omit = c("Constant"))
+```
