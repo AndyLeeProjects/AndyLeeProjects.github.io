@@ -489,7 +489,7 @@ model1 = lm(formula1, data = h_p_dat)
 <br>  
 
 ```{r}
-ggplot(data = h_p_dat, aes(x = H_score, y = GDP, 
+ggplot(data = h_p_dat, aes(x = GDP, y = H_score, 
                       color = Life_expectancy_F )) +
   geom_point(size = .75, alpha = 0.25) +
   geom_parallel_slopes(se=F)+
@@ -717,7 +717,7 @@ h_alldat_new <- data.frame(h_alldat %>%
 numbers_only <- h_alldat_new[,-1]
 rownames(numbers_only) <- h_alldat_new[,1]
 # Applying Ward Hierarchical Clustering
-d   <- dist(numbers_only, method="euclidean")
+d <- dist(numbers_only, method="euclidean")
 ```
 
 <br>  
