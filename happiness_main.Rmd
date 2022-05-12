@@ -238,6 +238,7 @@ rmarkdown::paged_table(data.frame(colnames(country_profile)))
 
 # Merge: Happiness & Country Infrastructure Data
 h_p_dat <- merge(h_alldat, country_profile, by = "Country")
+save(h_p_dat, file = 'h_p_dat.RData')
 
 # Merge: Happiness & Death/ Risk factors Data
 h_d_dat <- merge(h_alldat, death_dat, by = c("Country","Year"))
