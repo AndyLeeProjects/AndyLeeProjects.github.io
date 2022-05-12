@@ -490,8 +490,9 @@ model1 = lm(formula1, data = h_p_dat)
 
 ```{r}
 ggplot(data = h_p_dat, aes(x = GDP, y = H_score, 
-                      color = Life_expectancy_F )) +
-  geom_point(size = .75, alpha = 0.25) +
+                      color = Life_expectancy_F)) +
+  geom_point(aes(col=fct_reorder2(Life_expectancy_F, H_score, GDP)), 
+             size = .75, alpha = 0.25) +
   geom_parallel_slopes(se=F)+
   labs(title = "H_Score VS GDP: Female Life Expectancy",
        subtitle = "Parellel Slopes")
@@ -511,7 +512,8 @@ model2 = lm(formula2, data = h_p_dat)
 ```{r, warning=FALSE, message=FALSE}
 ggplot(data = h_p_dat, aes(x = GDP, y = H_score, 
                       color = Life_expectancy_F )) +
-  geom_point(size = .75, alpha = 0.25) +
+  geom_point(aes(col=fct_reorder2(Life_expectancy_F, H_score, GDP)), 
+             size = .75, alpha = 0.25) +
   geom_smooth(method = lm, se=FALSE) +
   labs(title = "H_Score VS GDP: Female Life Expectancy\n")
   
@@ -535,7 +537,8 @@ h_p_dat$Sanitation_Level <- factor(h_p_dat$Sanitation_Level,      # Reordering g
 
 ggplot(data = h_p_dat,
        aes(x = GDP, y = H_score, color = Life_expectancy_F )) +
-  geom_point(size = .75, alpha = 0.25) +
+  geom_point(aes(col=fct_reorder2(Life_expectancy_F, H_score, GDP)), 
+             size = .75, alpha = 0.25) +
   geom_smooth(method=lm, se=F) +
   facet_wrap(Sanitation_Level~.)+
   labs(title = "H_Score VS GDP: Female Life Expectancy",

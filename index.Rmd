@@ -99,7 +99,7 @@ a column separator -->
 ::::::
   
 ::: {.column width="90%" data-latex="{0.90\textwidth}"}
-
+<br>  
 Currently, I am a part-time Data Analytics Tutor at SUNY Geneseo teaching students the fundamentals of Data Analytics and introducing machine learning basics.
 
 My **Core Technical Skills** include:
@@ -205,7 +205,7 @@ cv_entries %>%
   dplyr::mutate(icon = case_when(
     str_detect(what, "Programming") ~ "fa-laptop",
     str_detect(what, "Speaking") ~ "fa-flask",
-    str_detect(what, "Soft") ~ "fa-earth-americas"
+    str_detect(what, "Soft") ~ "fa-earth"
   )) %>% 
   dplyr::mutate(what = str_c("<i class='fa fa-lg ", icon, "'></i> &nbsp;<span class='cv-entry-title'>", what, "</span> ", additional_info)) %>% 
   dplyr::select(type, what) %>% 

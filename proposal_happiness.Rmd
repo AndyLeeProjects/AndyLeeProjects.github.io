@@ -1,13 +1,10 @@
 ---
 title: "Happiness Project Proposal"
-author: "Andy"
-date: "4/12/2022"
+author: "Andy Lee"
 ---
 Final Project Proposal <br>  
 
 DANL 310  
-
-Names: Andy Lee, Dan Bosio, Wen Jing Jiang  
 
 
 The link to our data: [World Happiness Project](https://www.kaggle.com/unsdsn/world-happiness)
