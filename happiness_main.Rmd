@@ -11,16 +11,43 @@ output:
 
 <br>  
 
-# Project Description
+# Introduction
 
 ---
 
-<font size="3">   The data was collected from Gallup World Poll. Their survey consisted of questions that asked participants to rank their own life on a Cantril ladder with a scale from 1 to 10, 10 being the best ideal way of living and 0 being the worst. This data set focuses on the happiness score of each country, which ranges from 0 to 10. Each country is ranked based on that averaged happiness score for participants. The team recorded scores for these factors: economy or GDP per Capita, family or social support, health or life expectancy, and freedom to help explain the happiness score of each country. </font>
+<font size="3">   The data was collected from Gallup World Poll. Their survey consisted of questions that asked participants to rank their own life on a Cantril ladder on a scale from 1 to 10, 10 being the best ideal way of living and 0 being the worst. This data set focuses on the happiness score of each country, which ranges from 0 to 10. Each country is ranked based on that averaged happiness score for participants. The team recorded scores for these factors: economy or GDP per Capita, family or social support, health or life expectancy, and freedom to help explain the happiness score of each country. Also, combining the happiness data set with the Death/ Risk factor and Country Profile data sets will achieve a broader understanding of happiness.</font>
 
 <br>  
+
+
+  <font size="5">**Motivation**</font>  
+  
+  - Quantify an ambiguous concept of happiness for statistical analysis  
+  - Derive insights on which factors affect happiness on a global scale  
+
 <br>  
 
+  <font size="5">**Analysis Summary**</font>
 
+  <font size="3">**Descriptive Statistics (All Three Data Sets)**</font>:  
+  
+  - Demonstrate the survey results of happiness across the world by using  diverse visualizations  
+  - Observe how happiness scores differ by country and regions  
+  - Find meaningful correlations among the variables  
+  
+  <font size="3">**Regression Analysis**</font>:  
+  
+  - Compare different regression models by visualizing best fit & residual plots  
+  - Derive insights into the relationship within variables  
+  
+  
+  <font size="3">**Cluster Analysis**</font>:  
+  
+  - By using K-means and Hierarchical methods, cluster the data in a continental scope  
+
+<br>  
+
+\setlength{\leftskip}{0pt}
 
 ```{r, results='hide', message=FALSE}
 library(socviz)
@@ -146,6 +173,19 @@ h_alldat <- tibble(rbind.fill(h15,h16,h17,h18,h19))
 # Create Continent Variable
 h_alldat <- h_alldat %>%
   dplyr::mutate(Country = as.factor(tolower(Country)),
+                Region = case_when(
+    grepl('central african republic', as.character(Country)) ~ "Middle East and Northern Africa",
+    grepl('s.a.r.', as.character(Country)) ~ "Southeastern Asia",
+    grepl('lesotho', as.character(Country)) ~ "Sub-Saharan Africa",
+    grepl('mozambique', as.character(Country)) ~ "Sub-Saharan Africa",
+    grepl('taiwan province', as.character(Country)) ~ "Southeastern Asia",
+    grepl('cyprus', as.character(Country)) ~ "Central and Eastern Europe",
+    grepl('tobago', as.character(Country)) ~ "Latin America and Caribbean",
+    grepl('gambia', as.character(Country)) ~ "Sub-Saharan Africa",
+    grepl('macedonia', as.character(Country)) ~ "Central and Eastern Europe",
+    grepl('swaziland', as.character(Country)) ~ "Sub-Saharan Africa",
+    TRUE ~ Region
+    ),
                 Continent = case_when(
     grepl('Europe', as.character(Region)) ~ "Europe",
     grepl('Latin', as.character(Region)) ~ "South America",
@@ -156,11 +196,22 @@ h_alldat <- h_alldat %>%
     grepl('North America', as.character(Region)) ~ "North America"),
     Region = as.factor(Region))
 
+col_names = colnames(h_alldat)
 rmarkdown::paged_table(h_alldat)
-save(h_alldat, file = 'h_alldat.RData')
-#knitr::kable(papeR::summarize_numeric(h_alldat, type = "numeric", group = #"Region",variables = c("H_rank"),  test = FALSE))
-
 ```
+<br>  
+
+<font size="4">**Data Descriptions:**</font>  
+
+  - **Variable Names**: Country, Region, H_rank, H_score, SE, GDP, Family, Health, Freedom, Trust, Generosity, dystopia_res, Year, Continent  
+      
+  - **Years**: 2015 ~ 2019
+  
+  - **Countries #**: 169  
+  
+  - **Regions #  **: 10  
+    
+    
 
 <br>  
 <br>  
@@ -184,6 +235,17 @@ death_dat <- death_dat %>%
 
 rmarkdown::paged_table(data.frame(colnames(death_dat)))
 ```
+
+<br>  
+
+<font size="4">**Data Descriptions**</font>: Provides different causes of deaths and risk factors starting from 2015 to 2017  
+
+  - **[Data Source](https://www.kaggle.com/datasets/varpit94/worldwide-deaths-by-risk-factors)**
+
+  - **Total Variable #**: 31  
+
+  - **Years**: 2015 ~ 2017  
+
 <br>  
 <br>  
 
@@ -239,10 +301,19 @@ rmarkdown::paged_table(data.frame(colnames(country_profile)))
 # Merge: Happiness & Country Infrastructure Data
 h_p_dat <- merge(h_alldat, country_profile, by = "Country")
 save(h_p_dat, file = 'h_p_dat.RData')
+save(h_p_dat, file = '/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Shiny_Happiness/h_p_dat.RData')
 
 # Merge: Happiness & Death/ Risk factors Data
 h_d_dat <- merge(h_alldat, death_dat, by = c("Country","Year"))
 ```
+
+<br>  
+
+<font size="4">**Data Descriptions:**</font> Provides countries' profile data including geographic, population, economic, educational, environmental, etc.  
+
+  - [**Data Source**](https://www.kaggle.com/datasets/sudalairajkumar/undata-country-profiles)
+
+  - **Total Variable #**: 52  
 
 <br>  
 <br>  
@@ -394,6 +465,11 @@ geom_smooth(aes(x = GDP, y = H_score, color = 'GDP',), method = "lm")+
 ```
 
 <br>  
+
+<font size="4">**Analysis Description**:</font>  
+
+After determining the variables with highest correlations to the happiness score with the regression model, the Freedom & GDP variables were visualized with the H_score variable. As shown above, there are clear linear relationships, which illustrate that GDP and Freedom variables are linearly correlated with the Happiness scores. 
+
 <br>  
 <br>  
 
@@ -480,11 +556,14 @@ rmarkdown::paged_table(h_p_corr_negative10)
 
 ## Model 1
 
-
 ```{r}
 formula1 = H_score ~ GDP + Life_expectancy_F
 model1 = lm(formula1, data = h_p_dat)
 ```
+
+</font size="4">**Formula**: $\text{H_score} = b_0 + b_1*\text{GDP} + b_2*\text{Life_expectancy_F} + \epsilon$</font>  
+
+Determine & predict how GDP and Life expectancy for females affect Happiness Scores
 
 <br>  
 <br>  
@@ -500,12 +579,25 @@ ggplot(data = h_p_dat, aes(x = GDP, y = H_score,
 
 ```
 
+<br>  
+
+<font size="4">**Analysis Description**:</font>  
+
+With the fixed variables GDP and H_score, different levels Life expectancy for females could be compared. As shown, with higher GDP & H_score, it is more likely to achieve higher life expectancy.
+
+<br>  
+<br>  
+
 ## Model 2
 
 ```{r, warning=FALSE, message=FALSE}
-formula2 = H_score ~ GDP * Life_expectancy_F
+formula2 = H_score ~ Life_expectancy_F*GDP
 model2 = lm(formula2, data = h_p_dat)
 ```
+
+</font size="4">**Formula**: $\text{H_score} = b_0 + b_{\text{Life_expectancy_F}}*\text{GDP} + \epsilon$</font>  
+
+Determine & predict how GDP affect Happiness Scores across different life expectancy levels of females
 
 <br>  
 <br>  
@@ -520,12 +612,19 @@ ggplot(data = h_p_dat, aes(x = GDP, y = H_score,
   
 ```
 
+<br>  
+<br>  
+
 ## Model 3
 
 ```{r, warning=FALSE, message=FALSE}
 formula3 = H_score ~ GDP * Sanitation_Level * Life_expectancy_F
 model3 = lm(formula3, data = h_p_dat)
 ```
+
+</font size="4">**Formula**: $\text{H_score} = b_0 + b_{\text{Life_expectancy_F,  Sanitation_Level}}*\text{GDP} + \epsilon$</font>  
+
+Determine & predict how GDP affect Happiness Scores across different life expectancy & Sanitation levels
 
 <br>  
 <br>  
@@ -547,6 +646,13 @@ ggplot(data = h_p_dat,
 
 ```
 
+<br>  
+
+<font size="4">**Analysis Description**:</font>  
+
+On top of our analysis of Life expectancy for females, the sanitation factor has been added to observe how sanitation affects the life expectancy across countries with fixed variables, GDP & Happiness scores.  
+
+The visualization clearly shows how the sanitation level affects the life expectancy for females. For the higher sanitation level, Low Life Expectancy(in blue) cannot be observed. On the other hand, there exists significant concentration of low life expectancy countries in the lower sanitation level. 
 
 <br>  
 <br>  
@@ -557,6 +663,14 @@ ggplot(data = h_p_dat,
 stargazer(model1, model2, model3, type = "html", omit = c("Constant"))
 ```
 
+<br>  
+<font size="3">**Comparison Results**:</font>  
+
+Above table is an organized result of comparing the three models. First, we assume that $\alpha = 0.05$ and the null hypothesis states that the variables are not correlated. Also, the three stars next to the coefficients demonstrate high correlation.  
+
+Now, we can see that as it goes from model 1(far left) to model 3(far right), there are more meaningful variables with high correlations to the H_score variable. Also, we can see that the $R^2$ is the highest for model 3, which measures how much of the explanatory variables explain the dependent variable(H_score).  
+
+From this table, we can derive that the model 3 is the best model. However, let us take a further look at the residual plots to confirm the comparison result. 
 
 <br>  
 <br>  
@@ -575,6 +689,10 @@ ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
 
 ```
 
+<font size="3">**Comment**:</font>  
+
+The residual plot for model 1 seems to fluctuate, and numerous systematic errors can be observed. From the plot, it is safe to assume that this is not the best model for predicting Happiness Scores. 
+
 <br>  
 <br>  
 
@@ -592,6 +710,9 @@ ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
 
 ```
 
+<font size="3">**Comment**:</font>  
+
+Compared to the previous model 1 plot, the curve seems to be smoothed out a bit. However, there still exists systematic errors.
 
 <br>  
 <br>  
@@ -610,19 +731,24 @@ ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
 
 ```
 
+<font size="3">**Comment**:</font>  
+
+Lastly, the model 3 demonstrates the best model among them, and certainly confirms the assumption from the comparison table. In other words, the variables GDP, Sanitation Level, and Life Expectancy are not only highly correlated, but has significant affect on the total Happiness Scores. Thus, with the given variables, a reasonable prediction model can be created.  
+
+However, it is obvious that model 3 is still far from a perfect model since GDP, Sanitation Levels, and Life expectancy are not the only variables that affect the happiness scores. The next steps would be determining other factors that Happiness Scores tend to depend on.
+
 <br>  
 <br>  
 
 ## Multi Regression using Meaningful Variables
 
 ```{r, warning=FALSE, message=FALSE, results='asis'}
-Formula1 = H_score ~ GDP + Urban_pop + Health + Phone_subscriptions + 
-  dystopia_res + Life_expectancy_F + Infant_mortality + Life_expectancy_M + 
-  Age_distribution_below14 + Fertility_rate
+Formula1 = H_score ~ GDP*Sanitation_Level*Life_expectancy_F + Phone_subscriptions
 
 model <- lm(Formula1, data = h_p_dat)
 stargazer(model, type = "html", omit = c("Constant"))
 ```
+
 <br>  
 <br>  
 
@@ -637,6 +763,10 @@ ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
 
 ```
 
+
+<font size="3">**Phone_subscription variable Added**:</font>  
+
+Since the number of phone subscription seems to have relatively higher correlation with happiness, it was added to the formula. As shown above, the model's efficacy has increased. 
 
 <br>  
 <br>  
@@ -669,9 +799,7 @@ pmatrix
 
 pcenter <- attr(pmatrix, "scaled:center") 
 pscale <- attr(pmatrix, "scaled:scale")
-```
 
-```{r, warning=FALSE, message=FALSE, results='hide'}
 H_cluster <- kmeans(na.omit(pmatrix), 3, nstart = 10)
 groups <- H_cluster$cluster
 h_alldat_c <- cbind(h_alldat_new, cluster = groups)
@@ -686,14 +814,31 @@ ggplot(h_alldat_c)+
   labs(title = "K-Means Clustering", 
        subtitle = "H_Scores across Continents\n")
 ```
+<font size="3">**Bar Graph**:</font>  
+
+The bar graph illustrates different clusters with given continents; however, this is not a great depiction of the clustering outcome. Thus, let us move on to the next visualization.
 
 <br>  
 
 
 ```{r, warning=FALSE, message=FALSE}
+# Fix the order of clustering outcome
+  # This is because grouping order changes every time the code is ran
+orders <- h_alldat_c %>%
+  group_by(cluster) %>%
+  summarise(n = n())
+
+high_group <- orders %>%
+  filter(n == max(n))
+mid_group <- orders %>%
+  filter(n != max(n) & n != min(n))
+low_group <- orders %>%
+  filter(n == min(n))
 
 # Reorder the facet_grid
-h_alldat_c$cluster_f = factor(h_alldat_c$cluster, levels=c(3,1,2))
+h_alldat_c$cluster_f <- factor(h_alldat_c$cluster, levels=c(as.integer(low_group['cluster']),
+                                                           as.integer(high_group['cluster']),
+                                                           as.integer(mid_group['cluster'])))
 
 # Plot
 ggplot(h_alldat_c) +
@@ -705,6 +850,13 @@ ggplot(h_alldat_c) +
        subtitle = "Happiness Disparity within Continents")
 
 ```
+
+<font size="3">**Comment**:</font>  
+
+This visualization best demonstrates the K-means clustering result among the continents. As shown above, the first row consists of the group with relatively higher Happiness scores and GDP, where it includes countries from North America and Oceania. On the other hand, when looking at the last row, it consists most of the countries from Africa. Therefore, this clustering method provides a broader understanding of the disparity of happiness within and among the continents.  
+
+Next, let us take a look at hierarchical clustering method, which will confirm the results found in K-means clustering. 
+
 
 <br>  
 <br>  
@@ -742,3 +894,14 @@ fit <- hclust(d, method="ward")
 plot(fit, xlab = "Continents", y = "H_Scores Cluster Groups")
 ```
 
+<br>  
+<br>  
+
+
+# Conclusion
+
+---  
+
+We have utilized various statistical models to analyze the happiness data set and find insights on happiness in a global scale. Through Regression Analysis, we have predicted and tested using various models. Also, meaningful relationships, such as GDP & Life Expectancy, could be observed by testing the sensitivities with sanitation levels. Regression was adequate for the Happiness Data since it allowed to find correlations and create prediction models related to happiness scores.  
+
+Next, we have performed clustering analysis, which provided a bigger picture by diving the data set into meaningful clusters within continents. Most importantly, clustering analysis generated more important questions that will lead to further studies of determining which factors causes the disparity the most. Thus, search for happiness is not over. It has just begun. With these findings, I am looking forward to a more in-depth research about happiness. 
