@@ -743,17 +743,17 @@ However, it is obvious that model 3 is still far from a perfect model since GDP,
 ## Multi Regression using Meaningful Variables
 
 ```{r, warning=FALSE, message=FALSE, results='asis'}
-Formula1 = H_score ~ GDP*Sanitation_Level*Life_expectancy_F + Phone_subscriptions
+Formula_phone = H_score ~ GDP*Sanitation_Level*Life_expectancy_F + Phone_subscriptions
 
-model <- lm(Formula1, data = h_p_dat)
-stargazer(model, type = "html", omit = c("Constant"))
+model_mul <- lm(Formula_phone, data = h_p_dat)
+stargazer(model_mul, type = "html", omit = c("Constant"))
 ```
 
 <br>  
 <br>  
 
 ```{r, warning=FALSE, message=FALSE}
-h_p_dat$pred <- predict(model, data = h_p_dat)
+h_p_dat$pred <- predict(model_mul, data = h_p_dat)
 
 ggplot(data = h_p_dat, aes(x = pred, y = H_score - pred )) +
   geom_point(alpha = 0.2, color = "red") + geom_smooth(color = "darkblue") +
