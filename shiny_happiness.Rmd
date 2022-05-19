@@ -1,5 +1,5 @@
 ---
-title: "Happiness Project: Shiny"
+title: "Happiness Project: Interactive Shiny App"
 subtitle: "GDP vs Happiness Scores"
 ---
 ````{=html}

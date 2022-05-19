@@ -5,9 +5,9 @@ account: anddylee
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6224273
-bundleId: 5865513
+bundleId: 5923547
 url: https://anddylee.shinyapps.io/TestApp/
-when: 1651598956.32418
-lastSyncTime: 1651598956.3242
+when: 1652975104.4752
+lastSyncTime: 1652975104.47521
 asMultiple: FALSE
 asStatic: FALSE
