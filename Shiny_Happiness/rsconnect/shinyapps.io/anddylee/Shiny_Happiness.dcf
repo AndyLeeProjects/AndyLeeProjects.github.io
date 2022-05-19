@@ -5,10 +5,9 @@ account: anddylee
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6224815
-bundleId: 5900113
+bundleId: 5923681
 url: https://anddylee.shinyapps.io/Shiny_Happiness/
-when: 1652381570.34176
-lastSyncTime: 1652381570.34179
+when: 1652977485.96302
+lastSyncTime: 1652977485.96305
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: h_alldat.RData
