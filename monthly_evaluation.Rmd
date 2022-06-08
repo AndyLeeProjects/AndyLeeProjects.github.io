@@ -1,0 +1,79 @@
+---
+title: "Monthly Evaluation"
+author: "Andy"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(tm)
+library(wordcloud)
+library(ggwordcloud)
+```
+
+```{r, include=FALSE}
+all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
+
+colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
+                       'Screen_time','Created','Date','Drink',
+                       'Meditation','Mentality','Satisfaction',
+                       'Reading','Productivity','Rise_time','Run','Social',
+                       'Tech','Total','Total_todo','Work_done','Key_words')
+
+
+# Remove unnecessary columns & Modify some columns
+all_dat <- all_dat %>%
+  dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
+  dplyr::mutate(work_finished = round(Finished/Total_todo,4),
+                Drink = lag(Drink),
+                Total = Total*100) %>%
+  dplyr::filter(Multiple < 6) %>%
+  tibble()
+
+all_dat$Date[1:length(all_dat$Date)] = format(mdy(all_dat$Date[1:length(all_dat$Date)]),"%m/%d/%Y")
+
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+cur_month = month(Sys.Date())
+if (nchar(cur_month - 1) == 1 & cur_month != 1){
+  previous_month = cur_month - 1  
+  previous_month = paste0("0", previous_month, '/')
+} else if (cur_month == 1){
+  previous_month = 12
+  previous_month = paste0(previous_month, '/')
+} else {
+  previous_month = cur_month - 1
+  previous_month = paste0(previous_month, '/')
+}
+cur_year = paste0('/',year(Sys.Date()))
+
+
+words_dat <- all_dat %>%
+  select(Key_words, Date) %>%
+  filter(startsWith(Date, previous_month) == TRUE)  %>%
+  filter(endsWith(Date, cur_year) == TRUE) %>%
+  filter(Key_words != 0 & Key_words != '' & Key_words != '[]') %>%
+  mutate(Key_words = gsub('[\']','',Key_words),
+         Key_words = gsub('[\\[]','',Key_words),
+         Key_words = gsub('\\]','',Key_words)) %>%
+  separate(Key_words, c('word_1', 'word_2', 'word_3'), sep = ',') %>%
+  pivot_longer(cols = starts_with("word"), names_to = 'word_num', values_to = 'words') %>%
+  mutate(words = gsub(" ", "", words)) %>%
+  group_by(words) %>%
+  summarise(freq = n())
+
+
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+
+wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,           
+          max.words=70, random.order=FALSE, rot.per=0.35,            
+          colors=brewer.pal(8, "Dark2"))
+
+```
+

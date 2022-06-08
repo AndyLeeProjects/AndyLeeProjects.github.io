@@ -7,6 +7,8 @@ navbar:
       href: index.html
     - text: "Projects"
       menu:
+      - text: "Monthly Evaluation"
+        href: monthly_evaluation.html
       - text: "Self-Evaluation Project"
         href: selfeval_main.html
       - text: '---------'

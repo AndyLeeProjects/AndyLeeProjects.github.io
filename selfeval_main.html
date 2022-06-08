@@ -333,6 +333,9 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="monthly_evaluation.html">Monthly Evaluation</a>
+    </li>
+    <li>
       <a href="selfeval_main.html">Self-Evaluation Project</a>
     </li>
     <li class="divider"></li>
@@ -393,10 +396,27 @@ div.tocify {
 
 <p><br></p>
 <div id="project-description" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Project Description</h1>
+<h1><span class="header-section-number">1</span> Project
+Description</h1>
 <p><br></p>
-<p><font size="3"> Towards the end of my military service, I tried to find ways to maintain a high-disciplinary lifestyle even after my release. After much contemplation, I decided to develop a grading system for my day-to-day life, which sprouted from the concept of math exams. The graded exams allow us to improve our mathematical knowledge by analyzing our weaknesses and strengths. Thus, by utilizing quantifiable variables that best represent the fullness of my lifestyle and by implementing various mathematical models, I was able to construct an effective grading system for my day-to-day life.</p>
-<p>The self-evaluation project comprises three main procedures: collecting meaningful data, applying statistical analysis, and visualizing indicative findings in daily life. The goal is to find numerous insights and unique patterns with over 500 days’ worth of data using R. Also, a more comprehensive understanding of the lifestyle will be obtained by utilizing advanced statistical concepts such as linear regressions and various correlation tests. Ultimately, these findings will provide better guidance for me to achieve healthier life patterns in the future.</font></p>
+<p><font size="3"> Towards the end of my military service, I tried to
+find ways to maintain a high-disciplinary lifestyle even after my
+release. After much contemplation, I decided to develop a grading system
+for my day-to-day life, which sprouted from the concept of math exams.
+The graded exams allow us to improve our mathematical knowledge by
+analyzing our weaknesses and strengths. Thus, by utilizing quantifiable
+variables that best represent the fullness of my lifestyle and by
+implementing various mathematical models, I was able to construct an
+effective grading system for my day-to-day life.</p>
+<p>The self-evaluation project comprises three main procedures:
+collecting meaningful data, applying statistical analysis, and
+visualizing indicative findings in daily life. The goal is to find
+numerous insights and unique patterns with over 500 days’ worth of data
+using R. Also, a more comprehensive understanding of the lifestyle will
+be obtained by utilizing advanced statistical concepts such as linear
+regressions and various correlation tests. Ultimately, these findings
+will provide better guidance for me to achieve healthier life patterns
+in the future.</font></p>
 <p><br></p>
 <pre class="r"><code>library(lubridate)
 library(gridExtra)
@@ -408,48 +428,74 @@ library(papeR)
 library(tidyverse)</code></pre>
 <p><br></p>
 </div>
-<div id="main-variables-descriptive-statistics" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Main Variables: Descriptive Statistics</h1>
+<div id="main-variables-descriptive-statistics" class="section level1"
+number="2">
+<h1><span class="header-section-number">2</span> Main Variables:
+Descriptive Statistics</h1>
 <hr />
 <p><br></p>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /> <br></p>
-<div id="main-varibles-descriptions" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> Main Varibles Descriptions</h2>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" />
+<br></p>
+<div id="main-varibles-descriptions" class="section level2"
+number="2.1">
+<h2><span class="header-section-number">2.1</span> Main Varibles
+Descriptions</h2>
 <ul>
-<li><font size="3"><strong>Reading</strong>: reading duration in minutes</font></li>
-<li><font size="3"><strong>Meditation</strong>: meditation duration in minutes</font></li>
-<li><font size="3"><strong>Phone_pickups</strong>: number of times I picked up my phone</font></li>
-<li><font size="3"><strong>Screen_time</strong>: duration of spent time on my phone in minutes</font></li>
-<li><font size="3"><strong>Rise_time</strong>: the variation in minutes from the intended rise time
+<li><font size="3"><strong>Reading</strong>: reading duration in
+minutes</font></li>
+<li><font size="3"><strong>Meditation</strong>: meditation duration in
+minutes</font></li>
+<li><font size="3"><strong>Phone_pickups</strong>: number of times I
+picked up my phone</font></li>
+<li><font size="3"><strong>Screen_time</strong>: duration of spent time
+on my phone in minutes</font></li>
+<li><font size="3"><strong>Rise_time</strong>: the variation in minutes
+from the intended rise time
 <ul>
 <li>0: Woke up on time</li>
 <li>-n: Woke up n minutes earlier than intended</li>
 <li>+n: Woke up n minutes later than intended</font></li>
 </ul></li>
-<li><font size="3"><strong>Drink</strong>: Whether or not I drank the day before (Boolean)</font></li>
-<li><font size="3"><strong>Work_finished</strong>: Finished_tasks / Total_tasks </font></li>
-<li><font size="3"><strong>Multiple</strong>: Subjective grade given each day
+<li><font size="3"><strong>Drink</strong>: Whether or not I drank the
+day before (Boolean)</font></li>
+<li><font size="3"><strong>Work_finished</strong>: Finished_tasks /
+Total_tasks </font></li>
+<li><font size="3"><strong>Multiple</strong>: Subjective grade given
+each day
 <ul>
-<li>Considered factors: Mentality, Satisfaction, Productivity, Social interaction, and Tech consumption</font></li>
+<li>Considered factors: Mentality, Satisfaction, Productivity, Social
+interaction, and Tech consumption</font></li>
 </ul></li>
-<li><font size="3"><strong>Total</strong>: The sum of the percentages calculated of above variables</font></li>
+<li><font size="3"><strong>Total</strong>: The sum of the percentages
+calculated of above variables</font></li>
 </ul>
 <p><br><br />
 <br></p>
 </div>
-<div id="main-variables-correlations" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Main Variables Correlations</h2>
-<p><font size="4">To find the relationships between these variables and how they affect my lifestyle, we will first observe the relationships within variables</font></p>
+<div id="main-variables-correlations" class="section level2"
+number="2.2">
+<h2><span class="header-section-number">2.2</span> Main Variables
+Correlations</h2>
+<p><font size="4">To find the relationships between these variables and
+how they affect my lifestyle, we will first observe the relationships
+within variables</font></p>
 <ul>
-<li><font size="3">Use <strong>pairs.panels function</strong> in psych module
+<li><font size="3">Use <strong>pairs.panels function</strong> in psych
+module
 <ul>
-<li><strong>The diagonal histograms</strong> demonstrates the distribution of each variable</li>
-<li><strong>The bottom left triangle</strong> represents a scatter plot with the best fit line</li>
-<li><strong>The top right triangle</strong> represents a correlation coefficient for each pair, which ranges from -1 to 1
+<li><strong>The diagonal histograms</strong> demonstrates the
+distribution of each variable</li>
+<li><strong>The bottom left triangle</strong> represents a scatter plot
+with the best fit line</li>
+<li><strong>The top right triangle</strong> represents a correlation
+coefficient for each pair, which ranges from -1 to 1
 <ul>
-<li>If the coefficient is close to 1, it means that the pair holds a positive relationship and a negative relationship for -1.</li>
+<li>If the coefficient is close to 1, it means that the pair holds a
+positive relationship and a negative relationship for -1.</li>
 </ul></li>
-<li>Correlation Coefficient Formula:</font> <span class="math display">\[r = \dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\bar{y})^2}}\]</span></li>
+<li>Correlation Coefficient Formula:</font> <span
+class="math display">\[r =
+\dfrac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\sum(y_i-\bar{y})^2}}\]</span></li>
 </ul></li>
 </ul>
 <p><br></p>
@@ -471,7 +517,8 @@ pairs.panels(correlation_plot, lm = TRUE)</code></pre>
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
   scale_color_discrete(name = &quot;School Qtrs&quot;)+
   theme_classic()</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-6-1.png" width="672" /> <br><br />
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<br><br />
 <br><br />
 <br></p>
 </div>
@@ -488,11 +535,13 @@ ggplot(data = all_dat)+
        x = &quot;&quot;, y = &quot;Work Finished (%)&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
   theme_classic()</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-7-1.png" width="672" /> <br><br />
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<br><br />
 <br></p>
 </div>
 <div id="time-trend-total" class="section level2" number="2.5">
-<h2><span class="header-section-number">2.5</span> Time Trend (Total %)</h2>
+<h2><span class="header-section-number">2.5</span> Time Trend (Total
+%)</h2>
 <pre class="r"><code>all_dat_month &lt;- all_dat %&gt;%
   dplyr::filter(!is.na(Rise_time)) %&gt;%
   dplyr::group_by(year, month) %&gt;%
@@ -515,8 +564,10 @@ ggplot(all_dat_month)+
 <p><br><br />
 <br></p>
 </div>
-<div id="time-trend-total---rise-time" class="section level2" number="2.6">
-<h2><span class="header-section-number">2.6</span> Time Trend (Total % - Rise time)</h2>
+<div id="time-trend-total---rise-time" class="section level2"
+number="2.6">
+<h2><span class="header-section-number">2.6</span> Time Trend (Total % -
+Rise time)</h2>
 <pre class="r"><code>ggplot(all_dat_month)+
   geom_line(aes(x=Date, y=Total-Rise_time))+
   labs(title = &quot;Trend of Total% - Rise time&quot;,
@@ -525,7 +576,8 @@ ggplot(all_dat_month)+
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;, &quot;2021-06-01&quot;,
                                 &quot;2022-01-01&quot;))+
   theme_classic()</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-9-1.png" width="672" /> <br></p>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<br></p>
 <ul>
 <li><font size="3">Note for Rise time:
 <ul>
@@ -539,31 +591,49 @@ ggplot(all_dat_month)+
 <p><br></p>
 </div>
 </div>
-<div id="morning-routine-varables-descriptive-statistics" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Morning Routine Varables: Descriptive Statistics</h1>
+<div id="morning-routine-varables-descriptive-statistics"
+class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Morning Routine
+Varables: Descriptive Statistics</h1>
 <hr />
 <p><br></p>
-<p><span class="math display">\[&quot;The\ notion\ that\ once\ you\ set\ accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\ much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\ something\ from\ a\ standing\ start.&quot;\\ -Jim\ Kwik\]</span> <br><br />
+<p><span class="math display">\[&quot;The\ notion\ that\ once\ you\ set\
+accomplishment\ in\ motion,\\ you\ can\ keep\ it\ in\ motion\ with\
+much\ less\ effort\ than\\ if\ you\ were\ trying\ to\ accomplish\
+something\ from\ a\ standing\ start.&quot;\\ -Jim\ Kwik\]</span>
+<br><br />
 <br></p>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /> <br></p>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" />
+<br></p>
 <p><br></p>
-<div id="morning-routine-descriptions" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Morning Routine Descriptions</h2>
+<div id="morning-routine-descriptions" class="section level2"
+number="3.1">
+<h2><span class="header-section-number">3.1</span> Morning Routine
+Descriptions</h2>
 <p>Note that they are all discrete/ categorical variables <br></p>
 <ul>
-<li><font size="3"><strong>Total_checked</strong>: The number of morning routine tasks completed</font></li>
-<li><font size="3"><strong>Meditation_check</strong>: Meditation task completion (Boolean value)</font></li>
-<li><font size="3"><strong>Reading_check</strong>: Reading task completion (Boolean value)</font></li>
-<li><font size="3"><strong>morning_thoughts_check</strong>: Morning journal task completion (Boolean value)</font></li>
-<li><font size="3"><strong>Push_up_check</strong>: Push up task completion (Boolean value)</font></li>
-<li><font size="3"><strong>Morning_phone</strong>: Did not touch my phone for the first hour of the day (Boolean value)</font></li>
-<li><font size="3"><strong>Night_phone</strong>: Did not touch my phone for the last hour of the day (Boolean value)</font></li>
+<li><font size="3"><strong>Total_checked</strong>: The number of morning
+routine tasks completed</font></li>
+<li><font size="3"><strong>Meditation_check</strong>: Meditation task
+completion (Boolean value)</font></li>
+<li><font size="3"><strong>Reading_check</strong>: Reading task
+completion (Boolean value)</font></li>
+<li><font size="3"><strong>morning_thoughts_check</strong>: Morning
+journal task completion (Boolean value)</font></li>
+<li><font size="3"><strong>Push_up_check</strong>: Push up task
+completion (Boolean value)</font></li>
+<li><font size="3"><strong>Morning_phone</strong>: Did not touch my
+phone for the first hour of the day (Boolean value)</font></li>
+<li><font size="3"><strong>Night_phone</strong>: Did not touch my phone
+for the last hour of the day (Boolean value)</font></li>
 </ul>
 <p><br><br />
 <br></p>
 </div>
-<div id="test-how-total_checked-variable-affects-the-outcome-of-the-day" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Test how Total_checked variable affects the outcome of the day</h2>
+<div id="test-how-total_checked-variable-affects-the-outcome-of-the-day"
+class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Test how
+Total_checked variable affects the outcome of the day</h2>
 <ul>
 <li><font size = "4">The morning routine tasks:
 <ul>
@@ -596,11 +666,14 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 <p><br></p>
 </div>
 </div>
-<div id="main-variables-linear-regressions" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Main Variables: Linear Regressions</h1>
+<div id="main-variables-linear-regressions" class="section level1"
+number="4">
+<h1><span class="header-section-number">4</span> Main Variables: Linear
+Regressions</h1>
 <hr />
 <div id="simple-linear-regression" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> Simple Linear Regression</h2>
+<h2><span class="header-section-number">4.1</span> Simple Linear
+Regression</h2>
 <ul>
 <li><font size = "3">Set:
 <ul>
@@ -611,15 +684,25 @@ ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) +
 </ul></li>
 <li><font size = "3">lm() function:Fitting Linear Models
 <ol style="list-style-type: decimal">
-<li>Finds fitted line(<span class="math inline">\(\alpha\)</span> &amp; <span class="math inline">\(\beta\)</span>) by using the least-square method
+<li>Finds fitted line(<span class="math inline">\(\alpha\)</span> &amp;
+<span class="math inline">\(\beta\)</span>) by using the least-square
+method
 <ul>
-<li><strong>Least-square</strong>: by summing up the residual squares for different curves, it finds the “least squared” curve that best fit the data.</li>
+<li><strong>Least-square</strong>: by summing up the residual squares
+for different curves, it finds the “least squared” curve that best fit
+the data.</li>
 </ul></li>
-<li>Outputs <span class="math inline">\(R^2\)</span>, p-value and other meaningful calculations
+<li>Outputs <span class="math inline">\(R^2\)</span>, p-value and other
+meaningful calculations
 <ul>
-<li><span class="math inline">\(R^2\)</span>: It demonstrates how accurate the fitted line is to the data</li>
-<li>Formula: <span class="math inline">\(R^2 =1-\dfrac{Var(fit)}{Var(mean)}\)</span> or <span class="math inline">\(1-\dfrac{RSS}{TSS}\)</span></li>
-<li>Ex: If we get.8, it means that <span class="math inline">\(x\)</span> explains 60% of the variation in <span class="math inline">\(y\)</span></font></li>
+<li><span class="math inline">\(R^2\)</span>: It demonstrates how
+accurate the fitted line is to the data</li>
+<li>Formula: <span class="math inline">\(R^2
+=1-\dfrac{Var(fit)}{Var(mean)}\)</span> or <span
+class="math inline">\(1-\dfrac{RSS}{TSS}\)</span></li>
+<li>Ex: If we get.8, it means that <span
+class="math inline">\(x\)</span> explains 60% of the variation in <span
+class="math inline">\(y\)</span></font></li>
 </ul></li>
 </ol></li>
 </ul>
@@ -629,7 +712,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.54939168","3":"0.52461953","4":"0.57416383","5":"0.012609779","6":"43.56870","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01963685","3":"0.01740533","4":"0.02186837","5":"0.001135911","6":"17.28732","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.54874848","3":"0.52429542","4":"0.57320153","5":"0.012448106","6":"44.08289","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01966353","3":"0.01746572","4":"0.02186134","5":"0.001118821","6":"17.57523","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Meditation, y=work_finished))+
@@ -646,7 +729,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8756269486","3":"0.8360335283","4":"0.9152203689","5":"2.015426e-02","6":"43.446252","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007093936","3":"-0.0008638529","4":"-0.0005549342","5":"7.862452e-05","6":"-9.022549","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8770952026","3":"0.8379844906","4":"0.9162059145","5":"1.990975e-02","6":"44.053546","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007140458","3":"-0.0008665076","4":"-0.0005615839","5":"7.761243e-05","6":"-9.200147","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
@@ -663,14 +746,18 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
 <br></p>
 </div>
 <div id="multiple-regressions" class="section level2" number="4.2">
-<h2><span class="header-section-number">4.2</span> Multiple regressions</h2>
+<h2><span class="header-section-number">4.2</span> Multiple
+regressions</h2>
 <ul>
 <li><font size = "3">Set:
 <ul>
 <li>y = Dependent Variable</li>
-<li><span class="math inline">\(x_1,...x_n\)</span> = n independent/explanatory variables</li>
-<li><span class="math inline">\(\alpha\)</span> = Constant or intercept</li>
-<li><span class="math inline">\(\beta\)</span> = weights for each <span class="math inline">\(x_1,...x_n\)</span> </f   ont></li>
+<li><span class="math inline">\(x_1,...x_n\)</span> = n
+independent/explanatory variables</li>
+<li><span class="math inline">\(\alpha\)</span> = Constant or
+intercept</li>
+<li><span class="math inline">\(\beta\)</span> = weights for each <span
+class="math inline">\(x_1,...x_n\)</span> </f   ont></li>
 </ul></li>
 </ul>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Screen_time + Meditation + Rise_time + Phone_pickups + 
@@ -680,14 +767,16 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.5774042650","3":"0.4743091325","4":"0.6804993975","5":"5.246844e-02","6":"11.0047913","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003720445","3":"-0.0005016527","4":"-0.0002424362","5":"6.596185e-05","6":"-5.6402976","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0140885094","3":"0.0118807048","4":"0.0162963140","5":"1.123623e-03","6":"12.5384658","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0003993729","3":"-0.0005736109","4":"-0.0002251348","5":"8.867538e-05","6":"-4.5037625","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0001900676","3":"-0.0003180671","4":"0.0006982023","5":"2.586062e-04","6":"0.7349694","7":"0.463","8":""},{"1":"Reading","2":"0.0028807073","3":"0.0018423037","4":"0.0039191109","5":"5.284771e-04","6":"5.4509592","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0704410183","3":"-0.0960330940","4":"-0.0448489425","5":"1.302463e-02","6":"-5.4082916","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0084766800","3":"0.0029907663","4":"0.0139625937","5":"2.791959e-03","6":"3.0361051","7":"0.003","8":"**"},{"1":"Social","2":"-0.0200784371","3":"-0.0284880652","4":"-0.0116688090","5":"4.279931e-03","6":"-4.6912988","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.5879443331","3":"0.4869163050","4":"0.6889723613","5":"0.0514200800","6":"11.4341388","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003726149","3":"-0.0005013437","4":"-0.0002438861","5":"0.0000655189","6":"-5.6871357","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0141913485","3":"0.0119962832","4":"0.0163864138","5":"0.0011172190","6":"12.7023873","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0003940596","3":"-0.0005670763","4":"-0.0002210430","5":"0.0000880600","6":"-4.4748993","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0002227820","3":"-0.0002751962","4":"0.0007207602","5":"0.0002534552","6":"0.8789798","7":"0.38","8":""},{"1":"Reading","2":"0.0030690487","3":"0.0020352897","4":"0.0041028078","5":"0.0005261508","6":"5.8330216","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0692946992","3":"-0.0945801089","4":"-0.0440092895","5":"0.0128694761","6":"-5.3844227","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0070075345","3":"0.0016808957","4":"0.0123341732","5":"0.0027110911","6":"2.5847654","7":"0.01","8":"*"},{"1":"Social","2":"-0.0162778134","3":"-0.0243440293","4":"-0.0082115976","5":"0.0041054495","6":"-3.9649285","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><br><br />
 <br></p>
 </div>
-<div id="actual-vs-prediction-visualization-for-work_done-all_dat" class="section level2" number="4.3">
-<h2><span class="header-section-number">4.3</span> Actual vs Prediction Visualization for Work_done (all_dat)</h2>
+<div id="actual-vs-prediction-visualization-for-work_done-all_dat"
+class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Actual vs Prediction
+Visualization for Work_done (all_dat)</h2>
 <pre class="r"><code>all_dat$pred_work_finished &lt;- predict(model, newdata = all_dat)
 
 # Explanatory variable: work_finished
@@ -704,11 +793,13 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
        y = &quot;Tasks Finshed (y)&quot;, x = expression(hat(y)))+
   theme(plot.title = element_text(face = &quot;bold&quot;))+
   theme_classic()</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-15-1.png" width="672" /> <br></p>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<br></p>
 <ul>
 <li>Systematic Error can be observed
 <ul>
-<li>NOT a perfect prediction model, but the the model is reasonably accurate</li>
+<li>NOT a perfect prediction model, but the the model is reasonably
+accurate</li>
 </ul></li>
 </ul>
 <p><br></p>
@@ -722,7 +813,8 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
 </div>
 </div>
 <div id="main-variables-time-series" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> Main Variables: Time Series</h1>
+<h1><span class="header-section-number">5</span> Main Variables: Time
+Series</h1>
 <p><br></p>
 <pre class="r"><code>ats &lt;- ts(all_dat, start = decimal_date(mdy(&quot;09/01/2020&quot;)),
                             frequency = 365.25 / 7)
