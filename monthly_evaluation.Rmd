@@ -1,8 +1,32 @@
 ---
-title: "Monthly Evaluation"
+title: "Monthly Evaluation "
 author: "Andy"
 output: html_document
 ---
+
+
+<br>  
+
+
+```{r, include=FALSE}
+library(lubridate)
+
+cur_month = month(Sys.Date())
+if (nchar(cur_month - 1) == 1 & cur_month != 1){
+  previous_month = cur_month - 1  
+  previous_month_str = paste0("0", previous_month, '/')
+} else if (cur_month == 1){
+  previous_month = 12
+  previous_month_str = paste0(previous_month, '/')
+} else {
+  previous_month = cur_month - 1
+  previous_month_str = paste0(previous_month, '/')
+}
+cur_year = year(Sys.Date())
+cur_year_str = paste0('/',cur_year)
+```
+
+# **`r paste0(month.abb[previous_month], ' ', cur_year)`**
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -36,24 +60,13 @@ all_dat$Date[1:length(all_dat$Date)] = format(mdy(all_dat$Date[1:length(all_dat$
 ```
 
 
-```{r, warning=FALSE, message=FALSE}
-cur_month = month(Sys.Date())
-if (nchar(cur_month - 1) == 1 & cur_month != 1){
-  previous_month = cur_month - 1  
-  previous_month = paste0("0", previous_month, '/')
-} else if (cur_month == 1){
-  previous_month = 12
-  previous_month = paste0(previous_month, '/')
-} else {
-  previous_month = cur_month - 1
-  previous_month = paste0(previous_month, '/')
-}
+```{r, warning=FALSE, message=FALSE, include=FALSE}
 cur_year = paste0('/',year(Sys.Date()))
 
 
 words_dat <- all_dat %>%
   select(Key_words, Date) %>%
-  filter(startsWith(Date, previous_month) == TRUE)  %>%
+  filter(startsWith(Date, previous_month_str) == TRUE)  %>%
   filter(endsWith(Date, cur_year) == TRUE) %>%
   filter(Key_words != 0 & Key_words != '' & Key_words != '[]') %>%
   mutate(Key_words = gsub('[\']','',Key_words),

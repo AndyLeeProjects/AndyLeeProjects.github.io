@@ -315,37 +315,14 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>cur_month = month(Sys.Date())
-if (nchar(cur_month - 1) == 1 &amp; cur_month != 1){
-  previous_month = cur_month - 1  
-  previous_month = paste0(&quot;0&quot;, previous_month, &#39;/&#39;)
-} else if (cur_month == 1){
-  previous_month = 12
-  previous_month = paste0(previous_month, &#39;/&#39;)
-} else {
-  previous_month = cur_month - 1
-  previous_month = paste0(previous_month, &#39;/&#39;)
-}
-cur_year = paste0(&#39;/&#39;,year(Sys.Date()))
-
-
-words_dat &lt;- all_dat %&gt;%
-  select(Key_words, Date) %&gt;%
-  filter(startsWith(Date, previous_month) == TRUE)  %&gt;%
-  filter(endsWith(Date, cur_year) == TRUE) %&gt;%
-  filter(Key_words != 0 &amp; Key_words != &#39;&#39; &amp; Key_words != &#39;[]&#39;) %&gt;%
-  mutate(Key_words = gsub(&#39;[\&#39;]&#39;,&#39;&#39;,Key_words),
-         Key_words = gsub(&#39;[\\[]&#39;,&#39;&#39;,Key_words),
-         Key_words = gsub(&#39;\\]&#39;,&#39;&#39;,Key_words)) %&gt;%
-  separate(Key_words, c(&#39;word_1&#39;, &#39;word_2&#39;, &#39;word_3&#39;), sep = &#39;,&#39;) %&gt;%
-  pivot_longer(cols = starts_with(&quot;word&quot;), names_to = &#39;word_num&#39;, values_to = &#39;words&#39;) %&gt;%
-  mutate(words = gsub(&quot; &quot;, &quot;&quot;, words)) %&gt;%
-  group_by(words) %&gt;%
-  summarise(freq = n())</code></pre>
+<p><br></p>
+<div id="may-2022" class="section level1">
+<h1><strong>May 2022</strong></h1>
 <pre class="r"><code>wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,           
           max.words=70, random.order=FALSE, rot.per=0.35,            
           colors=brewer.pal(8, &quot;Dark2&quot;))</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
 
 
 
