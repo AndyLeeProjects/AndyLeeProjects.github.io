@@ -36,6 +36,17 @@ library(wordcloud)
 library(ggwordcloud)
 ```
 
+<br>  
+
+## Monthly Evaluation  
+
+---  
+
+![](`r paste0(month.abb[previous_month], cur_year)`.jpg)
+
+<br>  
+
+
 ```{r, include=FALSE}
 all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
 
@@ -80,6 +91,11 @@ words_dat <- all_dat %>%
 
 
 ```
+
+
+## World Cloud  
+
+---  
 
 
 ```{r, warning=FALSE, message=FALSE}
