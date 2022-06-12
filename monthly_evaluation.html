@@ -33,6 +33,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -319,12 +321,9 @@ $(document).ready(function () {
 <div id="may-2022" class="section level1">
 <h1><strong>May 2022</strong></h1>
 <p><br></p>
-<div id="monthly-evaluation" class="section level2">
-<h2>Monthly Evaluation</h2>
-<hr />
-<p><img src="May2022.jpg" /></p>
+<p><img
+src="monthly_eval_images/May2022.jpg" /></p>
 <p><br></p>
-</div>
 <div id="world-cloud" class="section level2">
 <h2>World Cloud</h2>
 <hr />
@@ -332,6 +331,80 @@ $(document).ready(function () {
           max.words=70, random.order=FALSE, rot.per=0.35,            
           colors=brewer.pal(8, &quot;Dark2&quot;))</code></pre>
 <p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="monthly-evaluation" class="section level2">
+<h2>Monthly Evaluation</h2>
+<hr />
+<pre class="r"><code>month_dat &lt;- all_dat %&gt;%
+  filter(startsWith(Date, previous_month_str) == TRUE &amp;
+         endsWith(Date, cur_year) == TRUE) %&gt;%
+  mutate(Date = mdy(Date),
+         Tech = as.factor(Tech),
+         Productivity = as.factor(Productivity),
+         Satisfaction = as.factor(Satisfaction),
+         Social = as.factor(Social)) 
+
+rmarkdown::paged_table(month_dat)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Date"],"name":[1],"type":["date"],"align":["right"]},{"label":["Finished"],"name":[2],"type":["int"],"align":["right"]},{"label":["Multiple"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Phone_pickups"],"name":[4],"type":["int"],"align":["right"]},{"label":["Screen_time"],"name":[5],"type":["int"],"align":["right"]},{"label":["Drink"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Meditation"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["Mentality"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["Satisfaction"],"name":[9],"type":["fct"],"align":["left"]},{"label":["Reading"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Productivity"],"name":[11],"type":["fct"],"align":["left"]},{"label":["Rise_time"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Run"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["Social"],"name":[14],"type":["fct"],"align":["left"]},{"label":["Tech"],"name":[15],"type":["fct"],"align":["left"]},{"label":["Total"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["Total_todo"],"name":[17],"type":["int"],"align":["right"]},{"label":["Key_words"],"name":[18],"type":["chr"],"align":["left"]},{"label":["work_finished"],"name":[19],"type":["dbl"],"align":["right"]}],"data":[{"1":"2022-05-01","2":"6","3":"3.0","4":"72","5":"262","6":"1","7":"0","8":"3","9":"3","10":"0","11":"3","12":"143","13":"0.00","14":"4","15":"2","16":"37.88","17":"10","18":"['Study', 'Github', 'Social']","19":"0.6000"},{"1":"2022-05-02","2":"9","3":"4.6","4":"113","5":"138","6":"0","7":"15","8":"5","9":"5","10":"13","11":"4","12":"10","13":"0.00","14":"5","15":"4","16":"82.78","17":"10","18":"['Teaching', 'Coding', 'Happy']","19":"0.9000"},{"1":"2022-05-03","2":"15","3":"3.8","4":"99","5":"136","6":"0","7":"15","8":"4","9":"4","10":"12","11":"4","12":"-80","13":"0.00","14":"3","15":"4","16":"90.67","17":"17","18":"['Coding', 'Github', 'Focused']","19":"0.8824"},{"1":"2022-05-04","2":"14","3":"3.6","4":"93","5":"176","6":"0","7":"15","8":"3","9":"4","10":"10","11":"4","12":"19","13":"0.00","14":"4","15":"3","16":"80.78","17":"15","18":"['Study', 'Statistics', 'Coding']","19":"0.9333"},{"1":"2022-05-05","2":"15","3":"4.4","4":"118","5":"168","6":"0","7":"14","8":"4","9":"4","10":"0","11":"5","12":"-60","13":"0.00","14":"5","15":"4","16":"86.49","17":"15","18":"['Job Search/Interview', 'Productive', 'Proud']","19":"1.0000"},{"1":"2022-05-06","2":"10","3":"3.2","4":"120","5":"113","6":"0","7":"35","8":"4","9":"3","10":"3","11":"3","12":"68","13":"0.00","14":"4","15":"2","16":"80.20","17":"13","18":"['Job Search/Interview', 'Drink', 'Proud']","19":"0.7692"},{"1":"2022-05-07","2":"1","3":"1.0","4":"55","5":"240","6":"1","7":"0","8":"1","9":"1","10":"0","11":"1","12":"75","13":"0.00","14":"1","15":"1","16":"20.76","17":"12","18":"['Lazy', 'Drink', 'Break']","19":"0.0833"},{"1":"2022-05-08","2":"5","3":"2.6","4":"73","5":"92","6":"1","7":"0","8":"2","9":"2","10":"0","11":"3","12":"210","13":"0.00","14":"3","15":"3","16":"27.33","17":"14","18":"['Busy', 'Procrastination', 'Project']","19":"0.3571"},{"1":"2022-05-09","2":"12","3":"2.8","4":"91","5":"186","6":"0","7":"15","8":"3","9":"3","10":"0","11":"3","12":"70","13":"0.00","14":"2","15":"3","16":"62.29","17":"16","18":"['Tired', 'Overwhelmed', 'Busy']","19":"0.7500"},{"1":"2022-05-10","2":"13","3":"2.0","4":"69","5":"242","6":"0","7":"0","8":"2","9":"2","10":"0","11":"2","12":"-30","13":"0.00","14":"2","15":"2","16":"62.80","17":"15","18":"['Technology', 'Tired', 'Unmotivated']","19":"0.8667"},{"1":"2022-05-11","2":"8","3":"2.6","4":"72","5":"199","6":"0","7":"0","8":"3","9":"3","10":"0","11":"3","12":"145","13":"0.00","14":"2","15":"2","16":"39.47","17":"13","18":"['Statistics', 'Math', 'Procrastination']","19":"0.6154"},{"1":"2022-05-12","2":"9","3":"3.0","4":"129","5":"181","6":"0","7":"0","8":"2","9":"3","10":"0","11":"3","12":"-20","13":"0.00","14":"4","15":"3","16":"60.30","17":"12","18":"['Exam', 'Study', 'Tired']","19":"0.7500"},{"1":"2022-05-13","2":"4","3":"3.4","4":"137","5":"189","6":"0","7":"0","8":"3","9":"3","10":"0","11":"3","12":"-20","13":"0.00","14":"5","15":"3","16":"45.62","17":"10","18":"['Drink', 'Movies', 'Exam']","19":"0.4000"},{"1":"2022-05-14","2":"2","3":"2.4","4":"82","5":"269","6":"1","7":"0","8":"2","9":"2","10":"0","11":"2","12":"100","13":"0.00","14":"4","15":"2","16":"31.45","17":"6","18":"['Lazy', 'Exam', 'Grateful']","19":"0.3333"},{"1":"2022-05-15","2":"3","3":"2.6","4":"47","5":"255","6":"0","7":"0","8":"2","9":"2","10":"0","11":"3","12":"133","13":"0.00","14":"4","15":"2","16":"35.19","17":"6","18":"['Study', 'Technology', 'Overwhelmed']","19":"0.5000"},{"1":"2022-05-16","2":"5","3":"2.6","4":"71","5":"154","6":"0","7":"0","8":"2","9":"2","10":"0","11":"3","12":"30","13":"0.00","14":"4","15":"2","16":"48.98","17":"9","18":"['Exam', 'Unmotivated', 'Overwhelmed']","19":"0.5556"},{"1":"2022-05-17","2":"4","3":"2.8","4":"72","5":"100","6":"0","7":"0","8":"3","9":"3","10":"0","11":"3","12":"-60","13":"0.00","14":"2","15":"3","16":"57.71","17":"8","18":"['Exam', 'Project', 'Netflix']","19":"0.5000"},{"1":"2022-05-18","2":"3","3":"3.4","4":"75","5":"158","6":"0","7":"0","8":"3","9":"3","10":"0","11":"4","12":"60","13":"0.00","14":"3","15":"4","16":"40.45","17":"7","18":"['Exam', 'Data Analytics', 'Relax']","19":"0.4286"},{"1":"2022-05-21","2":"6","3":"2.8","4":"76","5":"230","6":"1","7":"0","8":"3","9":"3","10":"0","11":"2","12":"150","13":"0.00","14":"4","15":"2","16":"34.37","17":"10","18":"['Movies', 'Relax', 'Coding']","19":"0.6000"},{"1":"2022-05-22","2":"3","3":"1.8","4":"53","5":"433","6":"1","7":"0","8":"2","9":"2","10":"0","11":"2","12":"120","13":"0.00","14":"2","15":"1","16":"24.97","17":"7","18":"['Technology', 'instagram', 'Coding']","19":"0.4286"},{"1":"2022-05-23","2":"9","3":"4.2","4":"74","5":"245","6":"1","7":"15","8":"4","9":"4","10":"13","11":"4","12":"164","13":"0.00","14":"5","15":"4","16":"65.42","17":"10","18":"['Coding', 'Python', 'Productive']","19":"0.9000"},{"1":"2022-05-24","2":"4","3":"3.4","4":"64","5":"332","6":"0","7":"0","8":"3","9":"4","10":"0","11":"4","12":"-7","13":"0.00","14":"4","15":"2","16":"50.92","17":"7","18":"['Exercise', 'Coding', 'SQL']","19":"0.5714"},{"1":"2022-05-25","2":"4","3":"3.6","4":"211","5":"282","6":"0","7":"0","8":"4","9":"4","10":"0","11":"4","12":"-75","13":"0.00","14":"4","15":"2","16":"53.42","17":"7","18":"['Drink', 'Travel', 'SQL']","19":"0.5714"},{"1":"2022-05-31","2":"8","3":"2.6","4":"114","5":"495","6":"1","7":"15","8":"3","9":"3","10":"23","11":"2","12":"-60","13":"1.13","14":"4","15":"1","16":"77.38","17":"10","18":"['Job Search/Interview', 'Coding', 'Technology']","19":"0.8000"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><br></p>
+</div>
+<div id="correlations" class="section level2">
+<h2>Correlations</h2>
+<hr />
+<pre class="r"><code>correlation_plot &lt;- month_dat %&gt;%
+  select(c(Multiple, Screen_time, Drink, Meditation, 
+           Mentality, Reading, Rise_time, Run, 
+           Productivity, Satisfaction, Social, Tech, Total))
+
+pairs.panels(correlation_plot, lm = TRUE)</code></pre>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="864" /></p>
+<p><br></p>
+</div>
+<div id="visualizations" class="section level2">
+<h2>Visualizations</h2>
+<hr />
+<pre class="r"><code>ggplot(data = month_dat, aes(x = Date, y = Total)) +
+  geom_line(aes(color = &#39;red&#39;)) +
+  geom_smooth(color = &#39;red&#39;, se=) + 
+  theme(legend.position = &quot;None&quot;) +
+  ylim(0,100) +
+  labs(title = paste0(month.abb[previous_month], &quot;: Daily Total Trend&quot;),
+       subtitle = paste0(&quot;Total AVG: &quot;, as.character(round(mean(month_dat$Total), 2))))</code></pre>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<br></p>
+</div>
+<div id="productivity" class="section level2">
+<h2>Productivity</h2>
+<pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) +
+  geom_bar(aes(x = Productivity, fill = Tech)) +
+  guides(fill=guide_legend(title=&quot;Tech Consumption\n1: Worst, 5: Best&quot;)) +
+  labs(title = &quot;ALL Data: Productivity &amp; Tech Consumption\n&quot;)
+
+
+g2 &lt;- ggplot(data = month_dat) +
+  geom_bar(aes(x = Productivity, fill = Tech)) +
+  guides(fill=guide_legend(title=&quot;Tech Consumption\n1: Worst, 5: Best&quot;)) +
+  labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption\n&quot;))
+
+grid.arrange(g1, g2, ncol = 2)</code></pre>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="960" /></p>
+<p><br></p>
+<pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) + 
+    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+              se = F) +
+  labs(title = &quot;ALL Data: Productivity &amp; Tech Consumption&quot;)
+g2 &lt;- ggplot(data = month_dat) + 
+    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+              se = F) +
+  labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption&quot;))
+
+grid.arrange(g1, g2, ncol = 2)</code></pre>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
 </div>
 </div>
 

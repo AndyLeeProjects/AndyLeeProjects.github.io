@@ -10,6 +10,11 @@ output: html_document
 
 ```{r, include=FALSE}
 library(lubridate)
+library(ggthemes)
+library(tidyverse)
+library(psych)
+library(gridExtra)
+theme_set(theme_classic())
 
 cur_month = month(Sys.Date())
 if (nchar(cur_month - 1) == 1 & cur_month != 1){
@@ -29,7 +34,6 @@ cur_year_str = paste0('/',cur_year)
 # **`r paste0(month.abb[previous_month], ' ', cur_year)`**
 
 ```{r setup, include=FALSE}
-library(tidyverse)
 library(lubridate)
 library(tm)
 library(wordcloud)
@@ -38,11 +42,7 @@ library(ggwordcloud)
 
 <br>  
 
-## Monthly Evaluation  
-
----  
-
-![](`r paste0(month.abb[previous_month], cur_year)`.jpg)
+![](`r paste0('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/monthly_eval_images/', month.abb[previous_month], cur_year)`.jpg)
 
 <br>  
 
@@ -66,6 +66,16 @@ all_dat <- all_dat %>%
   dplyr::filter(Multiple < 6) %>%
   tibble()
 
+all_dat_modified <- all_dat %>%
+  filter(Social != 0) %>%
+  mutate(Date = mdy(Date),
+         Tech = as.factor(Tech),
+         Productivity = as.factor(Productivity),
+         Satisfaction = as.factor(Satisfaction),
+         Social = as.factor(Social)) 
+  
+  
+
 all_dat$Date[1:length(all_dat$Date)] = format(mdy(all_dat$Date[1:length(all_dat$Date)]),"%m/%d/%Y")
 
 ```
@@ -77,8 +87,8 @@ cur_year = paste0('/',year(Sys.Date()))
 
 words_dat <- all_dat %>%
   select(Key_words, Date) %>%
-  filter(startsWith(Date, previous_month_str) == TRUE)  %>%
-  filter(endsWith(Date, cur_year) == TRUE) %>%
+  filter(startsWith(Date, previous_month_str) == TRUE &
+         endsWith(Date, cur_year) == TRUE) %>%
   filter(Key_words != 0 & Key_words != '' & Key_words != '[]') %>%
   mutate(Key_words = gsub('[\']','',Key_words),
          Key_words = gsub('[\\[]','',Key_words),
@@ -104,5 +114,93 @@ wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,
           max.words=70, random.order=FALSE, rot.per=0.35,            
           colors=brewer.pal(8, "Dark2"))
 
+```
+
+<br>  
+
+## Monthly Evaluation  
+
+---  
+
+
+```{r, warning=FALSE, message=FALSE}
+month_dat <- all_dat %>%
+  filter(startsWith(Date, previous_month_str) == TRUE &
+         endsWith(Date, cur_year) == TRUE) %>%
+  mutate(Date = mdy(Date),
+         Tech = as.factor(Tech),
+         Productivity = as.factor(Productivity),
+         Satisfaction = as.factor(Satisfaction),
+         Social = as.factor(Social)) 
+
+rmarkdown::paged_table(month_dat)
+```
+
+<br>  
+
+## Correlations  
+
+---  
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 9, fig.height = 5, fig.asp = .75,  warning = FALSE}
+
+correlation_plot <- month_dat %>%
+  select(c(Multiple, Screen_time, Drink, Meditation, 
+           Mentality, Reading, Rise_time, Run, 
+           Productivity, Satisfaction, Social, Tech, Total))
+
+pairs.panels(correlation_plot, lm = TRUE)
+
+```
+
+<br>  
+
+
+## Visualizations  
+
+---  
+
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(data = month_dat, aes(x = Date, y = Total)) +
+  geom_line(aes(color = 'red')) +
+  geom_smooth(color = 'red', se=) + 
+  theme(legend.position = "None") +
+  ylim(0,100) +
+  labs(title = paste0(month.abb[previous_month], ": Daily Total Trend"),
+       subtitle = paste0("Total AVG: ", as.character(round(mean(month_dat$Total), 2))))
+```
+<br>  
+
+## Productivity
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE}
+g1 <- ggplot(data = all_dat_modified) +
+  geom_bar(aes(x = Productivity, fill = Tech)) +
+  guides(fill=guide_legend(title="Tech Consumption\n1: Worst, 5: Best")) +
+  labs(title = "ALL Data: Productivity & Tech Consumption\n")
+
+
+g2 <- ggplot(data = month_dat) +
+  geom_bar(aes(x = Productivity, fill = Tech)) +
+  guides(fill=guide_legend(title="Tech Consumption\n1: Worst, 5: Best")) +
+  labs(title = paste0(month.abb[previous_month], " Data: Productivity & Tech Consumption\n"))
+
+grid.arrange(g1, g2, ncol = 2)
+```
+
+<br>  
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
+g1 <- ggplot(data = all_dat_modified) + 
+    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+              se = F) +
+  labs(title = "ALL Data: Productivity & Tech Consumption")
+g2 <- ggplot(data = month_dat) + 
+    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+              se = F) +
+  labs(title = paste0(month.abb[previous_month], " Data: Productivity & Tech Consumption"))
+
+grid.arrange(g1, g2, ncol = 2)
 ```
 
