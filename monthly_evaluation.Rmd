@@ -8,7 +8,6 @@ output: html_document
 <br>  
 
 ```{r setup, include=FALSE}
-library(lubridate)
 library(tm)
 library(wordcloud)
 library(ggwordcloud)
@@ -16,8 +15,9 @@ library(lubridate)
 library(ggthemes)
 library(psych)
 library(gridExtra)
-theme_set(theme_classic())
+library(lubridate)
 library(tidyverse)
+theme_set(theme_classic())
 ```
 
 
@@ -79,25 +79,12 @@ all_dat_modified <- all_dat %>%
 all_dat$Date[1:length(all_dat$Date)] = format(mdy(all_dat$Date[1:length(all_dat$Date)]),"%m/%d/%Y")
 
 morning_rt <- morning_rt %>%
-  dplyr::mutate(Date = strptime(as.character(morning_rt$Date), "%m/%d/%Y"),
-         Date = format(Date, "%m/%d/%Y"),
+  dplyr::mutate(Date = mdy(Date),
          morning_phone = rise_time_check, # modify column name 
          night_phone = before_sleep_check) %>%
   dplyr::select(Date, everything(), -c(X, level_0, index, 
                                 rise_time_check, before_sleep_check)) %>%
   tibble()
-
-# merge morning_rt with all_dat
-all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
-  dplyr::mutate(Date = mdy(Date),
-         work_finished_mr_exc = 
-           round((Finished-total_checked)/(Total_todo-6),4)) %>%
-            # work_finished_mr_exc: this variable excludes morning routine 
-            #         tasks for more accurate statistical analysis. 
-  
-  dplyr::select(-c(rise_time_min)) %>% # redundant
-  dplyr::filter(work_finished_mr_exc <= 1 & work_finished_mr_exc >0) %>%
-  arrange(desc(Date))
 
 ```
 
@@ -145,7 +132,7 @@ wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,
 
 
 ```{r, warning=FALSE, message=FALSE}
-month_dat <- all_morning_rt %>%
+month_dat <- all_dat %>%
   filter(startsWith(Date, previous_month_str) == TRUE &
          endsWith(Date, cur_year) == TRUE) %>%
   mutate(Date = mdy(Date),
@@ -153,6 +140,13 @@ month_dat <- all_morning_rt %>%
          Productivity = as.factor(Productivity),
          Satisfaction = as.factor(Satisfaction),
          Social = as.factor(Social)) 
+
+# merge morning_rt with all_dat
+month_dat <- merge(month_dat, morning_rt,by="Date", all.x=T) %>%
+  select(-c(rise_time_min)) %>% # redundant
+  filter(!is.na(total_checked)) %>%
+  arrange(Date) %>%
+  tibble()
 
 rmarkdown::paged_table(month_dat)
 ```
@@ -167,7 +161,8 @@ rmarkdown::paged_table(month_dat)
 
 correlation_plot <- month_dat %>%
   select(c(Screen_time, Drink, Meditation, 
-           Reading, Rise_time, Run, Multiple, work_finished))
+           Reading, Rise_time, Multiple, work_finished,
+           night_phone, morning_phone))
 
 pairs.panels(correlation_plot, lm = TRUE)
 
