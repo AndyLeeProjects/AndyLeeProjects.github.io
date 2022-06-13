@@ -14,7 +14,7 @@
 
 <title>Self-Evaluation Project</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -68,6 +68,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -88,6 +89,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -313,7 +317,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -326,7 +330,7 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Projects
      
     <span class="caret"></span>
@@ -712,7 +716,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.54869039","3":"0.52425865","4":"0.5731221","5":"0.012437413","6":"44.11612","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01977206","3":"0.01758113","4":"0.0219630","5":"0.001115334","6":"17.72747","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.54868078","3":"0.5242679","4":"0.57309367","5":"0.012427869","6":"44.14923","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01979001","3":"0.0176024","4":"0.02197763","5":"0.001113647","6":"17.77045","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Meditation, y=work_finished))+
@@ -729,7 +733,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8796288093","3":"0.8405996358","4":"0.9186579828","5":"0.0198684947","6":"44.272544","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007194009","3":"-0.0008717888","4":"-0.0005670129","5":"0.0000775758","6":"-9.273522","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8797803246","3":"0.8407460710","4":"0.9188145782","5":"1.987116e-02","6":"44.27422","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007181419","3":"-0.0008705363","4":"-0.0005657474","5":"7.757942e-05","6":"-9.25686","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
@@ -767,7 +771,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.5911689617","3":"0.4903235944","4":"0.6920143289","5":"5.132787e-02","6":"11.5175051","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003733728","3":"-0.0005019712","4":"-0.0002447743","5":"6.545353e-05","6":"-5.7043950","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0142490876","3":"0.0120565770","4":"0.0164415982","5":"1.115935e-03","6":"12.7687416","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0004001810","3":"-0.0005728939","4":"-0.0002274680","5":"8.790674e-05","6":"-4.5523356","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0002142885","3":"-0.0002832381","4":"0.0007118151","5":"2.532291e-04","6":"0.8462239","7":"0.398","8":""},{"1":"Reading","2":"0.0031408583","3":"0.0021120135","4":"0.0041697031","5":"5.236572e-04","6":"5.9979277","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0698536749","3":"-0.0951141880","4":"-0.0445931618","5":"1.285699e-02","6":"-5.4331267","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0067548006","3":"0.0014421877","4":"0.0120674135","5":"2.703992e-03","6":"2.4980844","7":"0.013","8":"*"},{"1":"Social","2":"-0.0154033886","3":"-0.0233854248","4":"-0.0074213524","5":"4.062664e-03","6":"-3.7914499","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.5916950683","3":"0.4909110129","4":"0.6924791237","5":"5.129691e-02","6":"11.5347119","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003718341","3":"-0.0005002970","4":"-0.0002433712","5":"6.538486e-05","6":"-5.6868534","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0142732141","3":"0.0120828282","4":"0.0164636001","5":"1.114859e-03","6":"12.8027061","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0004024663","3":"-0.0005749760","4":"-0.0002299566","5":"8.780372e-05","6":"-4.5837046","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0002059352","3":"-0.0002908014","4":"0.0007026717","5":"2.528282e-04","6":"0.8145261","7":"0.416","8":""},{"1":"Reading","2":"0.0031534295","3":"0.0021256934","4":"0.0041811656","5":"5.230955e-04","6":"6.0284012","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0699721851","3":"-0.0952178461","4":"-0.0447265241","5":"1.284950e-02","6":"-5.4455195","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0067321586","3":"0.0014225906","4":"0.0120417265","5":"2.702455e-03","6":"2.4911265","7":"0.013","8":"*"},{"1":"Social","2":"-0.0152077952","3":"-0.0231673623","4":"-0.0072482282","5":"4.051248e-03","6":"-3.7538545","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><br><br />

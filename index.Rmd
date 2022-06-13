@@ -47,8 +47,8 @@ cv_entries <- read_csv("resume/_content/cv_entries.csv") %>%
 
 blank_year_when_repeated <- function(cv_entry_tibble){
   cv_entry_tibble %>% 
-    dplyr::mutate(row_number = row_number()) %>% 
-    dplyr::mutate(year_begin = as.character(year_begin),
+    mutate(row_number = row_number()) %>% 
+    mutate(year_begin = as.character(year_begin),
            year_begin = case_when(
              row_number == 1 ~ year_begin,
              year_begin == lag(year_begin) ~ str_c('<span class="repeated-year">', year_begin, '</span>'),

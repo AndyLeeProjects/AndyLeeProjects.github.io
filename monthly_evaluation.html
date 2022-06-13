@@ -14,7 +14,7 @@
 
 <title>Monthly Evaluation</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
@@ -65,6 +65,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -85,6 +86,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -237,7 +241,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -250,7 +254,7 @@ $(document).ready(function () {
   <a href="index.html">Home</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Projects
      
     <span class="caret"></span>
@@ -330,7 +334,7 @@ src="monthly_eval_images/May2022.jpg" /></p>
 <pre class="r"><code>wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,           
           max.words=70, random.order=FALSE, rot.per=0.35,            
           colors=brewer.pal(8, &quot;Dark2&quot;))</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p><br></p>
 </div>
 <div id="monthly-evaluation" class="section level2">
@@ -357,9 +361,8 @@ rmarkdown::paged_table(month_dat)</code></pre>
 <h2>Correlations</h2>
 <hr />
 <pre class="r"><code>correlation_plot &lt;- month_dat %&gt;%
-  select(c(Multiple, Screen_time, Drink, Meditation, 
-           Mentality, Reading, Rise_time, Run, 
-           Productivity, Satisfaction, Social, Tech, Total))
+  select(c(Screen_time, Drink, Meditation, 
+           Reading, Rise_time, Run, Multiple, work_finished))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 <p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-6-1.png" width="864" /></p>

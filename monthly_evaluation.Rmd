@@ -7,15 +7,21 @@ output: html_document
 
 <br>  
 
-
-```{r, include=FALSE}
+```{r setup, include=FALSE}
+library(lubridate)
+library(tm)
+library(wordcloud)
+library(ggwordcloud)
 library(lubridate)
 library(ggthemes)
-library(tidyverse)
 library(psych)
 library(gridExtra)
 theme_set(theme_classic())
+library(tidyverse)
+```
 
+
+```{r, include=FALSE}
 cur_month = month(Sys.Date())
 if (nchar(cur_month - 1) == 1 & cur_month != 1){
   previous_month = cur_month - 1  
@@ -33,13 +39,6 @@ cur_year_str = paste0('/',cur_year)
 
 # **`r paste0(month.abb[previous_month], ' ', cur_year)`**
 
-```{r setup, include=FALSE}
-library(lubridate)
-library(tm)
-library(wordcloud)
-library(ggwordcloud)
-```
-
 <br>  
 
 ![](`r paste0('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/monthly_eval_images/', month.abb[previous_month], cur_year)`.jpg)
@@ -49,6 +48,7 @@ library(ggwordcloud)
 
 ```{r, include=FALSE}
 all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
+morning_rt = read.csv('/Volumes/Programming/Spring 2022/Project/morning_routine.csv')
 
 colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
                        'Screen_time','Created','Date','Drink',
@@ -77,6 +77,27 @@ all_dat_modified <- all_dat %>%
   
 
 all_dat$Date[1:length(all_dat$Date)] = format(mdy(all_dat$Date[1:length(all_dat$Date)]),"%m/%d/%Y")
+
+morning_rt <- morning_rt %>%
+  dplyr::mutate(Date = strptime(as.character(morning_rt$Date), "%m/%d/%Y"),
+         Date = format(Date, "%m/%d/%Y"),
+         morning_phone = rise_time_check, # modify column name 
+         night_phone = before_sleep_check) %>%
+  dplyr::select(Date, everything(), -c(X, level_0, index, 
+                                rise_time_check, before_sleep_check)) %>%
+  tibble()
+
+# merge morning_rt with all_dat
+all_morning_rt <- merge(morning_rt, all_dat,by="Date", all.x=T) %>%
+  dplyr::mutate(Date = mdy(Date),
+         work_finished_mr_exc = 
+           round((Finished-total_checked)/(Total_todo-6),4)) %>%
+            # work_finished_mr_exc: this variable excludes morning routine 
+            #         tasks for more accurate statistical analysis. 
+  
+  dplyr::select(-c(rise_time_min)) %>% # redundant
+  dplyr::filter(work_finished_mr_exc <= 1 & work_finished_mr_exc >0) %>%
+  arrange(desc(Date))
 
 ```
 
@@ -108,7 +129,7 @@ words_dat <- all_dat %>%
 ---  
 
 
-```{r, warning=FALSE, message=FALSE}
+```{r, echo = TRUE, eval = TRUE, fig.width = 5, fig.height = 5,  warning = FALSE, fig.align="center"}
 
 wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,           
           max.words=70, random.order=FALSE, rot.per=0.35,            
@@ -124,7 +145,7 @@ wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,
 
 
 ```{r, warning=FALSE, message=FALSE}
-month_dat <- all_dat %>%
+month_dat <- all_morning_rt %>%
   filter(startsWith(Date, previous_month_str) == TRUE &
          endsWith(Date, cur_year) == TRUE) %>%
   mutate(Date = mdy(Date),
@@ -145,9 +166,8 @@ rmarkdown::paged_table(month_dat)
 ```{r, echo = TRUE, eval = TRUE, fig.width = 9, fig.height = 5, fig.asp = .75,  warning = FALSE}
 
 correlation_plot <- month_dat %>%
-  select(c(Multiple, Screen_time, Drink, Meditation, 
-           Mentality, Reading, Rise_time, Run, 
-           Productivity, Satisfaction, Social, Tech, Total))
+  select(c(Screen_time, Drink, Meditation, 
+           Reading, Rise_time, Run, Multiple, work_finished))
 
 pairs.panels(correlation_plot, lm = TRUE)
 
