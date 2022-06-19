@@ -219,7 +219,7 @@ rmarkdown::paged_table(summary_comparison)
 
 <br>  
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 4,  warning = FALSE, message=FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 8.5,  warning = FALSE, message=FALSE}
 library(rstatix)
 
 
@@ -230,18 +230,48 @@ summary.stats <- all_dat %>%
   get_summary_stats() %>%
   rename(month = `month(Date)`,
          year = `year(Date)`) %>%
-  filter(variable %in% c('Total','Meditation', 'Reading', 'work_finished', 'Multiple')) %>%
+  filter(variable %in% c('Total','Meditation', 'Reading', 'work_finished',
+                         'Productivity', 'Mentality', 'Satisfaction', 'Tech', 'Social',
+                         'Screen_time')) %>%
   filter((month %in% previous_3 | month == previous_month) & year == cur_year) %>%
   select(month, variable, n, median, mean, sd)
 
 grading = c("Total", "work_finished")
+multiple = c('Productivity', 'Mentality', 'Satisfaction', 'Tech', 'Social')
 
-g1 <- ggplot(filter(summary.stats, !variable %in% grading)) +
-        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge")
-g2 <- ggplot(filter(summary.stats, variable %in% grading)) +
-        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge")
 
-grid.arrange(g1, g2, ncol = 2)
+g1 <- ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
+        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge") +
+        ylim(0,100) + 
+        labs(title = "Total & Work Finished Comparison",
+             subtitle = "Demonstrates Productivity Level & Overall Percentage\n")+
+        scale_fill_manual(values = c("#FBBC97", "#BEC5D6"))
+
+g2 <- ggplot(filter(summary.stats, !variable %in% grading & !variable %in% multiple &
+                      variable != "Screen_time")) +
+        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge") +
+        labs(title = "Meditation, Multiple, Reading Comparison",
+             subtitle = "Average minutes in Meditation & Reading") 
+
+g3 <- ggplot(filter(summary.stats, variable %in% multiple)) +
+        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge") +
+        ylim(0,5) + 
+        labs(title = "Subjective Evaluation - Bar",
+             subtitle = "1: Worst\n5: Best\n")
+
+g4 <- ggplot(filter(summary.stats, variable %in% multiple)) +
+        geom_smooth(aes(x = month, y = mean, group = variable, color = variable), position = "dodge") +
+        labs(title = "Subjective Evaluation - Line",
+             subtitle = "1: Worst\n5: Best\n")
+
+g5 <- ggplot(filter(summary.stats, variable == "Screen_time")) +
+        geom_smooth(aes(x = month, y = mean, group = variable, color = variable)) +
+        labs(title = "Screen time (min)",
+             subtitle = "Lower Screen time helps achieve higher productivity level") + 
+        theme(legend.position = "None")
+
+  
+grid.arrange(g1, g2, g3, g4, g5,  ncol = 2, nrow = 3)
 ```
 
 <br>  
@@ -260,15 +290,27 @@ comparison_month <- merge(comparison_month, morning_rt,by="Date", all.x=T) %>%
   tibble()
 
 ggplot() +
-  geom_line(data = comparison_month, aes(x = day(Date), y = Total, color = 'Preceding Month'), alpha = .3) +
-  geom_line(data = month_dat, aes(x = day(Date), y = Total, color = paste0('Month_',previous_month)), alpha = .3) +
-  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, color = 'Preceding Month'), 
-               se = F, size = 1.5, alpha = .2) +
-  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, color = paste0('Month_',previous_month)), 
+  geom_line(data = comparison_month, aes(x = day(Date), y = Total, 
+                                   color = paste0('Month_', pprevious_month)), 
+            alpha = .3) +
+  geom_line(data = month_dat, aes(x = day(Date), y = Total, 
+                                   color = paste0('Month_',previous_month)), 
+            alpha = .3) +
+  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, 
+                                   color = paste0('Month_', pprevious_month)), 
+              se = F, size = 1.5, alpha = .2) +
+  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, 
+                                   color = paste0('Month_',previous_month)), 
               se = F,size = 1.5, alpha = .2) + 
   ylim(0,100) +
   labs(title = paste0("DAILY TREND: ", month.abb[previous_month], " vs Preceding Month\n"),
-       subtitle = paste0(month.abb[previous_month], " AVG: ", as.character(round(mean(month_dat$Total), 2)), '\nPreceding Month AVG: ', round(mean(comparison_month$Total),2)),
+       subtitle = paste0(month.abb[pprevious_month], 
+                         " AVG: ", 
+                         as.character(round(mean(comparison_month$Total),2)),
+                         "\n",
+                         month.abb[previous_month], 
+                         " AVG: ", 
+                         as.character(round(mean(month_dat$Total), 2))),
        color = "Legend",
        x = "Day", y = "Total %")
 ```
