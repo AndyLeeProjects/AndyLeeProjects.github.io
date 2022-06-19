@@ -34,6 +34,9 @@ if (nchar(cur_month - 1) == 1 & cur_month != 1){
   previous_month_str = paste0(previous_month, '/')
 }
 cur_year = year(Sys.Date())
+if(cur_month == 1){
+  cur_year = cur_year - 1
+}
 cur_year_str = paste0('/',cur_year)
 ```
 
@@ -79,10 +82,10 @@ all_dat_modified <- all_dat %>%
 all_dat$Date[1:length(all_dat$Date)] = format(mdy(all_dat$Date[1:length(all_dat$Date)]),"%m/%d/%Y")
 
 morning_rt <- morning_rt %>%
-  dplyr::mutate(Date = mdy(Date),
+  mutate(Date = mdy(Date),
          morning_phone = rise_time_check, # modify column name 
          night_phone = before_sleep_check) %>%
-  dplyr::select(Date, everything(), -c(X, level_0, index, 
+  select(Date, everything(), -c(X, level_0, index, 
                                 rise_time_check, before_sleep_check)) %>%
   tibble()
 
@@ -90,13 +93,10 @@ morning_rt <- morning_rt %>%
 
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
-cur_year = paste0('/',year(Sys.Date()))
-
-
 words_dat <- all_dat %>%
   select(Key_words, Date) %>%
   filter(startsWith(Date, previous_month_str) == TRUE &
-         endsWith(Date, cur_year) == TRUE) %>%
+         endsWith(Date, cur_year_str) == TRUE) %>%
   filter(Key_words != 0 & Key_words != '' & Key_words != '[]') %>%
   mutate(Key_words = gsub('[\']','',Key_words),
          Key_words = gsub('[\\[]','',Key_words),
@@ -126,15 +126,10 @@ wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,
 
 <br>  
 
-## Monthly Evaluation  
-
----  
-
-
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, include=FALSE}
 month_dat <- all_dat %>%
   filter(startsWith(Date, previous_month_str) == TRUE &
-         endsWith(Date, cur_year) == TRUE) %>%
+         endsWith(Date, cur_year_str) == TRUE) %>%
   mutate(Date = mdy(Date),
          Tech = as.factor(Tech),
          Productivity = as.factor(Productivity),
@@ -147,47 +142,95 @@ month_dat <- merge(month_dat, morning_rt,by="Date", all.x=T) %>%
   filter(!is.na(total_checked)) %>%
   arrange(Date) %>%
   tibble()
-
-rmarkdown::paged_table(month_dat)
 ```
+
 
 <br>  
-
-## Correlations  
-
----  
-
-```{r, echo = TRUE, eval = TRUE, fig.width = 9, fig.height = 5, fig.asp = .75,  warning = FALSE}
-
-correlation_plot <- month_dat %>%
-  select(c(Screen_time, Drink, Meditation, 
-           Reading, Rise_time, Multiple, work_finished,
-           night_phone, morning_phone))
-
-pairs.panels(correlation_plot, lm = TRUE)
-
-```
-
 <br>  
 
 
-## Visualizations  
+## Past 3 Months VS `r paste0(month.abb[previous_month])`  
 
 ---  
+
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+if(previous_month <= 12){
+  previous_3 = (previous_month - 3):(previous_month - 1)
+}else if(previous_month == 1){
+  previous_3 = 10:12
+}else if(previous_month == 2){
+  previous_3 = c(11,12,1)
+}else if(previous_month == 3){
+  previous_3 = c(12,1,2)
+}
+  
+
+previous3_summary <- as.data.frame(all_dat %>%
+  mutate(Date = mdy(Date)) %>%
+  filter(month(Date) %in% previous_3 & year(Date) == cur_year) %>%
+  summarise(Total_avg = mean(Total),
+            Meditation_avg = mean(Meditation),
+            Reading_avg = mean(Reading),
+            work_finished_avg = mean(work_finished),
+            Multiple_avg = mean(Multiple)))
+
+rownames(previous3_summary) <- "Previous_3_months"
+
+month_summary <- as.data.frame(month_dat %>%
+  summarise(Total_avg = mean(Total),
+          Meditation_avg = mean(Meditation),
+          Reading_avg = mean(Reading),
+          work_finished_avg = mean(work_finished),
+          Multiple_avg = mean(Multiple)))
+
+rownames(month_summary) <- paste0("month_",previous_month)
+
+summary_comparison = rbind(previous3_summary, month_summary)
+rmarkdown::paged_table(summary_comparison)
+
+```
+
+<br>  
 
 
 ```{r, warning=FALSE, message=FALSE}
-ggplot(data = month_dat, aes(x = Date, y = Total)) +
-  geom_line(aes(color = 'red')) +
-  geom_smooth(color = 'red', se=) + 
+pprevious_month = previous_month - 1
+if(pprevious_month == 0){
+  pprevious_month = 12
+}
+
+comparison_month = all_dat %>%
+  mutate(Date = mdy(Date)) %>%
+  filter((month(Date) == pprevious_month & year(Date) == cur_year))
+
+
+comparison_month <- merge(comparison_month, morning_rt,by="Date", all.x=T) %>%
+  select(-c(rise_time_min)) %>% # redundant
+  filter(!is.na(total_checked)) %>%
+  arrange(Date) %>%
+  tibble()
+
+comp_dat <- rbind(comparison_month, month_dat) %>%
+  mutate(month = month(Date),
+         day = day(Date))
+
+colors = c("red", "blue")
+
+ggplot() +
+  geom_line(data = comparison_month, aes(x = day(Date), y = Total, color = 'red')) +
+  geom_line(data = month_dat, aes(x = day(Date), y = Total, color = 'blue')) +
+  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, color = 'red'), alpha = .2) +
+  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, color = 'blue'), alpha = .2) + 
   theme(legend.position = "None") +
   ylim(0,100) +
   labs(title = paste0(month.abb[previous_month], ": Daily Total Trend"),
        subtitle = paste0("Total AVG: ", as.character(round(mean(month_dat$Total), 2))))
 ```
+
+
 <br>  
 
-## Productivity
 
 ```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE}
 g1 <- ggplot(data = all_dat_modified) +
@@ -219,3 +262,21 @@ g2 <- ggplot(data = month_dat) +
 grid.arrange(g1, g2, ncol = 2)
 ```
 
+
+
+<br>  
+
+## Correlations  
+
+---  
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 9, fig.height = 5, fig.asp = .75,  warning = FALSE}
+
+correlation_plot <- month_dat %>%
+  select(c(Screen_time, Drink, Meditation, 
+           Reading, Rise_time, Multiple, work_finished,
+           night_phone, morning_phone))
+
+pairs.panels(correlation_plot, lm = TRUE)
+
+```
