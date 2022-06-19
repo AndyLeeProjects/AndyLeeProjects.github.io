@@ -326,7 +326,7 @@ $(document).ready(function () {
 <h1><strong>May 2022</strong></h1>
 <p><br></p>
 <p><img
-src="/Volumes/Programming/Spring%202022/DANL%20310/my_website/aLin-96.github.io/monthly_eval_images/May2022.jpg" /></p>
+src="monthly_eval_images/May2022.jpg" /></p>
 <p><br></p>
 <div id="world-cloud" class="section level2">
 <h2>World Cloud</h2>
@@ -348,39 +348,9 @@ src="/Volumes/Programming/Spring%202022/DANL%20310/my_website/aLin-96.github.io/
   </script>
 </div>
 <p><br></p>
-<pre class="r"><code>pprevious_month = previous_month - 1
-if(pprevious_month == 0){
-  pprevious_month = 12
-}
-
-comparison_month = all_dat %&gt;%
-  mutate(Date = mdy(Date)) %&gt;%
-  filter((month(Date) == pprevious_month &amp; year(Date) == cur_year))
-
-
-comparison_month &lt;- merge(comparison_month, morning_rt,by=&quot;Date&quot;, all.x=T) %&gt;%
-  select(-c(rise_time_min)) %&gt;% # redundant
-  filter(!is.na(total_checked)) %&gt;%
-  arrange(Date) %&gt;%
-  tibble()
-
-comp_dat &lt;- rbind(comparison_month, month_dat) %&gt;%
-  mutate(month = month(Date),
-         day = day(Date))
-
-colors = c(&quot;red&quot;, &quot;blue&quot;)
-
-ggplot() +
-  geom_line(data = comparison_month, aes(x = day(Date), y = Total, color = &#39;red&#39;)) +
-  geom_line(data = month_dat, aes(x = day(Date), y = Total, color = &#39;blue&#39;)) +
-  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, color = &#39;red&#39;), alpha = .2) +
-  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, color = &#39;blue&#39;), alpha = .2) + 
-  theme(legend.position = &quot;None&quot;) +
-  ylim(0,100) +
-  labs(title = paste0(month.abb[previous_month], &quot;: Daily Total Trend&quot;),
-       subtitle = paste0(&quot;Total AVG: &quot;, as.character(round(mean(month_dat$Total), 2))))</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="960" /></p>
 <p><br></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="960" /></p>
 <pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) +
   geom_bar(aes(x = Productivity, fill = Tech)) +
   guides(fill=guide_legend(title=&quot;Tech Consumption\n1: Worst, 5: Best&quot;)) +
@@ -393,7 +363,7 @@ g2 &lt;- ggplot(data = month_dat) +
   labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption\n&quot;))
 
 grid.arrange(g1, g2, ncol = 2)</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="960" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
 <p><br></p>
 <pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) + 
     geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
@@ -405,7 +375,7 @@ g2 &lt;- ggplot(data = month_dat) +
   labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption&quot;))
 
 grid.arrange(g1, g2, ncol = 2)</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="960" /></p>
 <p><br></p>
 </div>
 <div id="correlations" class="section level2">
@@ -417,7 +387,7 @@ grid.arrange(g1, g2, ncol = 2)</code></pre>
            night_phone, morning_phone))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="864" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="864" /></p>
 </div>
 </div>
 

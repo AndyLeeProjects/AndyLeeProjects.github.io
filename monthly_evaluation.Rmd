@@ -194,7 +194,7 @@ rmarkdown::paged_table(summary_comparison)
 <br>  
 
 
-```{r, warning=FALSE, message=FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
 pprevious_month = previous_month - 1
 if(pprevious_month == 0){
   pprevious_month = 12
@@ -204,32 +204,45 @@ comparison_month = all_dat %>%
   mutate(Date = mdy(Date)) %>%
   filter((month(Date) == pprevious_month & year(Date) == cur_year))
 
-
 comparison_month <- merge(comparison_month, morning_rt,by="Date", all.x=T) %>%
   select(-c(rise_time_min)) %>% # redundant
   filter(!is.na(total_checked)) %>%
   arrange(Date) %>%
   tibble()
 
-comp_dat <- rbind(comparison_month, month_dat) %>%
-  mutate(month = month(Date),
-         day = day(Date))
-
-colors = c("red", "blue")
-
 ggplot() +
-  geom_line(data = comparison_month, aes(x = day(Date), y = Total, color = 'red')) +
-  geom_line(data = month_dat, aes(x = day(Date), y = Total, color = 'blue')) +
-  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, color = 'red'), alpha = .2) +
-  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, color = 'blue'), alpha = .2) + 
-  theme(legend.position = "None") +
+  geom_line(data = comparison_month, aes(x = day(Date), y = Total, color = 'Preceding Month'), alpha = .3) +
+  geom_line(data = month_dat, aes(x = day(Date), y = Total, color = paste0('Month_',previous_month)), alpha = .3) +
+  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, color = 'Preceding Month'), 
+               se = F, size = 1.5, alpha = .2) +
+  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, color = paste0('Month_',previous_month)), 
+              se = F,size = 1.5, alpha = .2) + 
   ylim(0,100) +
-  labs(title = paste0(month.abb[previous_month], ": Daily Total Trend"),
-       subtitle = paste0("Total AVG: ", as.character(round(mean(month_dat$Total), 2))))
+  labs(title = paste0("DAILY TREND: ", month.abb[previous_month], " vs Preceding Month\n"),
+       subtitle = paste0(month.abb[previous_month], " AVG: ", as.character(round(mean(month_dat$Total), 2)), '\nPreceding Month AVG: ', round(mean(comparison_month$Total),2)),
+       color = "Legend",
+       x = "Day", y = "Total %")
 ```
 
 
 <br>  
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
+
+    
+all_dat %>% 
+        mutate(Date = mdy(Date)) %>%
+        filter((month(Date) %in% previous_3 | month(Date) == previous_month) & 
+                 year(Date) == cur_year) %>%
+  ggplot()+
+    geom_line(aes(x = Date, y = Total)) +
+    geom_smooth(aes(x = Date, y = Total, color = "red"), alpha = .2) + 
+  geom_smooth(aes(x = Date, y = Total, color = "red"), method = "lm", linetype = "dashed", se = F) + 
+  labs(title = "TIME SERIES: Past 4 Months\n") +
+  theme(legend.position = "None")
+
+```
+
 
 
 ```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE}
