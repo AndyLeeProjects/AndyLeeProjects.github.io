@@ -63,7 +63,7 @@ colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
 # Remove unnecessary columns & Modify some columns
 all_dat <- all_dat %>%
   dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
-  dplyr::mutate(work_finished = round(Finished/Total_todo,4),
+  dplyr::mutate(work_finished = round(Finished/Total_todo,4)*100,
                 Drink = lag(Drink),
                 Total = Total*100) %>%
   dplyr::filter(Multiple < 6) %>%
@@ -76,8 +76,6 @@ all_dat_modified <- all_dat %>%
          Productivity = as.factor(Productivity),
          Satisfaction = as.factor(Satisfaction),
          Social = as.factor(Social)) 
-  
-  
 
 all_dat$Date[1:length(all_dat$Date)] = format(mdy(all_dat$Date[1:length(all_dat$Date)]),"%m/%d/%Y")
 
@@ -105,7 +103,7 @@ words_dat <- all_dat %>%
   pivot_longer(cols = starts_with("word"), names_to = 'word_num', values_to = 'words') %>%
   mutate(words = gsub(" ", "", words)) %>%
   group_by(words) %>%
-  summarise(freq = n())
+  dplyr::summarise(freq = n())
 
 
 ```
@@ -149,12 +147,13 @@ month_dat <- merge(month_dat, morning_rt,by="Date", all.x=T) %>%
 <br>  
 
 
-## Past 3 Months VS `r paste0(month.abb[previous_month])`  
+## `r paste0(month.abb[previous_month])` vs Other Months
 
 ---  
 
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
+# Get past 3 preceding months
 if(previous_month <= 12){
   previous_3 = (previous_month - 3):(previous_month - 1)
 }else if(previous_month == 1){
@@ -164,42 +163,92 @@ if(previous_month <= 12){
 }else if(previous_month == 3){
   previous_3 = c(12,1,2)
 }
-  
 
+# Get preceding month
+pprevious_month = previous_3[3]
+
+# Fill Na's
+all_dat[is.na(all_dat)] = 0
+
+
+# Summary: ALL_dat (AVG)
+all_summary <- as.data.frame(all_dat %>%
+  dplyr::summarise(Total_avg = mean(Total),
+            Meditation_avg = mean(Meditation),
+            Reading_avg = mean(Reading),
+            work_finished_avg = mean(work_finished),
+            Multiple_avg = mean(Multiple)))
+  
+# Summary: 3 preceding months (AVG)
 previous3_summary <- as.data.frame(all_dat %>%
   mutate(Date = mdy(Date)) %>%
   filter(month(Date) %in% previous_3 & year(Date) == cur_year) %>%
-  summarise(Total_avg = mean(Total),
+  dplyr::summarise(Total_avg = mean(Total),
             Meditation_avg = mean(Meditation),
             Reading_avg = mean(Reading),
             work_finished_avg = mean(work_finished),
             Multiple_avg = mean(Multiple)))
 
-rownames(previous3_summary) <- "Previous_3_months"
+# Summary: 1 preceding month (AVG)
+preced_month_summary <- as.data.frame(all_dat %>%
+  mutate(Date = mdy(Date)) %>%
+  filter(month(Date) == pprevious_month & year(Date) == cur_year) %>%
+  dplyr::summarise(Total_avg = mean(Total),
+            Meditation_avg = mean(Meditation),
+            Reading_avg = mean(Reading),
+            work_finished_avg = mean(work_finished),
+            Multiple_avg = mean(Multiple)))
 
+# Summary: previous month (AVG)
 month_summary <- as.data.frame(month_dat %>%
-  summarise(Total_avg = mean(Total),
+  dplyr::summarise(Total_avg = mean(Total),
           Meditation_avg = mean(Meditation),
           Reading_avg = mean(Reading),
           work_finished_avg = mean(work_finished),
           Multiple_avg = mean(Multiple)))
 
+rownames(all_summary) <- "All_Data"
+rownames(previous3_summary) <- "Previous_3_months"
+rownames(preced_month_summary) <- paste0("month_",pprevious_month)
 rownames(month_summary) <- paste0("month_",previous_month)
 
-summary_comparison = rbind(previous3_summary, month_summary)
+summary_comparison = rbind(all_summary,previous3_summary, preced_month_summary, month_summary)
 rmarkdown::paged_table(summary_comparison)
 
 ```
 
 <br>  
 
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 4,  warning = FALSE, message=FALSE}
+library(rstatix)
+
+
+summary.stats <- all_dat %>%
+  mutate(Date = mdy(Date),
+         work_finished = work_finished) %>%
+  group_by(month(Date), year(Date)) %>%
+  get_summary_stats() %>%
+  rename(month = `month(Date)`,
+         year = `year(Date)`) %>%
+  filter(variable %in% c('Total','Meditation', 'Reading', 'work_finished', 'Multiple')) %>%
+  filter((month %in% previous_3 | month == previous_month) & year == cur_year) %>%
+  select(month, variable, n, median, mean, sd)
+
+grading = c("Total", "work_finished")
+
+g1 <- ggplot(filter(summary.stats, !variable %in% grading)) +
+        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge")
+g2 <- ggplot(filter(summary.stats, variable %in% grading)) +
+        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge")
+
+grid.arrange(g1, g2, ncol = 2)
+```
+
+<br>  
+
+
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
-pprevious_month = previous_month - 1
-if(pprevious_month == 0){
-  pprevious_month = 12
-}
-
 comparison_month = all_dat %>%
   mutate(Date = mdy(Date)) %>%
   filter((month(Date) == pprevious_month & year(Date) == cur_year))

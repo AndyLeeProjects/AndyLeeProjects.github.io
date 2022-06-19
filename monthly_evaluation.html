@@ -339,18 +339,20 @@ src="monthly_eval_images/May2022.jpg" /></p>
 <p><br><br />
 <br></p>
 </div>
-<div id="past-3-months-vs-may" class="section level2">
-<h2>Past 3 Months VS May</h2>
+<div id="may-vs-other-months" class="section level2">
+<h2>May vs Other Months</h2>
 <hr />
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Total_avg"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Meditation_avg"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Reading_avg"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["work_finished_avg"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Multiple_avg"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"62.14000","2":"9.436782","3":"6.321839","4":"0.6610138","5":"3.119540","_rn_":"Previous_3_months"},{"1":"53.13857","2":"5.904762","3":"2.428571","4":"0.6263571","5":"2.980952","_rn_":"month_5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Total_avg"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Meditation_avg"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Reading_avg"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["work_finished_avg"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Multiple_avg"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"62.55314","2":"8.557169","3":"9.292377","4":"71.44441","5":"3.395281","_rn_":"All_Data"},{"1":"62.14000","2":"9.436782","3":"6.321839","4":"66.10138","5":"3.119540","_rn_":"Previous_3_months"},{"1":"63.57862","2":"9.689655","3":"6.551724","4":"71.35828","5":"3.206897","_rn_":"month_4"},{"1":"53.13857","2":"5.904762","3":"2.428571","4":"62.63571","5":"2.980952","_rn_":"month_5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><br></p>
 <p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-7-1.png" width="960" /></p>
 <p><br></p>
 <p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-8-1.png" width="960" /></p>
+<p><br></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
 <pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) +
   geom_bar(aes(x = Productivity, fill = Tech)) +
   guides(fill=guide_legend(title=&quot;Tech Consumption\n1: Worst, 5: Best&quot;)) +
@@ -363,7 +365,7 @@ g2 &lt;- ggplot(data = month_dat) +
   labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption\n&quot;))
 
 grid.arrange(g1, g2, ncol = 2)</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="960" /></p>
 <p><br></p>
 <pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) + 
     geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
@@ -375,7 +377,7 @@ g2 &lt;- ggplot(data = month_dat) +
   labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption&quot;))
 
 grid.arrange(g1, g2, ncol = 2)</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="960" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="960" /></p>
 <p><br></p>
 </div>
 <div id="correlations" class="section level2">
@@ -387,7 +389,7 @@ grid.arrange(g1, g2, ncol = 2)</code></pre>
            night_phone, morning_phone))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="864" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="864" /></p>
 </div>
 </div>
 
