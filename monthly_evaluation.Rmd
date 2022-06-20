@@ -219,7 +219,7 @@ rmarkdown::paged_table(summary_comparison)
 
 <br>  
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 8.5,  warning = FALSE, message=FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message=FALSE}
 library(rstatix)
 
 
@@ -238,44 +238,58 @@ summary.stats <- all_dat %>%
 
 grading = c("Total", "work_finished")
 multiple = c('Productivity', 'Mentality', 'Satisfaction', 'Tech', 'Social')
+phone = c('Screen_time')
 
 
-g1 <- ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
-        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge") +
+ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
+        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge", alpha = .7) +
+        geom_line(aes(x = month, y = mean, group = variable, color = variable)) + 
         ylim(0,100) + 
-        labs(title = "Total & Work Finished Comparison",
-             subtitle = "Demonstrates Productivity Level & Overall Percentage\n")+
-        scale_fill_manual(values = c("#FBBC97", "#BEC5D6"))
+        labs(title = "Total & Work Finished Comparison (Past 3 Months)",
+             subtitle = "Demonstrates Productivity Level(work_finished) & Overall Percentage(Total)\n")+
+        scale_fill_manual(values = c("#FBBC97", "#BEC5D6")) + 
+        scale_color_manual(values = c("#FBBC97", "#BEC5D6")) + 
+        theme(legend.position = "top", legend.title=element_blank())
 
-g2 <- ggplot(filter(summary.stats, !variable %in% grading & !variable %in% multiple &
-                      variable != "Screen_time")) +
+```
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 7.5,  warning = FALSE, message=FALSE}
+g1 <- ggplot(filter(summary.stats, !variable %in% grading & !variable %in% multiple &
+                      !variable %in% phone)) +
         geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge") +
-        labs(title = "Meditation, Multiple, Reading Comparison",
-             subtitle = "Average minutes in Meditation & Reading") 
+        labs(title = "Meditation, Reading Comparison (Past 3 Months)",
+             subtitle = "Average minutes in Meditation & Reading\n") 
+
+g2 <- ggplot(filter(summary.stats, variable %in% phone)) +
+        geom_smooth(aes(x = month, y = mean, group = variable, color = variable)) +
+        labs(title = "Screen time (min)",
+             subtitle = "Lower Screen time helps achieve higher productivity level\n") + 
+        theme(legend.position = "None")
 
 g3 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge") +
         ylim(0,5) + 
         labs(title = "Subjective Evaluation - Bar",
-             subtitle = "1: Worst\n5: Best\n")
+             subtitle = "1: Worst\n5: Best\n") + 
+        theme(legend.position="bottom", legend.title=element_blank())
 
 g4 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         geom_smooth(aes(x = month, y = mean, group = variable, color = variable), position = "dodge") +
         labs(title = "Subjective Evaluation - Line",
-             subtitle = "1: Worst\n5: Best\n")
-
-g5 <- ggplot(filter(summary.stats, variable == "Screen_time")) +
-        geom_smooth(aes(x = month, y = mean, group = variable, color = variable)) +
-        labs(title = "Screen time (min)",
-             subtitle = "Lower Screen time helps achieve higher productivity level") + 
-        theme(legend.position = "None")
+             subtitle = "1: Worst\n5: Best\n") + 
+        theme(legend.position="bottom", legend.title=element_blank())
 
   
-grid.arrange(g1, g2, g3, g4, g5,  ncol = 2, nrow = 3)
+grid.arrange(g1, g2, g3, g4,  ncol = 2)
 ```
 
 <br>  
+<br>  
 
+
+## Trends & Time Series  
+
+---  
 
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
