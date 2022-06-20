@@ -236,14 +236,17 @@ summary.stats <- all_dat %>%
   filter((month %in% previous_3 | month == previous_month) & year == cur_year) %>%
   select(month, variable, n, median, mean, sd)
 
+
+
 grading = c("Total", "work_finished")
 multiple = c('Productivity', 'Mentality', 'Satisfaction', 'Tech', 'Social')
 phone = c('Screen_time')
 
+#summary.stats$month <- factor(summary.stats$month, levels = order(summary.stats$month, decreasing = T))
 
 ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
-        geom_col(aes(x = month.abb[month], y = mean, group = variable, fill = variable), position = "dodge", alpha = .7) +
-        geom_line(aes(x = month.abb[month], y = mean, group = variable, color = variable)) + 
+        geom_col(aes(x = reorder(month.abb[month],month), y = mean, group = variable, fill = variable), position = "dodge", alpha = .7) +
+        geom_line(aes(x = reorder(month.abb[month],month), y = mean, group = variable, color = variable)) + 
         ylim(0,100) + 
         labs(title = "Total & Work Finished Comparison (Past 3 Months)",
              subtitle = "Demonstrates Productivity Level(work_finished) & Overall Percentage(Total)\n",
@@ -257,20 +260,20 @@ ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
 ```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 7.5,  warning = FALSE, message=FALSE}
 g1 <- ggplot(filter(summary.stats, !variable %in% grading & !variable %in% multiple &
                       !variable %in% phone)) +
-        geom_col(aes(x = month.abb[month], y = mean, group = variable, fill = variable), position = "dodge") +
+        geom_col(aes(x = reorder(month.abb[month],month), y = mean, group = variable, fill = variable), position = "dodge") +
         labs(title = "Meditation, Reading Comparison (Past 3 Months)",
              subtitle = "Average minutes in Meditation & Reading\n",
              x = "Month", y = "Mean") 
 
 g2 <- ggplot(filter(summary.stats, variable %in% phone)) +
-        geom_smooth(aes(x = month.abb[month], y = mean, group = variable, color = variable)) +
+        geom_smooth(aes(x = reorder(month.abb[month],month), y = mean, group = variable, color = variable)) +
         labs(title = "Screen time (min)",
              subtitle = "Lower Screen time helps achieve higher productivity level\n",
              x = "Month", y = "Mean") + 
         theme(legend.position = "None")
 
 g3 <- ggplot(filter(summary.stats, variable %in% multiple)) +
-        geom_col(aes(x = month.abb[month], y = mean, group = variable, fill = variable), position = "dodge") +
+        geom_col(aes(x = reorder(month.abb[month],month), y = mean, group = variable, fill = variable), position = "dodge") +
         ylim(0,5) + 
         labs(title = "Subjective Evaluation - Bar",
              subtitle = "1: Worst\n5: Best\n",
@@ -278,7 +281,7 @@ g3 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         theme(legend.position="bottom", legend.title=element_blank())
 
 g4 <- ggplot(filter(summary.stats, variable %in% multiple)) +
-        geom_smooth(aes(x = month.abb[month], y = mean, group = variable, color = variable), position = "dodge") +
+        geom_smooth(aes(x = reorder(month.abb[month],month), y = mean, group = variable, color = variable), position = "dodge") +
         labs(title = "Subjective Evaluation - Line",
              subtitle = "1: Worst\n5: Best\n",
              x = "Month", y = "Mean") + 
@@ -356,7 +359,7 @@ all_dat %>%
 
 
 
-```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE}
+```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, include=FALSE}
 g1 <- ggplot(data = all_dat_modified) +
   geom_bar(aes(x = Productivity, fill = Tech)) +
   guides(fill=guide_legend(title="Tech Consumption\n1: Worst, 5: Best")) +
@@ -367,21 +370,6 @@ g2 <- ggplot(data = month_dat) +
   geom_bar(aes(x = Productivity, fill = Tech)) +
   guides(fill=guide_legend(title="Tech Consumption\n1: Worst, 5: Best")) +
   labs(title = paste0(month.abb[previous_month], " Data: Productivity & Tech Consumption\n"))
-
-grid.arrange(g1, g2, ncol = 2)
-```
-
-<br>  
-
-```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
-g1 <- ggplot(data = all_dat_modified) + 
-    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
-              se = F) +
-  labs(title = "ALL Data: Productivity & Tech Consumption")
-g2 <- ggplot(data = month_dat) + 
-    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
-              se = F) +
-  labs(title = paste0(month.abb[previous_month], " Data: Productivity & Tech Consumption"))
 
 grid.arrange(g1, g2, ncol = 2)
 ```
@@ -403,4 +391,19 @@ correlation_plot <- month_dat %>%
 
 pairs.panels(correlation_plot, lm = TRUE)
 
+```
+
+<br>  
+
+```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
+g1 <- ggplot(data = all_dat_modified) + 
+    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+              se = F) +
+  labs(title = "ALL Data: Productivity & Tech Consumption")
+g2 <- ggplot(data = month_dat) + 
+    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+              se = F) +
+  labs(title = paste0(month.abb[previous_month], " Data: Productivity & Tech Consumption"))
+
+grid.arrange(g1, g2, ncol = 2)
 ```

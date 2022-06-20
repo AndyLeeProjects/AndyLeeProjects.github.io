@@ -359,31 +359,6 @@ src="monthly_eval_images/May2022.jpg" /></p>
 <p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
 <p><br></p>
 <p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-10-1.png" width="960" /></p>
-<pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) +
-  geom_bar(aes(x = Productivity, fill = Tech)) +
-  guides(fill=guide_legend(title=&quot;Tech Consumption\n1: Worst, 5: Best&quot;)) +
-  labs(title = &quot;ALL Data: Productivity &amp; Tech Consumption\n&quot;)
-
-
-g2 &lt;- ggplot(data = month_dat) +
-  geom_bar(aes(x = Productivity, fill = Tech)) +
-  guides(fill=guide_legend(title=&quot;Tech Consumption\n1: Worst, 5: Best&quot;)) +
-  labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption\n&quot;))
-
-grid.arrange(g1, g2, ncol = 2)</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-11-1.png" width="960" /></p>
-<p><br></p>
-<pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) + 
-    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
-              se = F) +
-  labs(title = &quot;ALL Data: Productivity &amp; Tech Consumption&quot;)
-g2 &lt;- ggplot(data = month_dat) + 
-    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
-              se = F) +
-  labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption&quot;))
-
-grid.arrange(g1, g2, ncol = 2)</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="960" /></p>
 <p><br></p>
 </div>
 <div id="correlations" class="section level2">
@@ -395,7 +370,19 @@ grid.arrange(g1, g2, ncol = 2)</code></pre>
            night_phone, morning_phone))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
-<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-13-1.png" width="864" /></p>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="864" /></p>
+<p><br></p>
+<pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) + 
+    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+              se = F) +
+  labs(title = &quot;ALL Data: Productivity &amp; Tech Consumption&quot;)
+g2 &lt;- ggplot(data = month_dat) + 
+    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+              se = F) +
+  labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption&quot;))
+
+grid.arrange(g1, g2, ncol = 2)</code></pre>
+<p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-13-1.png" width="960" /></p>
 </div>
 </div>
 
