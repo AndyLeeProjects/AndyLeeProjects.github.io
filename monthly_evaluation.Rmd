@@ -219,7 +219,7 @@ rmarkdown::paged_table(summary_comparison)
 
 <br>  
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message=FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
 library(rstatix)
 
 
@@ -242,11 +242,12 @@ phone = c('Screen_time')
 
 
 ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
-        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge", alpha = .7) +
-        geom_line(aes(x = month, y = mean, group = variable, color = variable)) + 
+        geom_col(aes(x = month.abb[month], y = mean, group = variable, fill = variable), position = "dodge", alpha = .7) +
+        geom_line(aes(x = month.abb[month], y = mean, group = variable, color = variable)) + 
         ylim(0,100) + 
         labs(title = "Total & Work Finished Comparison (Past 3 Months)",
-             subtitle = "Demonstrates Productivity Level(work_finished) & Overall Percentage(Total)\n")+
+             subtitle = "Demonstrates Productivity Level(work_finished) & Overall Percentage(Total)\n",
+             x = "Month", y = "Mean (Total, Work_finished)")+
         scale_fill_manual(values = c("#FBBC97", "#BEC5D6")) + 
         scale_color_manual(values = c("#FBBC97", "#BEC5D6")) + 
         theme(legend.position = "top", legend.title=element_blank())
@@ -256,27 +257,31 @@ ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
 ```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 7.5,  warning = FALSE, message=FALSE}
 g1 <- ggplot(filter(summary.stats, !variable %in% grading & !variable %in% multiple &
                       !variable %in% phone)) +
-        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge") +
+        geom_col(aes(x = month.abb[month], y = mean, group = variable, fill = variable), position = "dodge") +
         labs(title = "Meditation, Reading Comparison (Past 3 Months)",
-             subtitle = "Average minutes in Meditation & Reading\n") 
+             subtitle = "Average minutes in Meditation & Reading\n",
+             x = "Month", y = "Mean") 
 
 g2 <- ggplot(filter(summary.stats, variable %in% phone)) +
-        geom_smooth(aes(x = month, y = mean, group = variable, color = variable)) +
+        geom_smooth(aes(x = month.abb[month], y = mean, group = variable, color = variable)) +
         labs(title = "Screen time (min)",
-             subtitle = "Lower Screen time helps achieve higher productivity level\n") + 
+             subtitle = "Lower Screen time helps achieve higher productivity level\n",
+             x = "Month", y = "Mean") + 
         theme(legend.position = "None")
 
 g3 <- ggplot(filter(summary.stats, variable %in% multiple)) +
-        geom_col(aes(x = month, y = mean, group = variable, fill = variable), position = "dodge") +
+        geom_col(aes(x = month.abb[month], y = mean, group = variable, fill = variable), position = "dodge") +
         ylim(0,5) + 
         labs(title = "Subjective Evaluation - Bar",
-             subtitle = "1: Worst\n5: Best\n") + 
+             subtitle = "1: Worst\n5: Best\n",
+             x = "Month", y = "Mean") + 
         theme(legend.position="bottom", legend.title=element_blank())
 
 g4 <- ggplot(filter(summary.stats, variable %in% multiple)) +
-        geom_smooth(aes(x = month, y = mean, group = variable, color = variable), position = "dodge") +
+        geom_smooth(aes(x = month.abb[month], y = mean, group = variable, color = variable), position = "dodge") +
         labs(title = "Subjective Evaluation - Line",
-             subtitle = "1: Worst\n5: Best\n") + 
+             subtitle = "1: Worst\n5: Best\n",
+             x = "Month", y = "Mean") + 
         theme(legend.position="bottom", legend.title=element_blank())
 
   
@@ -327,6 +332,7 @@ ggplot() +
                          as.character(round(mean(month_dat$Total), 2))),
        color = "Legend",
        x = "Day", y = "Total %")
+
 ```
 
 
