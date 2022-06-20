@@ -117,7 +117,7 @@ Shiny Sample
 
 ::: {.column width="33%" data-latex="{33\textwidth}"}
 
-**[Self Evaluation Description](https://www.andyleeproject.com/self-evaluation-project/data-raecording)**  
+**[Self Evaluation Description](https://www.andyleeproject.com/self-evaluation-project/data-recording)**  
 Project Process Description including Data Collection, Evaluation, etc.
 
 :::
