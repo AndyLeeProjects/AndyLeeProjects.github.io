@@ -60,6 +60,104 @@ blank_year_when_repeated <- function(cv_entry_tibble){
 }
 ```
 
+# Projects  
+
+---  
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+<font size="3">**Self Evaluation Project**</font>  
+
+---  
+
+
+:::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+<font size="3">**Happiness Project**</font>  
+
+---  
+
+
+:::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+<font size="3">**Others**</font>  
+
+---  
+
+
+::::::
+
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+**[Monthly Evaluation](https://alin-96.github.io/monthly_evaluation.html)**  
+Monthly Updated Evaluation of my lifestyle  
+<br>  
+
+
+:::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+**[Happiness Project Proposal](https://alin-96.github.io/proposal_happiness.html)**  
+Project Proposal & Data Description
+
+:::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+**[Central Limit Theorem](https://alin-96.github.io/shinyApp.html)**  
+Shiny Sample
+
+::::::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+**[Self Evaluation Description](https://www.andyleeproject.com/self-evaluation-project/data-raecording)**  
+Project Process Description including Data Collection, Evaluation, etc.
+
+:::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+**[Happiness Project](https://alin-96.github.io/happiness_main.html)**  
+Statistical Analyses of the Global Happiness Scores 
+
+:::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+
+
+::::::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+**[Self Evaluation](https://alin-96.github.io/selfeval_main.html)**  
+Statistical Analyses of my lifestyle
+
+:::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+**[Shiny App](https://alin-96.github.io/shiny_happiness.html)**  
+GDP vs Happiness Scores using Shiny App
+
+:::
+
+::: {.column width="33%" data-latex="{33\textwidth}"}
+
+
+::::::
+
+
+<br>  
+<br>  
+
 
 # Summary
 

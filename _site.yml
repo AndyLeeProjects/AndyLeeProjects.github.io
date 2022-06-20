@@ -19,10 +19,7 @@ navbar:
       - text: "Shiny: GDP vs Happiness"
         href: shiny_happiness.html
       - text: '---------'
-      - text: "Animation & Interactive Plots"
-        href: interactive_animated_plots.html
-      - text: '---------'
-      - text: "Shiny App"
+      - text: "Central Limit Theorem"
         href: shinyApp.html
     - text: "My Website (Portfolio)"
       href: website_redirect.html

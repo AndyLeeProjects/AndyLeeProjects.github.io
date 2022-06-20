@@ -4,8 +4,6 @@ author: "Andy Lee"
 ---
 Final Project Proposal <br>  
 
-DANL 310  
-
 
 The link to our data: [World Happiness Project](https://www.kaggle.com/unsdsn/world-happiness)
 <br>  

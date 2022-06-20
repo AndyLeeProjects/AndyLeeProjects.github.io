@@ -1,6 +1,5 @@
 ---
-title: "SHINY_Sample"
-subtitle: "Central Limit Theorem"
+title: "Central Limit Theorem Sample"
 ---
 ````{=html}
 <style>iframe{height: 1200px; width: 800px}</style>

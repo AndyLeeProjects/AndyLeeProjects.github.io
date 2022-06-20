@@ -354,11 +354,7 @@ div.tocify {
     </li>
     <li class="divider"></li>
     <li>
-      <a href="interactive_animated_plots.html">Animation &amp; Interactive Plots</a>
-    </li>
-    <li class="divider"></li>
-    <li>
-      <a href="shinyApp.html">Shiny App</a>
+      <a href="shinyApp.html">Central Limit Theorem</a>
     </li>
   </ul>
 </li>
@@ -825,11 +821,13 @@ Series</h1>
 
 ggplot(data = all_dat) +
   geom_line(aes(x = mdy(Date), y = Total))+
+  geom_smooth(aes(x = mdy(Date), y = Total, color = &quot;red&quot;)) + 
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
                                 &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
   labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)+
-  theme_classic()</code></pre>
+  theme_classic() + 
+  theme(legend.position = &quot;None&quot;)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
 fit = ets(myts)

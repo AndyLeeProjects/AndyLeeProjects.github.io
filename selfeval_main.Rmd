@@ -591,11 +591,13 @@ ats <- ts(all_dat, start = decimal_date(mdy("09/01/2020")),
 
 ggplot(data = all_dat) +
   geom_line(aes(x = mdy(Date), y = Total))+
+  geom_smooth(aes(x = mdy(Date), y = Total, color = "red")) + 
   scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01","2021-04-01", "2021-07-01", "2021-10-01","2022-01-01", "2022-04-01"),
                      labels=c("09/20", "01/21", "04/21", "07/21", 
                                 "10/21", "01/22","04/22"))+
   labs(title = "Time Seires", subtitle = "Total (%)")+
-  theme_classic()
+  theme_classic() + 
+  theme(legend.position = "None")
 ```
 
 ```{r, message=FALSE, warning=FALSE}
