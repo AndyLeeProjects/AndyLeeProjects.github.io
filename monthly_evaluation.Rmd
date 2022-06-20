@@ -109,7 +109,7 @@ words_dat <- all_dat %>%
 ```
 
 
-## World Cloud  
+## Word Cloud  
 
 ---  
 
