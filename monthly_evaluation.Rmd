@@ -109,12 +109,12 @@ words_dat <- all_dat %>%
 ```
 
 
-## Word Cloud  
+## `r month.abb[previous_month]` - Word Cloud  
 
 ---  
 
 
-```{r, echo = TRUE, eval = TRUE, fig.width = 5, fig.height = 5,  warning = FALSE, fig.align="center"}
+```{r, echo = FALSE, eval = TRUE, fig.width = 5, fig.height = 4,  warning = FALSE, fig.align="center"}
 
 wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,           
           max.words=70, random.order=FALSE, rot.per=0.35,            
@@ -383,7 +383,7 @@ grid.arrange(g1, g2, ncol = 2)
 
 ---  
 
-```{r, echo = TRUE, eval = TRUE, fig.width = 9, fig.height = 5, fig.asp = .75,  warning = FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 9, fig.height = 5, fig.asp = .75,  warning = FALSE}
 
 correlation_plot <- month_dat %>%
   select(c(Screen_time, Drink, Meditation, 
@@ -396,7 +396,9 @@ pairs.panels(correlation_plot, lm = TRUE)
 
 <br>  
 
-```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
+### Relationship Between Productivity Level & Tech Consumption
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
 g1 <- ggplot(data = all_dat_modified) + 
     geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
               se = F) +
@@ -408,3 +410,7 @@ g2 <- ggplot(data = month_dat) +
 
 grid.arrange(g1, g2, ncol = 2)
 ```
+
+
+
+

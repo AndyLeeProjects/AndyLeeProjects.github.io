@@ -324,12 +324,9 @@ $(document).ready(function () {
 <p><img
 src="monthly_eval_images/May2022.jpg" /></p>
 <p><br></p>
-<div id="word-cloud" class="section level2">
-<h2>Word Cloud</h2>
+<div id="may---word-cloud" class="section level2">
+<h2>May - Word Cloud</h2>
 <hr />
-<pre class="r"><code>wordcloud(words = words_dat$words, freq = words_dat$freq, min.freq = .01,           
-          max.words=70, random.order=FALSE, rot.per=0.35,            
-          colors=brewer.pal(8, &quot;Dark2&quot;))</code></pre>
 <p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p><br></p>
 <p><br><br />
@@ -360,25 +357,13 @@ src="monthly_eval_images/May2022.jpg" /></p>
 <div id="correlations" class="section level2">
 <h2>Correlations</h2>
 <hr />
-<pre class="r"><code>correlation_plot &lt;- month_dat %&gt;%
-  select(c(Screen_time, Drink, Meditation, 
-           Reading, Rise_time, Multiple, work_finished,
-           night_phone, morning_phone))
-
-pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 <p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-12-1.png" width="864" /></p>
 <p><br></p>
-<pre class="r"><code>g1 &lt;- ggplot(data = all_dat_modified) + 
-    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
-              se = F) +
-  labs(title = &quot;ALL Data: Productivity &amp; Tech Consumption&quot;)
-g2 &lt;- ggplot(data = month_dat) + 
-    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
-              se = F) +
-  labs(title = paste0(month.abb[previous_month], &quot; Data: Productivity &amp; Tech Consumption&quot;))
-
-grid.arrange(g1, g2, ncol = 2)</code></pre>
+<div id="relationship-between-productivity-level-tech-consumption"
+class="section level3">
+<h3>Relationship Between Productivity Level &amp; Tech Consumption</h3>
 <p><img src="monthly_evaluation_files/figure-html/unnamed-chunk-13-1.png" width="960" /></p>
+</div>
 </div>
 </div>
 
