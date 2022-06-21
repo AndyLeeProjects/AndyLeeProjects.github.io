@@ -258,18 +258,19 @@ ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
 ```
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 7.5,  warning = FALSE, message=FALSE}
+
 g1 <- ggplot(filter(summary.stats, !variable %in% grading & !variable %in% multiple &
                       !variable %in% phone)) +
         geom_col(aes(x = reorder(month.abb[month],month), y = mean, group = variable, fill = variable), position = "dodge") +
         labs(title = "Meditation, Reading Comparison (Past 3 Months)",
              subtitle = "Average minutes in Meditation & Reading\n",
-             x = "Month", y = "Mean") 
+             x = "Month", y = "Mean (min)") 
 
 g2 <- ggplot(filter(summary.stats, variable %in% phone)) +
         geom_smooth(aes(x = reorder(month.abb[month],month), y = mean, group = variable, color = variable)) +
         labs(title = "Screen time (min)",
              subtitle = "Lower Screen time helps achieve higher productivity level\n",
-             x = "Month", y = "Mean") + 
+             x = "Month", y = "Mean (min)") + 
         theme(legend.position = "None")
 
 g3 <- ggplot(filter(summary.stats, variable %in% multiple)) +
