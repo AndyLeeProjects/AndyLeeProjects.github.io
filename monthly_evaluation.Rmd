@@ -257,39 +257,77 @@ ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
 
 ```
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 7.5,  warning = FALSE, message=FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 10.7,  warning = FALSE, message=FALSE}
 
 g1 <- ggplot(filter(summary.stats, !variable %in% grading & !variable %in% multiple &
                       !variable %in% phone)) +
-        geom_col(aes(x = reorder(month.abb[month],month), y = mean, group = variable, fill = variable), position = "dodge") +
+        geom_col(aes(x = reorder(month.abb[month],month), y = mean, 
+                     group = variable, fill = variable), position = "dodge") +
         labs(title = "Meditation, Reading Comparison (Past 3 Months)",
              subtitle = "Average minutes in Meditation & Reading\n",
              x = "Month", y = "Mean (min)") 
 
-g2 <- ggplot(filter(summary.stats, variable %in% phone)) +
+g2 <- ggplot() +
+    geom_density(data = filter(all_dat, Reading < 50), 
+                 aes(x = Reading, fill = "All_dat"), se = F, alpha = .15) +
+    geom_density(data = filter(all_dat, Reading < 50 
+                               & month(mdy(Date)) == pprevious_month 
+                               & year(mdy(Date))==cur_year), 
+                 aes(x = Reading, fill = paste0(month.abb[pprevious_month], '_dat')), 
+                 se = F, alpha = .15) +
+    geom_density(data = month_dat,
+                 aes(x = Reading, fill = paste0(month.abb[previous_month], '_dat')), 
+                 se = F, alpha = .6) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+    labs(title = "Reading (min) Distributions",
+             x = "Reading (min)", y = "Percentage (%)") 
+  
+# Add groups for Rise time Boxplot
+all_dat <- all_dat %>%
+  mutate(Rise_time_group = case_when(month(mdy(Date)) == pprevious_month & 
+                              year(mdy(Date)) == cur_year ~ paste0(month.abb[pprevious_month], '_dat'),
+                              month(mdy(Date)) == previous_month & 
+                              year(mdy(Date)) == cur_year ~ paste0(month.abb[previous_month], '_dat'),
+                              TRUE ~ 'All_dat'))
+all_dat$Rise_time_group <- factor(all_dat$Rise_time_group, levels = c("All_dat",
+     paste0(month.abb[pprevious_month], '_dat'), 
+     paste0(month.abb[previous_month], '_dat')))
+
+g3 <- ggplot(month_dat) +
+        geom_boxplot(data = filter(all_dat),
+                     aes(Rise_time, group = Rise_time_group, color = Rise_time_group)) +
+     coord_flip() +
+     theme(axis.title.x=element_blank(),
+           axis.text.x=element_blank(),
+           axis.ticks.x=element_blank()) +
+     labs(title = "\nRise Time Distribution", 
+          subtitle = "0: Intended Time(IT), -n: Earlier than IT, +n: Later than IT\n",
+          y = "Rise Time (min)")
+
+
+g4 <- ggplot(filter(summary.stats, variable %in% phone)) +
         geom_smooth(aes(x = reorder(month.abb[month],month), y = mean, group = variable, color = variable)) +
-        labs(title = "Screen time (min)",
+        labs(title = "\nScreen time (min)",
              subtitle = "Lower Screen time helps achieve higher productivity level\n",
              x = "Month", y = "Mean (min)") + 
         theme(legend.position = "None")
 
-g3 <- ggplot(filter(summary.stats, variable %in% multiple)) +
+g5 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         geom_col(aes(x = reorder(month.abb[month],month), y = mean, group = variable, fill = variable), position = "dodge") +
         ylim(0,5) + 
-        labs(title = "Subjective Evaluation - Bar",
+        labs(title = "\nSubjective Evaluation - Bar",
              subtitle = "1: Worst\n5: Best\n",
              x = "Month", y = "Mean") + 
         theme(legend.position="bottom", legend.title=element_blank())
 
-g4 <- ggplot(filter(summary.stats, variable %in% multiple)) +
+g6 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         geom_smooth(aes(x = reorder(month.abb[month],month), y = mean, group = variable, color = variable), position = "dodge") +
-        labs(title = "Subjective Evaluation - Line",
+        labs(title = "\nSubjective Evaluation - Line",
              subtitle = "1: Worst\n5: Best\n",
              x = "Month", y = "Mean") + 
         theme(legend.position="bottom", legend.title=element_blank())
 
-  
-grid.arrange(g1, g2, g3, g4,  ncol = 2)
+grid.arrange(g1, g2, g3, g4, g5, g6, ncol = 2)
 ```
 
 <br>  
@@ -396,7 +434,43 @@ pairs.panels(correlation_plot, lm = TRUE)
 
 <br>  
 
-### Relationship Between Productivity Level & Tech Consumption
+### Productivity Level(Work_finished): Meditation
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
+all_dat_modified <- all_dat_modified %>%
+  mutate(reading_group = case_when(Reading == 0 ~ '0',
+                                   Reading < 10 ~ '<10',
+                                   Reading < 20 ~ '<20',
+                                   Reading < 30 ~ '<30',
+                                   Reading > 29 ~ '>30'))
+
+all_dat_modified$reading_group = factor(all_dat_modified$reading_group, levels = c('0', '<10', '<20', '<30', '>30'))
+
+month_dat <- month_dat %>%
+  mutate(reading_group = case_when(Reading == 0 ~ '0',
+                                   Reading < 10 ~ '<10',
+                                   Reading < 20 ~ '<20',
+                                   Reading < 30 ~ '<30',
+                                   Reading > 29 ~ '>30'))
+
+month_dat$reading_group = factor(month_dat$reading_group, levels = c('0', '<10', '<20', '<30', '>30'))
+
+ggplot(data = all_dat_modified) + 
+    geom_smooth(aes(x = Meditation, y = work_finished, color = "All_dat"), se = F) +
+    geom_smooth(data = filter(all_dat_modified, 
+                              month(Date) == pprevious_month 
+                               & year(Date) == cur_year), 
+                aes(x = Meditation, y = work_finished, 
+                    color = paste0(month.abb[pprevious_month], '_dat')), se = F) +
+    geom_smooth(data = month_dat, aes(x = Meditation, y = work_finished, 
+    color = paste0(month.abb[previous_month], '_dat')), se = F)
+
+```
+
+<br>  
+
+
+### Productivity Level: Tech Consumption
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
 g1 <- ggplot(data = all_dat_modified) + 
@@ -410,7 +484,5 @@ g2 <- ggplot(data = month_dat) +
 
 grid.arrange(g1, g2, ncol = 2)
 ```
-
-
 
 
