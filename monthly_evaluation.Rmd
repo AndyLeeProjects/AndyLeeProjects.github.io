@@ -23,6 +23,7 @@ theme_set(theme_classic())
 
 ```{r, include=FALSE}
 cur_month = month(Sys.Date())
+
 if (nchar(cur_month - 1) == 1 & cur_month != 1){
   previous_month = cur_month - 1  
   previous_month_str = paste0("0", previous_month, '/')
@@ -37,10 +38,11 @@ cur_year = year(Sys.Date())
 if(cur_month == 1){
   cur_year = cur_year - 1
 }
+
 cur_year_str = paste0('/',cur_year)
 ```
 
-# **`r paste0(month.abb[previous_month], ' ', cur_year)`**
+# **`r paste0(month.name[previous_month], ' ', cur_year)`**
 
 <br>  
 
@@ -109,7 +111,7 @@ words_dat <- all_dat %>%
 ```
 
 
-## `r month.abb[previous_month]` - Word Cloud  
+## `r month.name[previous_month]` - Word Cloud  
 
 ---  
 
@@ -137,7 +139,6 @@ month_dat <- all_dat %>%
 # merge morning_rt with all_dat
 month_dat <- merge(month_dat, morning_rt,by="Date", all.x=T) %>%
   select(-c(rise_time_min)) %>% # redundant
-  filter(!is.na(total_checked)) %>%
   arrange(Date) %>%
   tibble()
 ```
@@ -147,7 +148,7 @@ month_dat <- merge(month_dat, morning_rt,by="Date", all.x=T) %>%
 <br>  
 
 
-## `r paste0(month.abb[previous_month])` vs Other Months
+## `r paste0(month.name[previous_month])` vs Other Months
 
 ---  
 
@@ -209,8 +210,8 @@ month_summary <- as.data.frame(month_dat %>%
 
 rownames(all_summary) <- "All_Data"
 rownames(previous3_summary) <- "Previous_3_months"
-rownames(preced_month_summary) <- paste0("month_",pprevious_month)
-rownames(month_summary) <- paste0("month_",previous_month)
+rownames(preced_month_summary) <- month.name[pprevious_month]
+rownames(month_summary) <- month.name[previous_month]
 
 summary_comparison = rbind(all_summary,previous3_summary, preced_month_summary, month_summary)
 rmarkdown::paged_table(summary_comparison)
@@ -272,7 +273,7 @@ g2 <- ggplot() +
                  aes(x = Reading, fill = "All_dat"), se = F, alpha = .15) +
     geom_density(data = filter(all_dat, Reading < 50 
                                & month(mdy(Date)) == pprevious_month 
-                               & year(mdy(Date))==cur_year), 
+                               & year(mdy(Date)) == cur_year), 
                  aes(x = Reading, fill = paste0(month.abb[pprevious_month], '_dat')), 
                  se = F, alpha = .15) +
     geom_density(data = month_dat,
@@ -280,7 +281,8 @@ g2 <- ggplot() +
                  se = F, alpha = .6) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
     labs(title = "Reading (min) Distributions",
-             x = "Reading (min)", y = "Percentage (%)") 
+             x = "Reading (min)", y = "Percentage (%)")
+
   
 # Add groups for Rise time Boxplot
 all_dat <- all_dat %>%
@@ -301,8 +303,8 @@ g3 <- ggplot(month_dat) +
            axis.text.x=element_blank(),
            axis.ticks.x=element_blank()) +
      labs(title = "\nRise Time Distribution", 
-          subtitle = "0: Intended Time(IT), -n: Earlier than IT, +n: Later than IT\n",
-          y = "Rise Time (min)")
+          subtitle = "Negative value: Rose earlier than intended\nPositive value: Rose later than intended\n",
+          x = "Rise Time (min)")
 
 
 g4 <- ggplot(filter(summary.stats, variable %in% phone)) +
@@ -417,7 +419,7 @@ grid.arrange(g1, g2, ncol = 2)
 
 <br>  
 
-## Correlations  
+## `r month.name[previous_month]` - Correlations  
 
 ---  
 
