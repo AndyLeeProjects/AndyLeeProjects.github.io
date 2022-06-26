@@ -130,7 +130,7 @@ words_dat_month <- all_dat %>%
 
 ---  
 
-<font size="4">Every day, I define my day with three distinctive words. By calculating the frequencies for each word, I demonstrated the most frequent words in a monthly scope and overall collected data. Also, a word cloud could be created by utilizing the frequencies for each word recorded.</font>
+<font size="4">Every day, I define my day with three unique words. With the collected data(words), I could demonstrate the most frequent words in a monthly or even broader scope. Then, a word cloud could be created using the calculated frequencies.</font>
 
 <br>  
 
@@ -142,7 +142,7 @@ words_dat_month <- all_dat %>%
 
 ::: {.column width="49%" data-latex="{49\textwidth}"}
 
-<font size="3">**`r month.name[previous_month]` Word Frequency**</font>  
+<font size="3">**`r month.name[previous_month]` Frequency**</font>  
 
 ```{r, warning=FALSE, message=FALSE, echo = FALSE}
 rmarkdown::paged_table(head(words_dat_month, 10))
@@ -154,7 +154,7 @@ rmarkdown::paged_table(head(words_dat_month, 10))
 
 ::: {.column width="49%" data-latex="{49\textwidth}"}
 
-<font size="3">**All_dat Word Frequency**</font>  
+<font size="3">**All_dat Frequency**</font>  
 
 ```{r, warning=FALSE, message=FALSE, echo = FALSE}
 rmarkdown::paged_table(head(words_dat_all, 10))
