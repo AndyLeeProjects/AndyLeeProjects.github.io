@@ -416,46 +416,6 @@ grid.arrange(g1, g2, g3, g4, g5, g6, ncol = 2)
 ---  
 
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
-comparison_month = all_dat %>%
-  mutate(Date = mdy(Date)) %>%
-  filter((month(Date) == pprevious_month & year(Date) == cur_year))
-
-comparison_month <- merge(comparison_month, morning_rt,by="Date", all.x=T) %>%
-  select(-c(rise_time_min)) %>% # redundant
-  filter(!is.na(total_checked)) %>%
-  arrange(Date) %>%
-  tibble()
-
-ggplot() +
-  geom_line(data = comparison_month, aes(x = day(Date), y = Total, 
-                                   color = paste0('Month_', pprevious_month)), 
-            alpha = .3) +
-  geom_line(data = month_dat, aes(x = day(Date), y = Total, 
-                                   color = paste0('Month_',previous_month)), 
-            alpha = .3) +
-  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, 
-                                   color = paste0('Month_', pprevious_month)), 
-              se = F, size = 1.5, alpha = .2) +
-  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, 
-                                   color = paste0('Month_',previous_month)), 
-              se = F,size = 1.5, alpha = .2) + 
-  ylim(0,100) +
-  labs(title = paste0("DAILY TREND: ", month.abb[previous_month], " vs Preceding Month\n"),
-       subtitle = paste0(month.abb[pprevious_month], 
-                         " AVG: ", 
-                         as.character(round(mean(comparison_month$Total),2)),
-                         "\n",
-                         month.abb[previous_month], 
-                         " AVG: ", 
-                         as.character(round(mean(month_dat$Total), 2))),
-       color = "Legend",
-       x = "Day", y = "Total %")
-
-```
-
-
-<br>  
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
 
@@ -490,9 +450,88 @@ g2 <- ggplot(data = month_dat) +
 grid.arrange(g1, g2, ncol = 2)
 ```
 
+<br>  
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
+
+previous_year = cur_year -1
+
+box_dat <- all_dat %>%
+  mutate(month = month(mdy(Date)),
+         year = year(mdy(Date))) %>%
+  group_by(month) %>%
+  mutate(my = make_date(year, month)) %>%
+  group_by(my) %>%
+  filter(!is.na(work_finished)) %>%
+  mutate(Productivity_scale = mean(work_finished))
+
+# Total months 
+tot_month = length(unique(box_dat$my))
+
+starting_date = paste0(cur_month,'/15/', previous_year)
+ending_date = paste0(previous_month, '/30/', cur_year)
+
+dates = seq(as.Date(starting_date, format = "%m/%d/%Y"), 
+            by = "month", length.out = 12)
+dates_lb = format(seq(as.Date(starting_date, format = "%m/%d/%Y"), 
+                      by = "month", length.out = 12), "%m")
+
+ggplot(filter(box_dat, mdy(starting_date) <= mdy(Date) & mdy(Date) < mdy(ending_date))) +
+  geom_boxplot(aes(x = mdy(Date), y = Total, 
+                   fill = Productivity_scale, group = my))+
+  labs(title = "TIME SERIES (BoxPlot): Past 12 months\n", x = "Months (Past 12)") +
+  theme(plot.title = element_text(face = "bold")) +
+  scale_x_date(breaks = dates, labels = dates_lb)+
+  scale_fill_gradient(low = "white", high = "#C03B3B")+
+  theme_classic()
+  
+```
 
 
 <br>  
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
+comparison_month = all_dat %>%
+  mutate(Date = mdy(Date)) %>%
+  filter((month(Date) == pprevious_month & year(Date) == cur_year))
+
+comparison_month <- merge(comparison_month, morning_rt,by="Date", all.x=T) %>%
+  select(-c(rise_time_min)) %>% # redundant
+  filter(!is.na(total_checked)) %>%
+  arrange(Date) %>%
+  tibble()
+
+ggplot() +
+  geom_line(data = comparison_month, aes(x = day(Date), y = Total, 
+                                   color = paste0('Month_', pprevious_month)), 
+            alpha = .3) +
+  geom_line(data = month_dat, aes(x = day(Date), y = Total, 
+                                   color = paste0('Month_',previous_month)), 
+            alpha = .3) +
+  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, 
+                                   color = paste0('Month_', pprevious_month)), 
+              se = F, size = 1.5, alpha = .2) +
+  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, 
+                                   color = paste0('Month_',previous_month)), 
+              se = F,size = 1.5, alpha = .2) + 
+  ylim(0,100) +
+  labs(title = paste0("DAILY TREND: ", month.abb[previous_month], " vs Preceding Month"),
+       subtitle = paste0(month.abb[pprevious_month], 
+                         " AVG: ", 
+                         as.character(round(mean(comparison_month$Total),2)),
+                         "    ",
+                         month.abb[previous_month], 
+                         " AVG: ", 
+                         as.character(round(mean(month_dat$Total), 2)), '\n'),
+       color = "Legend",
+       x = "Day", y = "Total %")
+
+```
+
+
+<br>  
+
+
 
 ## `r month.name[previous_month]` - Correlations  
 
@@ -511,7 +550,7 @@ pairs.panels(correlation_plot, lm = TRUE)
 
 <br>  
 
-### Productivity Level(Work_finished): Meditation
+### Regression(Linear) Models:Work_finished & Meditation
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
 all_dat_modified <- all_dat_modified %>%
@@ -533,14 +572,14 @@ month_dat <- month_dat %>%
 month_dat$reading_group = factor(month_dat$reading_group, levels = c('0', '<10', '<20', '<30', '>30'))
 
 ggplot(data = all_dat_modified) + 
-    geom_smooth(aes(x = Meditation, y = work_finished, color = "All_dat"), se = F) +
+    geom_smooth(aes(x = Meditation, y = work_finished, color = "All_dat"), se = F, method = "lm") +
     geom_smooth(data = filter(all_dat_modified, 
                               month(Date) == pprevious_month 
                                & year(Date) == cur_year), 
                 aes(x = Meditation, y = work_finished, 
-                    color = paste0(month.abb[pprevious_month], '_dat')), se = F) +
+                    color = paste0(month.abb[pprevious_month], '_dat')), se = F, method = "lm") +
     geom_smooth(data = month_dat, aes(x = Meditation, y = work_finished, 
-    color = paste0(month.abb[previous_month], '_dat')), se = F)
+    color = paste0(month.abb[previous_month], '_dat')), se = F, method = "lm")
 
 ```
 
@@ -553,11 +592,14 @@ ggplot(data = all_dat_modified) +
 g1 <- ggplot(data = all_dat_modified) + 
     geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
               se = F) +
-  labs(title = "ALL Data: Productivity & Tech Consumption")
+  labs(title = "ALL Data: Productivity & Tech Consumption") +
+  theme(legend.position = "bottom")
+
 g2 <- ggplot(data = month_dat) + 
     geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
               se = F) +
-  labs(title = paste0(month.abb[previous_month], " Data: Productivity & Tech Consumption"))
+  labs(title = paste0(month.abb[previous_month], " Data: Productivity & Tech Consumption")) +
+  theme(legend.position = "bottom")
 
 grid.arrange(g1, g2, ncol = 2)
 ```
