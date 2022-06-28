@@ -428,8 +428,9 @@ all_dat %>%
     geom_line(aes(x = Date, y = Total)) +
     geom_smooth(aes(x = Date, y = Total, color = "red"), alpha = .2) + 
   geom_smooth(aes(x = Date, y = Total, color = "red"), method = "lm", linetype = "dashed", se = F) + 
-  labs(title = "TIME SERIES: Past 4 Months\n") +
-  theme(legend.position = "None")
+  labs(title = "TIME SERIES: Past 4 Months\n", y = "Total %") +
+  theme(legend.position = "None") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1, scale = 1))
 
 ```
 
@@ -479,14 +480,24 @@ dates_lb = format(seq(as.Date(starting_date, format = "%m/%d/%Y"),
 ggplot(filter(box_dat, mdy(starting_date) <= mdy(Date) & mdy(Date) < mdy(ending_date))) +
   geom_boxplot(aes(x = mdy(Date), y = Total, 
                    fill = Productivity_scale, group = my))+
-  labs(title = "TIME SERIES (BoxPlot): Past 12 months\n", x = "Months (Past 12)") +
+  labs(title = "TIME SERIES (BoxPlot): Past 12 months\n", x = "Months (Past 12)", y = "Total %") +
   theme(plot.title = element_text(face = "bold")) +
   scale_x_date(breaks = dates, labels = dates_lb)+
-  scale_fill_gradient(low = "white", high = "#C03B3B")+
-  theme_classic()
+  scale_fill_gradient(low = "white", high = "#E7744D")+
+  theme_classic() +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1, scale = 1))
   
 ```
+<br>   
 
+
+- <font size="3">**Width of the Box**: Demonstrates the quantity of the data for a given month</font>  
+
+- <font size="3">**Height of the Box**: Demonstrates the variation of Total % for a given month</font>  
+
+- <font size="3">**Color of the Box**: The darker the color, more productive I was during that month</font>  
+
+<br>  
 
 <br>  
 
@@ -524,7 +535,8 @@ ggplot() +
                          " AVG: ", 
                          as.character(round(mean(month_dat$Total), 2)), '\n'),
        color = "Legend",
-       x = "Day", y = "Total %")
+       x = "Day", y = "Total %") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1, scale = 1))
 
 ```
 
