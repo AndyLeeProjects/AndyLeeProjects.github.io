@@ -326,7 +326,7 @@ ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
              x = "Month", y = "Mean (Total, Work_finished)")+
         scale_fill_manual(values = c("#FBBC97", "#BEC5D6")) + 
         scale_color_manual(values = c("#FBBC97", "#BEC5D6")) + 
-        theme(legend.position = "top", legend.title=element_blank())
+        theme(plot.title = element_text(face = "bold"), legend.position = "top", legend.title=element_blank())
 
 ```
 
@@ -339,7 +339,7 @@ g1 <- ggplot(filter(summary.stats, !variable %in% grading & !variable %in% multi
         labs(title = "Meditation, Reading Comparison (Past 3 Months)",
              subtitle = "Average minutes in Meditation & Reading\n",
              x = "Month", y = "Mean (min)") +
-    theme(legend.position = "top")
+    theme(plot.title = element_text(face = "bold"), legend.position = "top")
 
 g2 <- ggplot() +
     geom_density(data = filter(all_dat, Reading < 50), 
@@ -355,7 +355,7 @@ g2 <- ggplot() +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
     labs(title = "Reading (min) Distributions",
              x = "Reading (min)", y = "Scaled Percentage (%)") +
-    theme(legend.position = "top", 
+    theme(plot.title = element_text(face = "bold"), legend.position = "top", 
           axis.text.y = element_blank())
 
   
@@ -374,7 +374,8 @@ g3 <- ggplot(month_dat) +
         geom_boxplot(data = filter(all_dat),
                      aes(Rise_time, group = Rise_time_group, color = Rise_time_group)) +
      coord_flip() +
-     theme(axis.title.x=element_blank(),
+     theme(plot.title = element_text(face = "bold"), 
+           axis.title.x=element_blank(),
            axis.text.x=element_blank(),
            axis.ticks.x=element_blank()) +
      labs(title = "\nRise Time Distribution", 
@@ -387,7 +388,7 @@ g4 <- ggplot(filter(summary.stats, variable %in% phone)) +
         labs(title = "\nScreen time (min)",
              subtitle = "Lower Screen time helps achieve higher productivity level\n",
              x = "Month", y = "Mean (min)") + 
-        theme(legend.position = "None")
+        theme(plot.title = element_text(face = "bold"), legend.position = "None")
 
 g5 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         geom_col(aes(x = reorder(month.abb[month],month), y = mean, group = variable, fill = variable), position = "dodge") +
@@ -395,14 +396,16 @@ g5 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         labs(title = "\nSubjective Evaluation - Bar",
              subtitle = "1: Worst\n5: Best\n",
              x = "Month", y = "Mean") + 
-        theme(legend.position="bottom", legend.title=element_blank())
+        theme(plot.title = element_text(face = "bold"), 
+              legend.position="bottom", legend.title=element_blank())
 
 g6 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         geom_smooth(aes(x = reorder(month.abb[month],month), y = mean, group = variable, color = variable), position = "dodge") +
         labs(title = "\nSubjective Evaluation - Line",
              subtitle = "1: Worst\n5: Best\n",
              x = "Month", y = "Mean") + 
-        theme(legend.position="bottom", legend.title=element_blank())
+        theme(plot.title = element_text(face = "bold"), 
+              legend.position="bottom", legend.title=element_blank())
 
 grid.arrange(g1, g2, g3, g4, g5, g6, ncol = 2)
 ```
@@ -429,7 +432,7 @@ all_dat %>%
     geom_smooth(aes(x = Date, y = Total, color = "red"), alpha = .2) + 
   geom_smooth(aes(x = Date, y = Total, color = "red"), method = "lm", linetype = "dashed", se = F) + 
   labs(title = "TIME SERIES: Past 4 Months\n", y = "Total %") +
-  theme(legend.position = "None") +
+  theme(plot.title = element_text(face = "bold"), legend.position = "None") +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1, scale = 1))
 
 ```
@@ -484,7 +487,7 @@ ggplot(filter(box_dat, mdy(starting_date) <= mdy(Date) & mdy(Date) < mdy(ending_
   theme(plot.title = element_text(face = "bold")) +
   scale_x_date(breaks = dates, labels = dates_lb)+
   scale_fill_gradient(low = "white", high = "#E7744D")+
-  theme_classic() +
+  theme(plot.title = element_text(face = "bold"), legend.position = "top") + 
   scale_y_continuous(labels = scales::percent_format(accuracy = 1, scale = 1))
   
 ```
@@ -501,7 +504,7 @@ ggplot(filter(box_dat, mdy(starting_date) <= mdy(Date) & mdy(Date) < mdy(ending_
 
 <br>  
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 9, fig.height = 5.5,  warning = FALSE, message=FALSE}
 comparison_month = all_dat %>%
   mutate(Date = mdy(Date)) %>%
   filter((month(Date) == pprevious_month & year(Date) == cur_year))
@@ -525,7 +528,6 @@ ggplot() +
   geom_smooth(data = month_dat, aes(x = day(Date), y = Total, 
                                    color = paste0('Month_',previous_month)), 
               se = F,size = 1.5, alpha = .2) + 
-  ylim(0,100) +
   labs(title = paste0("DAILY TREND: ", month.abb[previous_month], " vs Preceding Month"),
        subtitle = paste0(month.abb[pprevious_month], 
                          " AVG: ", 
@@ -536,7 +538,8 @@ ggplot() +
                          as.character(round(mean(month_dat$Total), 2)), '\n'),
        color = "Legend",
        x = "Day", y = "Total %") +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1, scale = 1))
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1, scale = 1)) +
+  theme(plot.title = element_text(face = "bold"),legend.position = "top")
 
 ```
 

@@ -425,7 +425,8 @@ library(psych)
 library(grid)
 library(forecast)
 library(papeR)
-library(tidyverse)</code></pre>
+library(tidyverse)
+theme_set(theme_classic())</code></pre>
 <p><br></p>
 </div>
 <div id="main-variables-descriptive-statistics" class="section level1"
@@ -509,14 +510,13 @@ pairs.panels(correlation_plot, lm = TRUE)</code></pre>
 </div>
 <div id="school-variable" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> School Variable</h2>
-<pre class="r"><code>ggplot(data = all_dat, aes(x = work_finished,
+<pre class="r"><code>ggplot(data = filter(all_dat, School != FALSE), aes(x = work_finished,
                            color = School))+
   geom_density()+
   labs(title = &quot;Density Plot of Work Finished% for different School periods&quot;,
        x = &quot;Work Finished (%)&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
-  scale_color_discrete(name = &quot;School Qtrs&quot;)+
-  theme_classic()</code></pre>
+  scale_color_discrete(name = &quot;School Qtrs&quot;)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 <br><br />
 <br><br />
@@ -533,8 +533,7 @@ ggplot(data = all_dat)+
   labs(title = &quot;Work finished % by week days&quot;,
        subtitle = &quot;Data: all_dat (500+ observations)&quot;,
        x = &quot;&quot;, y = &quot;Work Finished (%)&quot;)+
-  theme(plot.title = element_text(face = &quot;bold&quot;))+
-  theme_classic()</code></pre>
+  theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 <br><br />
 <br></p>
@@ -558,8 +557,7 @@ ggplot(all_dat_month)+
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
-                                &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
-  theme_classic()</code></pre>
+                                &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p><br><br />
 <br></p>
@@ -574,8 +572,7 @@ Rise time)</h2>
               subtitle = &quot;Larger positive differnce indicates higher productivity&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;)) +
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;, &quot;2021-06-01&quot;,
-                                &quot;2022-01-01&quot;))+
-  theme_classic()</code></pre>
+                                &quot;2022-01-01&quot;))</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 <br></p>
 <ul>
@@ -650,16 +647,14 @@ Total_checked variable affects the outcome of the day</h2>
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(Total))+
   facet_wrap(~total_checked)+
-  labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)+
-  theme_classic()</code></pre>
+  labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>
 # see how number of morning routine checks affects the total todo lists checked
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
-  labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)+
-  theme_classic()</code></pre>
+  labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 <p><br></p>
 <p><br></p>
@@ -712,7 +707,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.55086842","3":"0.52668437","4":"0.57505248","5":"0.01231198","6":"44.74248","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01958534","3":"0.01745206","4":"0.02171861","5":"0.00108604","6":"18.03372","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.55005199","3":"0.5259206","4":"0.5741834","5":"0.012285206","6":"44.77353","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01964055","3":"0.0175100","4":"0.0217711","5":"0.001084656","6":"18.10763","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Meditation, y=work_finished))+
@@ -721,15 +716,14 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
   labs(title = &quot;Linear Regression&quot;,
        subtitle = &quot;y = Total to-do lists finished (%) \nx = Meditation in minutes&quot;,
        y = &quot;Total to-do lists finished (%)&quot;, x = &quot;Meditation in minutes&quot;)+
-  theme(plot.title = element_text(face = &quot;bold&quot;))+
-  theme_classic()</code></pre>
+  theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Screen_time, data = all_dat)
 pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8846081628","3":"0.8464519189","4":"0.9227644067","5":"1.942514e-02","6":"45.539337","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007313894","3":"-0.0008815633","4":"-0.0005812154","5":"7.645277e-05","6":"-9.566551","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8825128336","3":"0.844307538","4":"0.9207181296","5":"1.945019e-02","6":"45.372960","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007255332","3":"-0.000876008","4":"-0.0005750583","5":"7.660626e-05","6":"-9.470939","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
@@ -738,8 +732,7 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
   labs(title = &quot;Linear Regression&quot;,
        subtitle = &quot;y = The number of Phone pickups\nx = Rise time&quot;,
        y = &quot;Number of Phone pickups\n&quot;, x = &quot;\nRise time&quot;)+
-  theme(plot.title = element_text(face = &quot;bold&quot;))+
-  theme_classic()</code></pre>
+  theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
 <p><br><br />
 <br><br />
@@ -767,7 +760,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.6104056140","3":"0.5132737168","4":"0.7075375112","5":"4.944085e-02","6":"12.3461793","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003865182","3":"-0.0005129044","4":"-0.0002601321","5":"6.433150e-05","6":"-6.0082269","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0141762982","3":"0.0120479821","4":"0.0163046143","5":"1.083329e-03","6":"13.0858711","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0004188233","3":"-0.0005895967","4":"-0.0002480500","5":"8.692489e-05","6":"-4.8182209","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0001278105","3":"-0.0003556238","4":"0.0006112447","5":"2.460716e-04","6":"0.5194036","7":"0.604","8":""},{"1":"Reading","2":"0.0032755751","3":"0.0022600004","4":"0.0042911498","5":"5.169350e-04","6":"6.3365316","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0702273882","3":"-0.0952382303","4":"-0.0452165461","5":"1.273070e-02","6":"-5.5163795","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0061516625","3":"0.0010045069","4":"0.0112988182","5":"2.619940e-03","6":"2.3480164","7":"0.019","8":"*"},{"1":"Social","2":"-0.0145090923","3":"-0.0222893210","4":"-0.0067288637","5":"3.960194e-03","6":"-3.6637330","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.6033345364","3":"0.5066095678","4":"0.7000595050","5":"4.923395e-02","6":"12.2544413","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003810654","3":"-0.0005073448","4":"-0.0002547859","5":"6.427748e-05","6":"-5.9284426","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0142580236","3":"0.0121307046","4":"0.0163853426","5":"1.082826e-03","6":"13.1674185","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0004112882","3":"-0.0005819032","4":"-0.0002406732","5":"8.684469e-05","6":"-4.7359049","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0001578102","3":"-0.0003242808","4":"0.0006399012","5":"2.453890e-04","6":"0.6431023","7":"0.52","8":""},{"1":"Reading","2":"0.0032888596","3":"0.0022724762","4":"0.0043052429","5":"5.173490e-04","6":"6.3571391","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0699194505","3":"-0.0949506798","4":"-0.0448882213","5":"1.274114e-02","6":"-5.4876924","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0062690554","3":"0.0011195441","4":"0.0114185667","5":"2.621151e-03","6":"2.3917183","7":"0.017","8":"*"},{"1":"Social","2":"-0.0146155030","3":"-0.0224018059","4":"-0.0068292001","5":"3.963304e-03","6":"-3.6877069","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><br><br />
@@ -791,8 +784,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   labs(title = &quot;Multiple Regression&quot;,
        subtitle = &quot;Actual Tasks Finished (%) vs Predicted Values of Task Finished (%)&quot;,
        y = &quot;Tasks Finshed (y)&quot;, x = expression(hat(y)))+
-  theme(plot.title = element_text(face = &quot;bold&quot;))+
-  theme_classic()</code></pre>
+  theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 <br></p>
 <ul>
@@ -825,10 +817,14 @@ ggplot(data = all_dat) +
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
                                 &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
-  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)+
-  theme_classic() + 
-  theme(legend.position = &quot;None&quot;)</code></pre>
+  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code>  theme(legend.position = &quot;None&quot;)</code></pre>
+<pre><code>## List of 1
+##  $ legend.position: chr &quot;None&quot;
+##  - attr(*, &quot;class&quot;)= chr [1:2] &quot;theme&quot; &quot;gg&quot;
+##  - attr(*, &quot;complete&quot;)= logi FALSE
+##  - attr(*, &quot;validate&quot;)= logi TRUE</code></pre>
 <pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
 fit = ets(myts)
 plot(fit)</code></pre>
@@ -836,27 +832,28 @@ plot(fit)</code></pre>
 <p><br></p>
 <pre class="r"><code>box_dat &lt;- all_dat %&gt;%
   group_by(month) %&gt;%
-  dplyr::mutate(my = make_date(year, month)) %&gt;%
+  mutate(my = make_date(year, month)) %&gt;%
+  filter(!is.na(work_finished)) %&gt;%
   group_by(my) %&gt;%
-  dplyr::mutate(busy_scale = mean(Total_todo))
+  mutate(productivity_scale = mean(work_finished)) 
 
 # Total months 
 tot_month = length(unique(box_dat$my))
 
-dates = seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
+dates = seq(as.Date(&#39;09/15/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
             by = &quot;month&quot;, length.out = tot_month)
 dates_lb = format(seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
                       by = &quot;month&quot;, length.out = tot_month), &quot;%m\n%y&quot;)
 
 ggplot(box_dat) +
   geom_boxplot(aes(x = mdy(Date), y = Total, 
-                   fill = busy_scale, group = my))+
-  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%) &amp; Busyness&quot;, x = &quot;Dates&quot;) +
-  theme(plot.title = element_text(face = &quot;bold&quot;)) +
+                   fill = productivity_scale, group = my))+
+  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%) &amp; Productivity\n&quot;, x = &quot;Dates&quot;) +
+  
   scale_x_date(breaks = dates, labels = dates_lb)+
   scale_fill_gradient(low = &quot;white&quot;, high = &quot;#C03B3B&quot;)+
-  theme_classic()</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+  theme(plot.title = element_text(face = &quot;bold&quot;), legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-20-1.png" width="960" /></p>
 </div>
 
 

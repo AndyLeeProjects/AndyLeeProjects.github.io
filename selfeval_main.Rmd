@@ -33,6 +33,7 @@ library(grid)
 library(forecast)
 library(papeR)
 library(tidyverse)
+theme_set(theme_classic())
 ```
 
 
@@ -245,14 +246,13 @@ pairs.panels(correlation_plot, lm = TRUE)
 
 ## School Variable
 ```{r, echo = TRUE, eval = TRUE, fig.width = 7, fig.height = 5, warning = FALSE}
-ggplot(data = all_dat, aes(x = work_finished,
+ggplot(data = filter(all_dat, School != FALSE), aes(x = work_finished,
                            color = School))+
   geom_density()+
   labs(title = "Density Plot of Work Finished% for different School periods",
        x = "Work Finished (%)")+
   theme(plot.title = element_text(face = "bold")) +
-  scale_color_discrete(name = "School Qtrs")+
-  theme_classic()
+  scale_color_discrete(name = "School Qtrs")
 ```
 <br>  
 <br>  
@@ -271,8 +271,7 @@ ggplot(data = all_dat)+
   labs(title = "Work finished % by week days",
        subtitle = "Data: all_dat (500+ observations)",
        x = "", y = "Work Finished (%)")+
-  theme(plot.title = element_text(face = "bold"))+
-  theme_classic()
+  theme(plot.title = element_text(face = "bold"))
 ```
 <br>  
 <br>  
@@ -296,8 +295,7 @@ ggplot(all_dat_month)+
   theme(plot.title = element_text(face = "bold")) +
   scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01","2021-04-01", "2021-07-01", "2021-10-01","2022-01-01", "2022-04-01"),
                      labels=c("09/20", "01/21", "04/21", "07/21", 
-                                "10/21", "01/22","04/22"))+
-  theme_classic()
+                                "10/21", "01/22","04/22"))
   
 
 ```
@@ -314,8 +312,7 @@ ggplot(all_dat_month)+
               subtitle = "Larger positive differnce indicates higher productivity")+
   theme(plot.title = element_text(face = "bold")) +
   scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01", "2021-06-01",
-                                "2022-01-01"))+
-  theme_classic()
+                                "2022-01-01"))
   
 ```
 <br>  
@@ -430,15 +427,13 @@ Note that they are all discrete/ categorical variables
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(Total))+
   facet_wrap(~total_checked)+
-  labs(title = "Morning Routine checked & \nTotal %")+
-  theme_classic()
+  labs(title = "Morning Routine checked & \nTotal %")
 
 # see how number of morning routine checks affects the total todo lists checked
 ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
-  labs(title = "Morning Routine checked & \n todo lists finished(excluding morning routine tasks)")+
-  theme_classic()
+  labs(title = "Morning Routine checked & \n todo lists finished(excluding morning routine tasks)")
 ```
 
 
@@ -481,8 +476,7 @@ ggplot(all_dat,aes(x=Meditation, y=work_finished))+
   labs(title = "Linear Regression",
        subtitle = "y = Total to-do lists finished (%) \nx = Meditation in minutes",
        y = "Total to-do lists finished (%)", x = "Meditation in minutes")+
-  theme(plot.title = element_text(face = "bold"))+
-  theme_classic()
+  theme(plot.title = element_text(face = "bold"))
 ```
   
   
@@ -496,8 +490,7 @@ ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
   labs(title = "Linear Regression",
        subtitle = "y = The number of Phone pickups\nx = Rise time",
        y = "Number of Phone pickups\n", x = "\nRise time")+
-  theme(plot.title = element_text(face = "bold"))+
-  theme_classic()
+  theme(plot.title = element_text(face = "bold"))
 ```
 
 <br>  
@@ -541,8 +534,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
   labs(title = "Multiple Regression",
        subtitle = "Actual Tasks Finished (%) vs Predicted Values of Task Finished (%)",
        y = "Tasks Finshed (y)", x = expression(hat(y)))+
-  theme(plot.title = element_text(face = "bold"))+
-  theme_classic()
+  theme(plot.title = element_text(face = "bold"))
 
 ```
 <br>  
@@ -595,8 +587,7 @@ ggplot(data = all_dat) +
   scale_x_continuous(breaks = ymd("2020-09-01", "2021-01-01","2021-04-01", "2021-07-01", "2021-10-01","2022-01-01", "2022-04-01"),
                      labels=c("09/20", "01/21", "04/21", "07/21", 
                                 "10/21", "01/22","04/22"))+
-  labs(title = "Time Seires", subtitle = "Total (%)")+
-  theme_classic() + 
+  labs(title = "Time Seires", subtitle = "Total (%)")
   theme(legend.position = "None")
 ```
 
@@ -608,31 +599,31 @@ plot(fit)
 
 <br>  
 
-```{r, message=FALSE, warning=FALSE}
-
+```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 7,  warning = FALSE, message=FALSE}
 
 box_dat <- all_dat %>%
   group_by(month) %>%
-  dplyr::mutate(my = make_date(year, month)) %>%
+  mutate(my = make_date(year, month)) %>%
+  filter(!is.na(work_finished)) %>%
   group_by(my) %>%
-  dplyr::mutate(busy_scale = mean(Total_todo))
+  mutate(productivity_scale = mean(work_finished)) 
 
 # Total months 
 tot_month = length(unique(box_dat$my))
 
-dates = seq(as.Date('09/01/2020', format = "%m/%d/%Y"), 
+dates = seq(as.Date('09/15/2020', format = "%m/%d/%Y"), 
             by = "month", length.out = tot_month)
 dates_lb = format(seq(as.Date('09/01/2020', format = "%m/%d/%Y"), 
                       by = "month", length.out = tot_month), "%m\n%y")
 
 ggplot(box_dat) +
   geom_boxplot(aes(x = mdy(Date), y = Total, 
-                   fill = busy_scale, group = my))+
-  labs(title = "Time Seires", subtitle = "Total (%) & Busyness", x = "Dates") +
-  theme(plot.title = element_text(face = "bold")) +
+                   fill = productivity_scale, group = my))+
+  labs(title = "Time Seires", subtitle = "Total (%) & Productivity\n", x = "Dates") +
+  
   scale_x_date(breaks = dates, labels = dates_lb)+
   scale_fill_gradient(low = "white", high = "#C03B3B")+
-  theme_classic()
+  theme(plot.title = element_text(face = "bold"), legend.position = "bottom")
   
 ```
 
