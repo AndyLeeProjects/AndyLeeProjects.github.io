@@ -46,7 +46,7 @@ cur_year_str = paste0('/',cur_year)
 
 <br>  
 
-![](`r paste0('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/monthly_eval_images/', month.abb[previous_month], cur_year)`.jpg)
+![](`r paste0('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/monthly_eval_images/', month.name[previous_month], cur_year)`.jpg)
 
 <br>  
 
