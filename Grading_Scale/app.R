@@ -10,7 +10,7 @@
 library(shiny)
 library(tidyverse)
 theme_set(theme_classic())
-
+load("month_dat.RData")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -21,59 +21,52 @@ ui <- fluidPage(
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-      fixedRow(
-        column(8,
+      fluidRow(
+        column(12,
                sliderInput("Rise_time",
                   "Rise time (min):",
                   min = -240,
                   max = 240,
-                  value = 30),
-          sliderInput("Screen_time",
-                    "Screen Time (min):",
-                    min = 1,
-                    max = 300,
-                    value = 60),
-          sliderInput("Phone_pickups",
-                    "Number of Phone pickups:",
-                    min = 1,
-                    max = 200,
-                    value = 50),
-          sliderInput("Todo_total",
-                    "Total To-do Lists:",
-                    min = 0,
-                    max = 20,
-                    value = 15),
-          sliderInput("Todo_finished",
-                    "Total To-do Lists Completed:",
-                    min = 0,
-                    max = 20,
-                    value = 15))),
-      fixedRow(
-        column(8,
-               sliderInput("Meditation",
-                  "Meditation (min):",
-                  min = 0,
-                  max = 40,
-                  value = 20),
-                sliderInput("Reading",
-                            "Reading (min):",
-                            min = 0,
-                            max = 100,
-                            value = 30),
+                  value = mean(month_dat$Rise_time)),
+               h5("Negative value: earlier rise than intended\nPositive value: later rise than intended"),
+               hr(),
+          sliderInput("Work_finished",
+                     "Work_finished (%):",
+                     min = 0,
+                     max = 1,
+                     value = mean(month_dat$work_finished),
+                     step = .01),
+          sliderInput("Meditation",
+                      "Meditation (min):",
+                      min = 0,
+                      max = 40,
+                      value = mean(month_dat$Meditation)),
+          sliderInput("Reading",
+                      "Reading (min):",
+                      min = 0,
+                      max = 100,
+                      value = mean(month_dat$Reading)))),
+      fluidRow(
+        column(12,
+               sliderInput("Screen_time",
+                           "Screen Time (min):",
+                           min = 1,
+                           max = 500,
+                           value = mean(month_dat$Screen_time)),
+               sliderInput("Phone_pickups",
+                           "Number of Phone pickups:",
+                           min = 1,
+                           max = 200,
+                           value = mean(month_dat$Phone_pickups)),
                 sliderInput("Multiple",
                             "Multiple (Subjective Evaluation 1-5):",
                             min = 1,
                             max = 5,
-                            value = 5,
+                            value = mean(month_dat$Multiple),
                             step = .1),
-                sliderInput("Run",
-                            "Total distance ran (km):",
-                            min = 0,
-                            max = 5,
-                            value = 1),
                 radioButtons("Drink",
                              "Drink (T/F):",
-                             choices = c("Drank", "Sober"),
+                             choices = c("Sober", "Drank"),
                              inline = TRUE)))
     ),
     # Show a plot of the generated distribution
@@ -91,10 +84,8 @@ server <- function(input, output) {
                        Rise_time = input$Rise_time,
                        Screen_time = input$Screen_time,
                        Phone_pickups = input$Phone_pickups,
-                       Todo_total = input$Todo_total,
-                       Todo_finished = input$Todo_finished,
+                       Work_finished = input$Work_finished,
                        Drink = input$Drink,
-                       Run = input$Run,
                        Multiple = input$Multiple)
     
     data <- data %>%
@@ -103,22 +94,24 @@ server <- function(input, output) {
                                round((1 / (1 + exp(0.004 * Rise_time)) - 0.5),3)),
              Screen_time = round((1000 - Screen_time) / 4.3e+5 * 1e+5) / 1000,
              Phone_pickups = round((340 - Phone_pickups) / 5) / 1000,
-             Work_finished = if_else(Todo_total < 12, 
-                               round(Todo_finished / (3.06 * Todo_total),3), 
-                               round(Todo_finished / (2.94 * Todo_total),3)),
+             Work_finished = round(Work_finished / (3.06),3),
              Meditation = round(Meditation / 140,3),
              Reading = case_when(Reading > 0 ~ round(Reading / 450,3), 
                                  Reading == 0 ~ -0.03),
              Drink = if_else(Drink == "Drank", -0.03, 0),
-             Run = if_else(Run != 0, round(Run / 85,3), -0.003),
              Multiple = Multiple * (2.3 + 6 / Multiple) / 100,
              Total = (Rise_time + Screen_time + Work_finished + Meditation +
-               Reading + Drink + Run + Phone_pickups + Multiple)*100)
+               Reading + Drink + Phone_pickups + Multiple)*100) %>%
+      mutate(Total = case_when(
+                      Total > 100 ~ 100,
+                      Total <= 100 ~ Total
+      ))
     return(data)
        
        
   })
-    
+  
+  
     output$distPlot <- renderPlot({
       
       ggplot(data()) +
@@ -127,8 +120,11 @@ server <- function(input, output) {
         theme(axis.title.x=element_blank(),
               axis.text.x=element_blank(),
               axis.ticks.x=element_blank(),
-              legend.position = "None")
-      })
+              legend.position = "None",
+              plot.title = element_text(size=22)) +
+        labs(title = paste0("Total: ",as.character(data()$Total)))
+      
+      }, height = 700, width = 300)
 }
 
 # Run the application 

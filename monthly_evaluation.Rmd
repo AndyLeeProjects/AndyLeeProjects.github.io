@@ -50,6 +50,14 @@ cur_year_str = paste0(cur_year, '-')
 
 <br>  
 
+````{=html}
+<style>iframe{height: 1200px; width: 800px}</style>
+<iframe height="100%" width="100%" frameborder="no"
+src="https://anddylee.shinyapps.io/Grading_Scale/">
+</iframe>
+````
+
+<br>
 
 ```{r, include=FALSE}
 all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
@@ -64,11 +72,11 @@ colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
 
 # Remove unnecessary columns & Modify some columns
 all_dat <- all_dat %>%
-  dplyr::select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
-  dplyr::mutate(work_finished = round(Finished/Total_todo,4)*100,
+  select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
+  mutate(work_finished = round(Finished/Total_todo,4)*100,
                 Drink = lag(Drink),
                 Total = Total*100) %>%
-  dplyr::filter(Multiple < 6) %>%
+  filter(Multiple < 6) %>%
   tibble()
 
 all_dat_modified <- all_dat %>%
@@ -86,7 +94,6 @@ morning_rt <- morning_rt %>%
   select(Date, everything(), -c(X, level_0, index, 
                                 rise_time_check, before_sleep_check)) %>%
   tibble()
-
 ```
 
 
@@ -205,6 +212,9 @@ month_dat <- all_dat %>%
          Productivity = as.factor(Productivity),
          Satisfaction = as.factor(Satisfaction),
          Social = as.factor(Social)) 
+
+# Save it as RData for Shiny App
+save(month_dat, file = '/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Grading_Scale/month_dat.RData')
 
 # merge morning_rt with all_dat
 month_dat <- merge(month_dat, morning_rt,by="Date", all.x=T) %>%
@@ -595,6 +605,27 @@ ggplot(data = all_dat_modified) +
 ```
 
 <br>  
+
+```{r, include = FALSE}
+all_dat <- all_dat %>%
+  filter(!is.na(work_finished)) %>%
+  mutate(med_check = case_when(
+    Meditation == 0 ~ "No Med",
+    Meditation != 0 ~ "Med"),
+         total_d = case_when(
+    Total < median(Total) ~ "Low Total",
+    Total >= median(Total) ~ "High Total"),
+         work_finished_d = case_when(
+    work_finished < median(work_finished) ~ "Low Productivy",
+    work_finished >= median(work_finished) ~ "High Productivy"
+         ))
+ggplot(all_dat) +
+  geom_bar(aes(x = total_d, fill = med_check))
+
+ggplot(all_dat) +
+    geom_bar(aes(x = work_finished_d, fill = med_check))
+
+```
 
 
 ### Productivity Level: Tech Consumption

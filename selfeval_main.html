@@ -501,7 +501,7 @@ class="math display">\[r =
 </ul>
 <p><br></p>
 <pre class="r"><code>correlation_plot &lt;- all_dat %&gt;%
-  dplyr::select(c(Screen_time, Meditation, Multiple, Rise_time, 
+  select(c(Screen_time, Meditation, Multiple, Rise_time, 
            Reading,Phone_pickups, work_finished, Total))
 
 pairs.panels(correlation_plot, lm = TRUE)</code></pre>
@@ -542,11 +542,11 @@ ggplot(data = all_dat)+
 <h2><span class="header-section-number">2.5</span> Time Trend (Total
 %)</h2>
 <pre class="r"><code>all_dat_month &lt;- all_dat %&gt;%
-  dplyr::filter(!is.na(Rise_time)) %&gt;%
-  dplyr::group_by(year, month) %&gt;%
+  filter(!is.na(Rise_time)) %&gt;%
+  group_by(year, month) %&gt;%
   dplyr::summarise(Total = mean(Total),
             Rise_time = mean(Rise_time)) %&gt;%
-  dplyr::mutate(Date = make_date(year, month)) %&gt;%
+  mutate(Date = make_date(year, month)) %&gt;%
   arrange(Date)
   
   
@@ -644,14 +644,14 @@ Total_checked variable affects the outcome of the day</h2>
 </ul>
 <pre class="r"><code>
 # see how number of morning routine checks affects the Total %
-ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
+ggplot(filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(Total))+
   facet_wrap(~total_checked)+
   labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>
 # see how number of morning routine checks affects the total todo lists checked
-ggplot(dplyr::filter(all_morning_rt, total_checked != 0)) + 
+ggplot(filter(all_morning_rt, total_checked != 0)) + 
   geom_density(aes(work_finished_mr_exc))+
   facet_wrap(~total_checked)+
   labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)</code></pre>
@@ -707,7 +707,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.5499647","3":"0.52585967","4":"0.57406975","5":"0.012271847","6":"44.81515","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0196624","3":"0.01753822","4":"0.02178659","5":"0.001081419","6":"18.18205","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.55034859","3":"0.52628342","4":"0.57441376","5":"0.012251741","6":"44.92003","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01956628","3":"0.01746139","4":"0.02167118","5":"0.001071616","6":"18.25867","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Meditation, y=work_finished))+
@@ -723,7 +723,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8835084287","3":"0.8453827361","4":"0.9216341213","5":"1.940974e-02","6":"45.518808","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007285041","3":"-0.0008787824","4":"-0.0005782257","5":"7.650654e-05","6":"-9.522115","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8854848588","3":"0.8474992498","4":"0.9234704678","5":"1.933873e-02","6":"45.788156","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007332432","3":"-0.0008832042","4":"-0.0005832822","5":"7.634615e-05","6":"-9.604193","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
@@ -760,7 +760,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.6054288953","3":"0.5087379471","4":"0.7021198434","5":"4.921686e-02","6":"12.3012503","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003838589","3":"-0.0005100903","4":"-0.0002576276","5":"6.425326e-05","6":"-5.9741551","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0143406895","3":"0.0122173177","4":"0.0164640613","5":"1.080822e-03","6":"13.2683194","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0004076095","3":"-0.0005781655","4":"-0.0002370535","5":"8.681504e-05","6":"-4.6951484","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0001448293","3":"-0.0003369139","4":"0.0006265725","5":"2.452131e-04","6":"0.5906263","7":"0.555","8":""},{"1":"Reading","2":"0.0033111475","3":"0.0022951393","4":"0.0043271558","5":"5.171604e-04","6":"6.4025538","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0688847703","3":"-0.0938623686","4":"-0.0439071720","5":"1.271390e-02","6":"-5.4180682","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0061282953","3":"0.0009826642","4":"0.0112739264","5":"2.619188e-03","6":"2.3397689","7":"0.02","8":"*"},{"1":"Social","2":"-0.0142525775","3":"-0.0220169734","4":"-0.0064881816","5":"3.952171e-03","6":"-3.6062652","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.6123712362","3":"0.5161380946","4":"0.7086043778","5":"4.898472e-02","6":"12.5012700","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003900955","3":"-0.0005162101","4":"-0.0002639808","5":"6.419505e-05","6":"-6.0767217","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0144379183","3":"0.0123356649","4":"0.0165401716","5":"1.070092e-03","6":"13.4922240","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0004084413","3":"-0.0005788468","4":"-0.0002380358","5":"8.674004e-05","6":"-4.7087973","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0001090951","3":"-0.0003696556","4":"0.0005878457","5":"2.436943e-04","6":"0.4476718","7":"0.655","8":""},{"1":"Reading","2":"0.0033508216","3":"0.0023357704","4":"0.0043658729","5":"5.166827e-04","6":"6.4852594","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0666929639","3":"-0.0915604307","4":"-0.0418254970","5":"1.265807e-02","6":"-5.2688094","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0058181891","3":"0.0006956196","4":"0.0109407585","5":"2.607497e-03","6":"2.2313309","7":"0.026","8":"*"},{"1":"Social","2":"-0.0139860430","3":"-0.0216973857","4":"-0.0062747004","5":"3.925238e-03","6":"-3.5631071","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><br><br />
@@ -808,12 +808,12 @@ accurate</li>
 <h1><span class="header-section-number">5</span> Main Variables: Time
 Series</h1>
 <p><br></p>
-<pre class="r"><code>ats &lt;- ts(all_dat, start = decimal_date(mdy(&quot;09/01/2020&quot;)),
+<pre class="r"><code>ats &lt;- ts(all_dat, start = decimal_date(ymd(&quot;2020-09-01&quot;)),
                             frequency = 365.25 / 7)
 
 ggplot(data = all_dat) +
-  geom_line(aes(x = mdy(Date), y = Total))+
-  geom_smooth(aes(x = mdy(Date), y = Total, color = &quot;red&quot;)) + 
+  geom_line(aes(x = ymd(Date), y = Total))+
+  geom_smooth(aes(x = ymd(Date), y = Total, color = &quot;red&quot;)) + 
   scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
                                 &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
@@ -840,13 +840,13 @@ plot(fit)</code></pre>
 # Total months 
 tot_month = length(unique(box_dat$my))
 
-dates = seq(as.Date(&#39;09/15/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
+dates = seq(as.Date(&#39;2020-09-15&#39;, format = &quot;%Y-%m-%d&quot;), 
             by = &quot;month&quot;, length.out = tot_month)
-dates_lb = format(seq(as.Date(&#39;09/01/2020&#39;, format = &quot;%m/%d/%Y&quot;), 
+dates_lb = format(seq(as.Date(&#39;2020-09-01&#39;, format = &quot;%Y-%m-%d&quot;), 
                       by = &quot;month&quot;, length.out = tot_month), &quot;%m\n%y&quot;)
 
 ggplot(box_dat) +
-  geom_boxplot(aes(x = mdy(Date), y = Total, 
+  geom_boxplot(aes(x = ymd(Date), y = Total, 
                    fill = productivity_scale, group = my))+
   labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%) &amp; Productivity\n&quot;, x = &quot;Dates&quot;) +
   
