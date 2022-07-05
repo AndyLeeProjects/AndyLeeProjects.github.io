@@ -26,20 +26,20 @@ cur_month = month(Sys.Date())
 
 if (nchar(cur_month - 1) == 1 & cur_month != 1){
   previous_month = cur_month - 1  
-  previous_month_str = paste0("0", previous_month, '/')
+  previous_month_str = paste0("-0", previous_month, '-')
 } else if (cur_month == 1){
   previous_month = 12
-  previous_month_str = paste0(previous_month, '/')
+  previous_month_str = paste0('-',previous_month, '-')
 } else {
   previous_month = cur_month - 1
-  previous_month_str = paste0(previous_month, '/')
+  previous_month_str = paste0('-',previous_month, '-')
 }
 cur_year = year(Sys.Date())
 if(cur_month == 1){
   cur_year = cur_year - 1
 }
 
-cur_year_str = paste0('/',cur_year)
+cur_year_str = paste0(cur_year, '-')
 ```
 
 # **`r paste0(month.name[previous_month], ' ', cur_year)`**
@@ -56,10 +56,10 @@ all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
 morning_rt = read.csv('/Volumes/Programming/Spring 2022/Project/morning_routine.csv')
 
 colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
-                       'Screen_time','Created','Date','Drink',
+                       'Screen_time','Created','Date','Drink','Key_words',
                        'Meditation','Mentality','Satisfaction',
                        'Reading','Productivity','Rise_time','Run','Social',
-                       'Tech','Total','Total_todo','Work_done','Key_words')
+                       'Tech','Total','Total_todo','Work_done')
 
 
 # Remove unnecessary columns & Modify some columns
@@ -73,16 +73,14 @@ all_dat <- all_dat %>%
 
 all_dat_modified <- all_dat %>%
   filter(Social != 0) %>%
-  mutate(Date = mdy(Date),
+  mutate(Date = ymd(Date),
          Tech = as.factor(Tech),
          Productivity = as.factor(Productivity),
          Satisfaction = as.factor(Satisfaction),
          Social = as.factor(Social)) 
 
-all_dat$Date[1:length(all_dat$Date)] = format(mdy(all_dat$Date[1:length(all_dat$Date)]),"%m/%d/%Y")
-
 morning_rt <- morning_rt %>%
-  mutate(Date = mdy(Date),
+  mutate(Date = ymd(Date),
          morning_phone = rise_time_check, # modify column name 
          night_phone = before_sleep_check) %>%
   select(Date, everything(), -c(X, level_0, index, 
@@ -109,8 +107,8 @@ words_dat_all <- all_dat %>%
 
 words_dat_month <- all_dat %>%
   select(Key_words, Date) %>%
-  filter(startsWith(Date, previous_month_str) == TRUE &
-         endsWith(Date, cur_year_str) == TRUE) %>%
+  filter(startsWith(Date, cur_year_str) == TRUE &
+         grepl(previous_month_str, Date) == TRUE) %>%
   filter(Key_words != 0 & Key_words != '' & Key_words != '[]') %>%
   mutate(Key_words = gsub('[\']','',Key_words),
          Key_words = gsub('[\\[]','',Key_words),
@@ -200,9 +198,9 @@ wordcloud(words = words_dat_all$words, freq = words_dat_all$freq, min.freq = .01
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
 month_dat <- all_dat %>%
-  filter(startsWith(Date, previous_month_str) == TRUE &
-         endsWith(Date, cur_year_str) == TRUE) %>%
-  mutate(Date = mdy(Date),
+  filter(startsWith(Date, cur_year_str) == TRUE &
+         grepl(previous_month_str, Date) == TRUE) %>%
+  mutate(Date = ymd(Date),
          Tech = as.factor(Tech),
          Productivity = as.factor(Productivity),
          Satisfaction = as.factor(Satisfaction),
@@ -210,7 +208,6 @@ month_dat <- all_dat %>%
 
 # merge morning_rt with all_dat
 month_dat <- merge(month_dat, morning_rt,by="Date", all.x=T) %>%
-  select(-c(rise_time_min)) %>% # redundant
   arrange(Date) %>%
   tibble()
 ```
@@ -254,7 +251,7 @@ all_summary <- as.data.frame(all_dat %>%
   
 # Summary: 3 preceding months (AVG)
 previous3_summary <- as.data.frame(all_dat %>%
-  mutate(Date = mdy(Date)) %>%
+  mutate(Date = ymd(Date)) %>%
   filter(month(Date) %in% previous_3 & year(Date) == cur_year) %>%
   dplyr::summarise(Total_avg = mean(Total),
             Meditation_avg = mean(Meditation),
@@ -264,7 +261,7 @@ previous3_summary <- as.data.frame(all_dat %>%
 
 # Summary: 1 preceding month (AVG)
 preced_month_summary <- as.data.frame(all_dat %>%
-  mutate(Date = mdy(Date)) %>%
+  mutate(Date = ymd(Date)) %>%
   filter(month(Date) == pprevious_month & year(Date) == cur_year) %>%
   dplyr::summarise(Total_avg = mean(Total),
             Meditation_avg = mean(Meditation),
@@ -297,7 +294,7 @@ library(rstatix)
 
 
 summary.stats <- all_dat %>%
-  mutate(Date = mdy(Date),
+  mutate(Date = ymd(Date),
          work_finished = work_finished) %>%
   group_by(month(Date), year(Date)) %>%
   get_summary_stats() %>%
@@ -345,8 +342,8 @@ g2 <- ggplot() +
     geom_density(data = filter(all_dat, Reading < 50), 
                  aes(x = Reading, y = ..scaled..,fill = "All_dat"), se = F, alpha = .15) +
     geom_density(data = filter(all_dat, Reading < 50 
-                               & month(mdy(Date)) == pprevious_month 
-                               & year(mdy(Date)) == cur_year), 
+                               & month(ymd(Date)) == pprevious_month 
+                               & year(ymd(Date)) == cur_year), 
                  aes(x = Reading, y = ..scaled..,fill = paste0(month.abb[pprevious_month], '_dat')), 
                  se = F, alpha = .15) +
     geom_density(data = month_dat,
@@ -361,10 +358,10 @@ g2 <- ggplot() +
   
 # Add groups for Rise time Boxplot
 all_dat <- all_dat %>%
-  mutate(Rise_time_group = case_when(month(mdy(Date)) == pprevious_month & 
-                              year(mdy(Date)) == cur_year ~ paste0(month.abb[pprevious_month], '_dat'),
-                              month(mdy(Date)) == previous_month & 
-                              year(mdy(Date)) == cur_year ~ paste0(month.abb[previous_month], '_dat'),
+  mutate(Rise_time_group = case_when(month(ymd(Date)) == pprevious_month & 
+                              year(ymd(Date)) == cur_year ~ paste0(month.abb[pprevious_month], '_dat'),
+                              month(ymd(Date)) == previous_month & 
+                              year(ymd(Date)) == cur_year ~ paste0(month.abb[previous_month], '_dat'),
                               TRUE ~ 'All_dat'))
 all_dat$Rise_time_group <- factor(all_dat$Rise_time_group, levels = c("All_dat",
      paste0(month.abb[pprevious_month], '_dat'), 
@@ -424,7 +421,7 @@ grid.arrange(g1, g2, g3, g4, g5, g6, ncol = 2)
 
     
 all_dat %>% 
-        mutate(Date = mdy(Date)) %>%
+        mutate(Date = ymd(Date)) %>%
         filter((month(Date) %in% previous_3 | month(Date) == previous_month) & 
                  year(Date) == cur_year) %>%
   ggplot()+
@@ -461,8 +458,8 @@ grid.arrange(g1, g2, ncol = 2)
 previous_year = cur_year -1
 
 box_dat <- all_dat %>%
-  mutate(month = month(mdy(Date)),
-         year = year(mdy(Date))) %>%
+  mutate(month = month(ymd(Date)),
+         year = year(ymd(Date))) %>%
   group_by(month) %>%
   mutate(my = make_date(year, month)) %>%
   group_by(my) %>%
@@ -472,16 +469,16 @@ box_dat <- all_dat %>%
 # Total months 
 tot_month = length(unique(box_dat$my))
 
-starting_date = paste0(cur_month,'/15/', previous_year)
-ending_date = paste0(previous_month, '/30/', cur_year)
+starting_date = paste0(previous_year, '-', cur_month, '-15')
+ending_date = paste0(cur_year, '-', previous_month, '-30')
 
-dates = seq(as.Date(starting_date, format = "%m/%d/%Y"), 
+dates = seq(as.Date(starting_date, format = "%Y-%m-%d"), 
             by = "month", length.out = 12)
-dates_lb = format(seq(as.Date(starting_date, format = "%m/%d/%Y"), 
+dates_lb = format(seq(as.Date(starting_date, format = "%Y-%m-%d"), 
                       by = "month", length.out = 12), "%m")
 
-ggplot(filter(box_dat, mdy(starting_date) <= mdy(Date) & mdy(Date) < mdy(ending_date))) +
-  geom_boxplot(aes(x = mdy(Date), y = Total, 
+ggplot(filter(box_dat, ymd(starting_date) <= ymd(Date) & ymd(Date) < ymd(ending_date))) +
+  geom_boxplot(aes(x = ymd(Date), y = Total, 
                    fill = Productivity_scale, group = my))+
   labs(title = "TIME SERIES (BoxPlot): Past 12 months\n", x = "Months (Past 12)", y = "Total %") +
   theme(plot.title = element_text(face = "bold")) +
@@ -506,11 +503,10 @@ ggplot(filter(box_dat, mdy(starting_date) <= mdy(Date) & mdy(Date) < mdy(ending_
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 9, fig.height = 5.5,  warning = FALSE, message=FALSE}
 comparison_month = all_dat %>%
-  mutate(Date = mdy(Date)) %>%
+  mutate(Date = ymd(Date)) %>%
   filter((month(Date) == pprevious_month & year(Date) == cur_year))
 
 comparison_month <- merge(comparison_month, morning_rt,by="Date", all.x=T) %>%
-  select(-c(rise_time_min)) %>% # redundant
   filter(!is.na(total_checked)) %>%
   arrange(Date) %>%
   tibble()
@@ -528,7 +524,7 @@ ggplot() +
   geom_smooth(data = month_dat, aes(x = day(Date), y = Total, 
                                    color = paste0('Month_',previous_month)), 
               se = F,size = 1.5, alpha = .2) + 
-  labs(title = paste0("DAILY TREND: ", month.abb[previous_month], " vs Preceding Month"),
+  labs(title = paste0("DAILY TREND: ", month.abb[pprevious_month], " vs ", month.abb[previous_month]),
        subtitle = paste0(month.abb[pprevious_month], 
                          " AVG: ", 
                          as.character(round(mean(comparison_month$Total),2)),

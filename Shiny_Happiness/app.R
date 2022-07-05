@@ -45,7 +45,7 @@ server <- function(input, output) {
   
   output$plot1 <- renderPlot({
     req(input$hpnsContinent)
-    ggplot(dplyr::filter(h_p_dat, Continent == input$hpnsContinent), 
+    ggplot(filter(h_p_dat, Continent == input$hpnsContinent), 
            aes(x = GDP, y=H_score, color = Life_expectancy_F,
                size = Freedom)) +
       geom_point() +
