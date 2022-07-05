@@ -30,7 +30,7 @@ ui <- fluidPage(
                      "Work_finished (%):",
                      min = 0,
                      max = 1,
-                     value = mean(month_dat$work_finished),
+                     value = mean(month_dat$work_finished)/100,
                      step = .01),
           sliderInput("Meditation",
                       "Meditation (min):",

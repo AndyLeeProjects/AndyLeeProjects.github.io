@@ -55,6 +55,9 @@ cur_year_str = paste0(cur_year, '-')
 
 ---  
 
+<font size="4">The initial set up is the **actual average** of the `r month.name[previous_month]` Data.</font>  
+
+<br>  
 
 ````{=html}
 <style>iframe{height: 900px; width: 1200px}</style>
