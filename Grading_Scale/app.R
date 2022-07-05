@@ -15,15 +15,11 @@ load("month_dat.RData")
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   
-  # Application title
-  titlePanel("Daily Evaluation Grading Scale"),
-  
   # Sidebar with a slider input for number of bins 
-  sidebarLayout(
+    column(10,
     sidebarPanel(
       fluidRow(
-        column(12,
-               sliderInput("Rise_time",
+           sliderInput("Rise_time",
                   "Rise time (min):",
                   min = -240,
                   max = 240,
@@ -45,33 +41,31 @@ ui <- fluidPage(
                       "Reading (min):",
                       min = 0,
                       max = 100,
-                      value = mean(month_dat$Reading)))),
-      fluidRow(
-        column(12,
-               sliderInput("Screen_time",
-                           "Screen Time (min):",
-                           min = 1,
-                           max = 500,
-                           value = mean(month_dat$Screen_time)),
-               sliderInput("Phone_pickups",
-                           "Number of Phone pickups:",
-                           min = 1,
-                           max = 200,
-                           value = mean(month_dat$Phone_pickups)),
-                sliderInput("Multiple",
-                            "Multiple (Subjective Evaluation 1-5):",
-                            min = 1,
-                            max = 5,
-                            value = mean(month_dat$Multiple),
-                            step = .1),
-                radioButtons("Drink",
-                             "Drink (T/F):",
-                             choices = c("Sober", "Drank"),
-                             inline = TRUE)))
-    ),
+                      value = mean(month_dat$Reading)),
+          sliderInput("Screen_time",
+                     "Screen Time (min):",
+                     min = 1,
+                     max = 500,
+                     value = mean(month_dat$Screen_time)),
+          sliderInput("Phone_pickups",
+                     "Number of Phone pickups:",
+                     min = 1,
+                     max = 200,
+                     value = mean(month_dat$Phone_pickups)),
+          sliderInput("Multiple",
+                      "Multiple (Subjective Evaluation 1-5):",
+                      min = 1,
+                      max = 5,
+                      value = mean(month_dat$Multiple),
+                      step = .1),
+          radioButtons("Drink",
+                       "Drink (T/F):",
+                       choices = c("Sober", "Drank"),
+                       inline = TRUE))),
     # Show a plot of the generated distribution
-    mainPanel(
-      plotOutput("distPlot"))
+      column(2, offset = 2,
+      mainPanel(
+      plotOutput("distPlot")))
   )
 )
 
@@ -122,7 +116,7 @@ server <- function(input, output) {
               axis.ticks.x=element_blank(),
               legend.position = "None",
               plot.title = element_text(size=22)) +
-        labs(title = paste0("Total: ",as.character(data()$Total)))
+        labs(title = paste0("Total: ",as.character(data()$Total), "%"))
       
       }, height = 700, width = 300)
 }

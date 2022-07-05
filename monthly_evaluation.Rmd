@@ -50,8 +50,14 @@ cur_year_str = paste0(cur_year, '-')
 
 <br>  
 
+## Daily Evaluation Grading Metrics  
+
+
+---  
+
+
 ````{=html}
-<style>iframe{height: 1200px; width: 800px}</style>
+<style>iframe{height: 900px; width: 1200px}</style>
 <iframe height="100%" width="100%" frameborder="no"
 src="https://anddylee.shinyapps.io/Grading_Scale/">
 </iframe>
