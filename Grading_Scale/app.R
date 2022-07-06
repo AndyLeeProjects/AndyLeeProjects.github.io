@@ -9,11 +9,12 @@
 
 library(shiny)
 library(tidyverse)
+library(shinythemes)
 theme_set(theme_classic())
 load("month_dat.RData")
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
+ui <- fluidPage(theme = shinytheme("sandstone"),
   
   # Sidebar with a slider input for number of bins 
     column(10,
@@ -21,7 +22,7 @@ ui <- fluidPage(
       fluidRow(
            sliderInput("Rise_time",
                   "Rise time (min):",
-                  min = -240,
+                  min = -100,
                   max = 240,
                   value = mean(month_dat$Rise_time)),
                h5("Negative value: earlier rise than intended\nPositive value: later rise than intended"),
@@ -35,12 +36,12 @@ ui <- fluidPage(
           sliderInput("Meditation",
                       "Meditation (min):",
                       min = 0,
-                      max = 40,
+                      max = 30,
                       value = mean(month_dat$Meditation)),
           sliderInput("Reading",
                       "Reading (min):",
                       min = 0,
-                      max = 100,
+                      max = 60,
                       value = mean(month_dat$Reading)),
           sliderInput("Screen_time",
                      "Screen Time (min):",
@@ -117,6 +118,7 @@ server <- function(input, output) {
               legend.position = "None",
               plot.title = element_text(size=22)) +
         labs(title = paste0("Total: ",as.character(data()$Total), "%"))
+
       
       }, height = 700, width = 300)
 }
