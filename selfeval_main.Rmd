@@ -46,14 +46,15 @@ morning_rt = read.csv('/Volumes/Programming/Spring 2022/Project/morning_routine.
 
 
 colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
-                       'Screen_time','Created','Date','Drink','Key_words',
+                       'Screen_time','Date','Drink',
                        'Meditation','Mentality','Satisfaction',
                        'Reading','Productivity','Rise_time','Run','Social',
-                       'Tech','Total','Total_todo','Work_done')
+                       'Tech','Total','Total_todo','Work_done', 'Key_words')
+
 
 # Remove unnecessary columns & Modify some columns
 all_dat <- all_dat %>%
-  select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
+  select(Date, everything(), Finished, Total_todo,-X,-Name, - Work_done) %>%
   mutate(work_finished = round(Finished/Total_todo,4),
          Drink = lag(Drink),
          Total = Total*100) %>%

@@ -73,15 +73,15 @@ all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
 morning_rt = read.csv('/Volumes/Programming/Spring 2022/Project/morning_routine.csv')
 
 colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
-                       'Screen_time','Created','Date','Drink','Key_words',
+                       'Screen_time','Date','Drink',
                        'Meditation','Mentality','Satisfaction',
                        'Reading','Productivity','Rise_time','Run','Social',
-                       'Tech','Total','Total_todo','Work_done')
+                       'Tech','Total','Total_todo','Work_done', 'Key_words')
 
 
 # Remove unnecessary columns & Modify some columns
 all_dat <- all_dat %>%
-  select(Date, everything(), Finished, Total_todo,-X,-Name,-Created, - Work_done) %>%
+  select(Date, everything(), Finished, Total_todo,-X,-Name, - Work_done) %>%
   mutate(work_finished = round(Finished/Total_todo,4)*100,
                 Drink = lag(Drink),
                 Total = Total*100) %>%
@@ -113,7 +113,7 @@ words_dat_all <- all_dat %>%
   mutate(Key_words = gsub('[\']','',Key_words),
          Key_words = gsub('[\\[]','',Key_words),
          Key_words = gsub('\\]','',Key_words)) %>%
-  separate(Key_words, c('word_1', 'word_2', 'word_3'), sep = ',') %>%
+  separate(Key_words, c('word_1', 'word_2', 'word_3'), sep = '-') %>%
   pivot_longer(cols = starts_with("word"), names_to = 'word_num', values_to = 'words') %>%
   mutate(words = gsub(" ", "", words)) %>%
   group_by(words) %>%
@@ -129,7 +129,7 @@ words_dat_month <- all_dat %>%
   mutate(Key_words = gsub('[\']','',Key_words),
          Key_words = gsub('[\\[]','',Key_words),
          Key_words = gsub('\\]','',Key_words)) %>%
-  separate(Key_words, c('word_1', 'word_2', 'word_3'), sep = ',') %>%
+  separate(Key_words, c('word_1', 'word_2', 'word_3'), sep = '-') %>%
   pivot_longer(cols = starts_with("word"), names_to = 'word_num', values_to = 'words') %>%
   mutate(words = gsub(" ", "", words)) %>%
   group_by(words) %>%
