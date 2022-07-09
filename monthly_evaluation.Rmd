@@ -1,6 +1,5 @@
 ---
 title: "Monthly Evaluation "
-author: "Andy"
 output: html_document
 ---
 
@@ -346,13 +345,13 @@ ggplot(filter(summary.stats, variable %in% grading & !variable %in% multiple)) +
 
 ```
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 10.7,  warning = FALSE, message=FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 11.2,  warning = FALSE, message=FALSE}
 
 g1 <- ggplot(filter(summary.stats, !variable %in% grading & !variable %in% multiple &
                       !variable %in% phone)) +
         geom_col(aes(x = reorder(month.abb[month],month), y = mean, 
                      group = variable, fill = variable), position = "dodge") +
-        labs(title = "Meditation, Reading Comparison (Past 3 Months)",
+        labs(title = "Meditation, Reading Comparison",
              subtitle = "Average minutes in Meditation & Reading\n",
              x = "Month", y = "Mean (min)") +
     theme(plot.title = element_text(face = "bold"), legend.position = "top")
@@ -393,33 +392,32 @@ g3 <- ggplot(month_dat) +
      theme(plot.title = element_text(face = "bold"), 
            axis.title.x=element_blank(),
            axis.text.x=element_blank(),
-           axis.ticks.x=element_blank()) +
-     labs(title = "\nRise Time Distribution", 
-          subtitle = "Negative value: Rose earlier than intended\nPositive value: Rose later than intended\n",
+           axis.ticks.x=element_blank(),
+           legend.position="bottom") +
+     labs(title = "\n\nRise Time Distribution", 
+          subtitle = "Negative value: Rose n (min) earlier than intended\nPositive value: Rose n (min) later than intended\n",
           x = "Rise Time (min)")
 
 
 g4 <- ggplot(filter(summary.stats, variable %in% phone)) +
         geom_smooth(aes(x = reorder(month.abb[month],month), y = mean, group = variable, color = variable)) +
-        labs(title = "\nScreen time (min)",
+        labs(title = "\n\nScreen time (min) Trend",
              subtitle = "Lower Screen time helps achieve higher productivity level\n",
-             x = "Month", y = "Mean (min)") + 
+             x = "Month", y = "Screen Time Mean (min)") + 
         theme(plot.title = element_text(face = "bold"), legend.position = "None")
 
 g5 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         geom_col(aes(x = reorder(month.abb[month],month), y = mean, group = variable, fill = variable), position = "dodge") +
         ylim(0,5) + 
-        labs(title = "\nSubjective Evaluation - Bar",
-             subtitle = "1: Worst\n5: Best\n",
-             x = "Month", y = "Mean") + 
+        labs(title = "\n\nSubjective Evaluation (1~5) - Bar\n",
+             x = "Month", y = "Sub. Evaluation Mean") + 
         theme(plot.title = element_text(face = "bold"), 
               legend.position="bottom", legend.title=element_blank())
 
 g6 <- ggplot(filter(summary.stats, variable %in% multiple)) +
         geom_smooth(aes(x = reorder(month.abb[month],month), y = mean, group = variable, color = variable), position = "dodge") +
-        labs(title = "\nSubjective Evaluation - Line",
-             subtitle = "1: Worst\n5: Best\n",
-             x = "Month", y = "Mean") + 
+        labs(title = "\n\nSubjective Evaluation (1~5) - Line\n",
+             x = "Month", y = "Sub. Evaluation Mean") + 
         theme(plot.title = element_text(face = "bold"), 
               legend.position="bottom", legend.title=element_blank())
 
@@ -434,6 +432,47 @@ grid.arrange(g1, g2, g3, g4, g5, g6, ncol = 2)
 
 ---  
 
+<br>  
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 9, fig.height = 5.5,  warning = FALSE, message=FALSE}
+comparison_month = all_dat %>%
+  mutate(Date = ymd(Date)) %>%
+  filter((month(Date) == pprevious_month & year(Date) == cur_year))
+
+comparison_month <- merge(comparison_month, morning_rt,by="Date", all.x=T) %>%
+  filter(!is.na(total_checked)) %>%
+  arrange(Date) %>%
+  tibble()
+
+ggplot() +
+  geom_line(data = comparison_month, aes(x = day(Date), y = Total, 
+                                   color = month.name[pprevious_month]), 
+            alpha = .3) +
+  geom_line(data = month_dat, aes(x = day(Date), y = Total, 
+                                   color = month.name[previous_month]), 
+            alpha = .3) +
+  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, 
+                                   color = month.name[pprevious_month]), 
+              se = F, size = 1.5, alpha = .2) +
+  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, 
+                                   color = month.name[previous_month]), 
+              se = F,size = 1.5, alpha = .2) + 
+  labs(title = paste0("DAILY TREND: ", month.abb[pprevious_month], " vs ", month.abb[previous_month]),
+       subtitle = paste0(month.abb[pprevious_month], 
+                         " AVG: ", 
+                         as.character(round(mean(comparison_month$Total),2)),
+                         "    ",
+                         month.abb[previous_month], 
+                         " AVG: ", 
+                         as.character(round(mean(month_dat$Total), 2)), '\n'),
+       color = "Legend",
+       x = "Day", y = "Total %") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1, scale = 1)) +
+  theme(plot.title = element_text(face = "bold"),legend.position = "top")
+
+```
+
+<br>  
 
 
 ```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 6,  warning = FALSE, message=FALSE}
@@ -518,56 +557,16 @@ ggplot(filter(box_dat, ymd(starting_date) <= ymd(Date) & ymd(Date) < ymd(ending_
 
 <br>  
 
-<br>  
-
-```{r, echo = FALSE, eval = TRUE, fig.width = 9, fig.height = 5.5,  warning = FALSE, message=FALSE}
-comparison_month = all_dat %>%
-  mutate(Date = ymd(Date)) %>%
-  filter((month(Date) == pprevious_month & year(Date) == cur_year))
-
-comparison_month <- merge(comparison_month, morning_rt,by="Date", all.x=T) %>%
-  filter(!is.na(total_checked)) %>%
-  arrange(Date) %>%
-  tibble()
-
-ggplot() +
-  geom_line(data = comparison_month, aes(x = day(Date), y = Total, 
-                                   color = paste0('Month_', pprevious_month)), 
-            alpha = .3) +
-  geom_line(data = month_dat, aes(x = day(Date), y = Total, 
-                                   color = paste0('Month_',previous_month)), 
-            alpha = .3) +
-  geom_smooth(data = comparison_month, aes(x = day(Date), y = Total, 
-                                   color = paste0('Month_', pprevious_month)), 
-              se = F, size = 1.5, alpha = .2) +
-  geom_smooth(data = month_dat, aes(x = day(Date), y = Total, 
-                                   color = paste0('Month_',previous_month)), 
-              se = F,size = 1.5, alpha = .2) + 
-  labs(title = paste0("DAILY TREND: ", month.abb[pprevious_month], " vs ", month.abb[previous_month]),
-       subtitle = paste0(month.abb[pprevious_month], 
-                         " AVG: ", 
-                         as.character(round(mean(comparison_month$Total),2)),
-                         "    ",
-                         month.abb[previous_month], 
-                         " AVG: ", 
-                         as.character(round(mean(month_dat$Total), 2)), '\n'),
-       color = "Legend",
-       x = "Day", y = "Total %") +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1, scale = 1)) +
-  theme(plot.title = element_text(face = "bold"),legend.position = "top")
-
-```
-
 
 <br>  
 
 
 
-## `r month.name[previous_month]` - Correlations  
+
 
 ---  
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 9, fig.height = 5, fig.asp = .75,  warning = FALSE}
+```{r, echo = FALSE, eval = TRUE, fig.width = 9, fig.height = 5, fig.asp = .75,  warning = FALSE, include = FALSE}
 
 correlation_plot <- month_dat %>%
   select(c(Screen_time, Drink, Meditation, 
@@ -580,9 +579,9 @@ pairs.panels(correlation_plot, lm = TRUE)
 
 <br>  
 
-### Regression(Linear) Models:Work_finished & Meditation
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE, include = FALSE}
 all_dat_modified <- all_dat_modified %>%
   mutate(reading_group = case_when(Reading == 0 ~ '0',
                                    Reading < 10 ~ '<10',
@@ -637,22 +636,24 @@ ggplot(all_dat) +
 ```
 
 
-### Productivity Level: Tech Consumption
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
+
+```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE, include = FALSE}
 g1 <- ggplot(data = all_dat_modified) + 
-    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+    geom_smooth(aes(x = Screen_time, y = work_finished/100, color = Productivity),
               se = F) +
   labs(title = "ALL Data: Productivity & Tech Consumption") +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
 
 g2 <- ggplot(data = month_dat) + 
-    geom_smooth(aes(x = Screen_time, y = work_finished, color = Productivity),
+    geom_smooth(aes(x = Screen_time, y = work_finished/100, color = Productivity),
               se = F) +
-  labs(title = paste0(month.abb[previous_month], " Data: Productivity & Tech Consumption")) +
-  theme(legend.position = "bottom")
+  labs(title = paste0(month.abb[previous_month], 
+                      " Data: Productivity & Tech Consumption")) +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
 
 grid.arrange(g1, g2, ncol = 2)
 ```
-
 
