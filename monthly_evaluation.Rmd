@@ -1,5 +1,5 @@
 ---
-title: "Monthly Evaluation "
+title: "Monthly Evaluation"
 output: html_document
 ---
 
@@ -49,12 +49,14 @@ cur_year_str = paste0(cur_year, '-')
 
 <br>  
 
-## Daily Evaluation Grading Metrics  
+## Total % Grading Metrics  
 
 
 ---  
 
-<font size="4">The initial set up is the **actual average** of the `r month.name[previous_month]` Data.</font>  
+<font size="4">I have constructed daily grading metrics to estimate my productivity level and the fullness of my day-to-day life. Like Math Exams, graded results over time provide meaningful stories of my lifestyle. With the insights & trends found in the story, I can effectively utilize them to pursue a more productive and healthier lifestyle. To create such a grading system, I have implemented various mathematical models for the variables below.</font>  
+
+  - <font size="4">The initial set up is the **actual average** of the `r month.name[previous_month]` Data.</font>
 
 <br>  
 
@@ -556,13 +558,7 @@ ggplot(filter(box_dat, ymd(starting_date) <= ymd(Date) & ymd(Date) < ymd(ending_
 - <font size="3">**Color of the Box**: The darker the color, more productive I was during that month</font>  
 
 <br>  
-
-
 <br>  
-
-
-
-
 
 ---  
 
@@ -638,7 +634,7 @@ ggplot(all_dat) +
 
 
 
-```{r, echo = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE, include = FALSE}
+```{r, echo = FALSE, include = FALSE, eval = TRUE, fig.width = 10, fig.height = 5,  warning = FALSE, message = FALSE}
 g1 <- ggplot(data = all_dat_modified) + 
     geom_smooth(aes(x = Screen_time, y = work_finished/100, color = Productivity),
               se = F) +
