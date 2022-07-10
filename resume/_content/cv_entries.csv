@@ -1,5 +1,5 @@
 type,exclude,date,date_end,what,what_translation,institution,department,where,additional_info,additional_info2,url,slides,video,short_cv,order,academic,professional_2_page,website,one_column_paged,brief_no_pubs,humanities,humanities_description
-current_positions,NA,10/1/21,present,Data Analytics Tutor,NA,NA,NA,"[School of Business, SUNY Geneseo](https://www.geneseo.edu/business/)",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+work,NA,10/1/21,5/20/22,Data Analytics Tutor,NA,NA,NA,"[School of Business, SUNY Geneseo](https://www.geneseo.edu/business/)",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
 education,NA,8/26/20,5/19/22,B.A. in Mathematics,NA,NA,NA,SUNY Geneseo,NA,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
 education,NA,11/12/18,6/23/20,Korean Military,NA,NA,NA,"JSA Panmunjom, South Korea",NA,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA
 education,NA,8/26/15,12/19/17,B.A. in Mathematics,NA,NA,NA,SUNY Geneseo,NA,NA,NA,NA,NA,y,NA,NA,NA,NA,NA,NA,NA,NA

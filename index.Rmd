@@ -35,12 +35,12 @@ publications <- read_csv("resume/_content/publications.csv")
 
 #### all other entries #####
 cv_entries <- read_csv("resume/_content/cv_entries.csv") %>%
-  dplyr::mutate(year_begin = year(mdy(date))) %>%
-  dplyr::mutate(year_end = dplyr::case_when(
+  mutate(year_begin = year(mdy(date))) %>%
+  mutate(year_end = case_when(
     date_end == "present" ~ date_end,
     !is.na(date_end) ~ str_sub(year(mdy(date_end)), 1, 4),
     is.na(date_end) ~ date_end)) %>%
-  dplyr::mutate(year = ifelse((is.na(year_end) | year_begin == year_end),
+  mutate(year = ifelse((is.na(year_end) | year_begin == year_end),
                       year_begin,
                       str_c(year_begin, " --- ", year_end)))
 
@@ -54,7 +54,7 @@ blank_year_when_repeated <- function(cv_entry_tibble){
              year_begin == lag(year_begin) ~ str_c('<span class="repeated-year">', year_begin, '</span>'),
              year_begin != lag(year_begin) ~ year_begin
            )) %>% 
-    dplyr::mutate(year = ifelse(!is.na(lag(year)) & lag(year) == year, 
+    mutate(year = ifelse(!is.na(lag(year)) & lag(year) == year, 
                           str_c('<span class="repeated-year">', year, '</span>'),
                           year))
 }
@@ -244,31 +244,17 @@ Don't hesitate to get in touch with me via email or connect with me on LinkedIn 
 
 <br>
 
-# Current Position
-```{r}
-cv_entries %>% 
-  dplyr::filter(type == 'current_positions', is.na(exclude)) %>%
-  dplyr::mutate(what = str_c("<span class='cv-entry-title'>", what, "</span><br>", where)) %>% 
-  dplyr::select(year, what) %>% 
-  kableExtra::kbl(padding = 0, col.names = NULL, escape = FALSE) %>%
-  kableExtra::kable_styling( bootstrap_options = c("hover", "condensed"))  %>% 
-  kableExtra::column_spec(1, width = "15%")
-
-```
-
-<br>
-
 # Education
 ```{r}
 cv_entries %>% 
-  dplyr::filter(type == 'education') %>% 
-  dplyr::mutate(what = str_c( "<span class='cv-entry-title'>", 
+  filter(type == 'education') %>% 
+  mutate(what = str_c( "<span class='cv-entry-title'>", 
                               what, "</span>, ", where,
                               "<br>", 
                        ifelse(is.na(additional_info), "", additional_info) 
                        , "<br>", 
                        ifelse(is.na(additional_info2), "", additional_info2))) %>% 
-  dplyr::select(year, what) %>% 
+  select(year, what) %>% 
   kbl(padding = 0, col.names = NULL, escape = FALSE) %>%
   kable_styling( bootstrap_options = c("hover", "condensed"))   %>% 
   column_spec(1, width = "15%")
@@ -282,11 +268,11 @@ cv_entries %>%
 # Work Experience
 ```{r}
 cv_entries %>% 
-  dplyr::filter(type == 'work', is.na(website)) %>% 
-  dplyr::mutate(additional_info = replace_na(additional_info, "")) %>% 
-  dplyr::mutate(what = str_c("<span class='cv-entry-title'>", what, "</span><br class='work-break'>", where, "<br>", additional_info)) %>% 
-  arrange(desc(date)) %>% 
-  dplyr::select(year, what) %>% 
+  filter(type == 'work', is.na(website)) %>% 
+  mutate(additional_info = replace_na(additional_info, "")) %>% 
+  mutate(what = str_c("<span class='cv-entry-title'>", what, "</span><br class='work-break'>", where, "<br>", additional_info)) %>% 
+  arrange(desc(mdy(date))) %>% 
+  select(year, what) %>% 
   kbl(padding = 0, col.names = NULL, escape = FALSE) %>%
   kable_styling( bootstrap_options = c("hover", "condensed"))   %>% 
   column_spec(1, width = "15%")
@@ -299,15 +285,15 @@ cv_entries %>%
 # Skills
 ```{r}
 cv_entries %>% 
-  dplyr::filter(type == 'technical') %>% 
-  dplyr::mutate(icon = case_when(
+  filter(type == 'technical') %>% 
+  mutate(icon = case_when(
     str_detect(what, "Programming") ~ "fa-laptop",
     str_detect(what, "Speaking") ~ "fa-flask",
     str_detect(what, "Soft") ~ "fa-earth"
   )) %>% 
-  dplyr::mutate(what = str_c("<i class='fa fa-lg ", icon, "'></i> &nbsp;<span class='cv-entry-title'>", what, "</span> ", additional_info)) %>% 
-  dplyr::select(type, what) %>% 
-  dplyr::mutate(type = "") %>% 
+  mutate(what = str_c("<i class='fa fa-lg ", icon, "'></i> &nbsp;<span class='cv-entry-title'>", what, "</span> ", additional_info)) %>% 
+  select(type, what) %>% 
+  mutate(type = "") %>% 
   kbl(padding = 0, col.names = NULL, escape=FALSE) %>%
   kable_styling( bootstrap_options = c("hover", "condensed")) 
 ```

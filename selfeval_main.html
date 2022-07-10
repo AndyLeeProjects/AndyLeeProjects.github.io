@@ -418,15 +418,6 @@ regressions and various correlation tests. Ultimately, these findings
 will provide better guidance for me to achieve healthier life patterns
 in the future.</font></p>
 <p><br></p>
-<pre class="r"><code>library(lubridate)
-library(gridExtra)
-library(margins)
-library(psych)
-library(grid)
-library(forecast)
-library(papeR)
-library(tidyverse)
-theme_set(theme_classic())</code></pre>
 <p><br></p>
 </div>
 <div id="main-variables-descriptive-statistics" class="section level1"
@@ -642,20 +633,7 @@ Total_checked variable affects the outcome of the day</h2>
 <li>Morning journal </font></li>
 </ul></li>
 </ul>
-<pre class="r"><code>
-# see how number of morning routine checks affects the Total %
-ggplot(filter(all_morning_rt, total_checked != 0)) + 
-  geom_density(aes(Total))+
-  facet_wrap(~total_checked)+
-  labs(title = &quot;Morning Routine checked &amp; \nTotal %&quot;)</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<pre class="r"><code>
-# see how number of morning routine checks affects the total todo lists checked
-ggplot(filter(all_morning_rt, total_checked != 0)) + 
-  geom_density(aes(work_finished_mr_exc))+
-  facet_wrap(~total_checked)+
-  labs(title = &quot;Morning Routine checked &amp; \n todo lists finished(excluding morning routine tasks)&quot;)</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="selfeval_main_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 <p><br></p>
 <p><br></p>
 <p><br></p>
@@ -707,7 +685,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.54750422","3":"0.52353256","4":"0.57147589","5":"0.012204466","6":"44.86097","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01976512","3":"0.01767872","4":"0.02185151","5":"0.001062227","6":"18.60724","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.54755289","3":"0.52360764","4":"0.57149813","5":"0.012191063","6":"44.91429","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.01975291","3":"0.01767253","4":"0.02183329","5":"0.001059169","6":"18.64943","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Meditation, y=work_finished))+
@@ -723,7 +701,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.87991383","3":"0.8419005773","4":"0.9179270922","5":"1.935333e-02","6":"45.465762","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.00071293","3":"-0.0008636958","4":"-0.0005621641","5":"7.675797e-05","6":"-9.288025","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.8803244608","3":"0.8423394304","4":"0.9183094913","5":"1.933903e-02","6":"45.520609","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0007134355","3":"-0.0008641411","4":"-0.0005627299","5":"7.672758e-05","6":"-9.298293","7":"<0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>ggplot(all_dat,aes(x=Screen_time, y=work_finished))+
@@ -760,7 +738,7 @@ pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.5939190000","3":"0.4986489000","4":"0.6891891001","5":"4.849603e-02","6":"12.2467556","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003661027","3":"-0.0004915274","4":"-0.0002406780","5":"6.384584e-05","6":"-5.7341665","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0147017346","3":"0.0126085853","4":"0.0167948839","5":"1.065491e-03","6":"13.7980851","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0004104606","3":"-0.0005807652","4":"-0.0002401559","5":"8.669140e-05","6":"-4.7347323","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0001657618","3":"-0.0003100323","4":"0.0006415559","5":"2.421969e-04","6":"0.6844093","7":"0.494","8":""},{"1":"Reading","2":"0.0034630526","3":"0.0024467388","4":"0.0044793663","5":"5.173415e-04","6":"6.6939387","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0662417105","3":"-0.0911939717","4":"-0.0412894493","5":"1.270163e-02","6":"-5.2152134","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0060648991","3":"0.0009454127","4":"0.0111843855","5":"2.606009e-03","6":"2.3272747","7":"0.02","8":"*"},{"1":"Social","2":"-0.0132897503","3":"-0.0209532404","4":"-0.0056262603","5":"3.901002e-03","6":"-3.4067532","7":"0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[" "],"name":[1],"type":["chr"],"align":["left"]},{"label":["Estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["CI (lower)"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["CI (upper)"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[7],"type":["chr"],"align":["left"]},{"label":["   "],"name":[8],"type":["noquote"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.5940458863","3":"0.4988856019","4":"0.6892061707","5":"4.844034e-02","6":"12.2634540","7":"<0.001","8":"***"},{"1":"Screen_time","2":"-0.0003660032","3":"-0.0004913006","4":"-0.0002407059","5":"6.378129e-05","6":"-5.7384109","7":"<0.001","8":"***"},{"1":"Meditation","2":"0.0147086687","3":"0.0126202414","4":"0.0167970959","5":"1.063092e-03","6":"13.8357454","7":"<0.001","8":"***"},{"1":"Rise_time","2":"-0.0004103077","3":"-0.0005804358","4":"-0.0002401796","5":"8.660191e-05","6":"-4.7378597","7":"<0.001","8":"***"},{"1":"Phone_pickups","2":"0.0001647295","3":"-0.0003103488","4":"0.0006398079","5":"2.418336e-04","6":"0.6811688","7":"0.496","8":""},{"1":"Reading","2":"0.0034665575","3":"0.0024526487","4":"0.0044804664","5":"5.161196e-04","6":"6.7165775","7":"<0.001","8":"***"},{"1":"Drink","2":"-0.0662622453","3":"-0.0911890237","4":"-0.0413354668","5":"1.268871e-02","6":"-5.2221403","7":"<0.001","8":"***"},{"1":"Total_todo","2":"0.0060513174","3":"0.0009409632","4":"0.0111616717","5":"2.601372e-03","6":"2.3262023","7":"0.02","8":"*"},{"1":"Social","2":"-0.0132498725","3":"-0.0208812529","4":"-0.0056184921","5":"3.884674e-03","6":"-3.4108070","7":"0.001","8":"***"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><br><br />
@@ -770,21 +748,6 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
 class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> Actual vs Prediction
 Visualization for Work_done (all_dat)</h2>
-<pre class="r"><code>all_dat$pred_work_finished &lt;- predict(model, newdata = all_dat)
-
-# Explanatory variable: work_finished
-ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
-  geom_point(alpha = 0.5, color = &quot;darkgray&quot;) +
-  geom_smooth(color = &quot;darkblue&quot;) +
-  geom_line(aes(x = work_finished,
-                y = work_finished),   # Plotting the line, y = x
-            color = &quot;red&quot;, linetype = 2) +
-  coord_cartesian( xlim = c(0, 1),
-                   ylim = c(0, 1) ) +  # Limits the range of the
-  labs(title = &quot;Multiple Regression&quot;,
-       subtitle = &quot;Actual Tasks Finished (%) vs Predicted Values of Task Finished (%)&quot;,
-       y = &quot;Tasks Finshed (y)&quot;, x = expression(hat(y)))+
-  theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 <br></p>
 <ul>
@@ -808,26 +771,12 @@ accurate</li>
 <h1><span class="header-section-number">5</span> Main Variables: Time
 Series</h1>
 <p><br></p>
-<pre class="r"><code>ats &lt;- ts(all_dat, start = decimal_date(ymd(&quot;2020-09-01&quot;)),
-                            frequency = 365.25 / 7)
-
-ggplot(data = all_dat) +
-  geom_line(aes(x = ymd(Date), y = Total))+
-  geom_smooth(aes(x = ymd(Date), y = Total, color = &quot;red&quot;)) + 
-  scale_x_continuous(breaks = ymd(&quot;2020-09-01&quot;, &quot;2021-01-01&quot;,&quot;2021-04-01&quot;, &quot;2021-07-01&quot;, &quot;2021-10-01&quot;,&quot;2022-01-01&quot;, &quot;2022-04-01&quot;),
-                     labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
-                                &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
-  labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
-<pre class="r"><code>  theme(legend.position = &quot;None&quot;)</code></pre>
 <pre><code>## List of 1
 ##  $ legend.position: chr &quot;None&quot;
 ##  - attr(*, &quot;class&quot;)= chr [1:2] &quot;theme&quot; &quot;gg&quot;
 ##  - attr(*, &quot;complete&quot;)= logi FALSE
 ##  - attr(*, &quot;validate&quot;)= logi TRUE</code></pre>
-<pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
-fit = ets(myts)
-plot(fit)</code></pre>
 <p><img src="selfeval_main_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p><br></p>
 <pre class="r"><code>box_dat &lt;- all_dat %&gt;%
