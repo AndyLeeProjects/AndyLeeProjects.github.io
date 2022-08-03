@@ -368,7 +368,7 @@ g2 <- ggplot() +
                  se = F, alpha = .15) +
     geom_density(data = month_dat,
                  aes(x = Reading, y = ..scaled.., fill = paste0(month.abb[previous_month], '_dat')), 
-                 se = F, alpha = .6) +
+                 se = F, alpha = .4) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
     labs(title = "Reading (min) Distributions",
              x = "Reading (min)", y = "Scaled Percentage (%)") +
