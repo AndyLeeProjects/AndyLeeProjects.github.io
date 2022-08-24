@@ -221,7 +221,7 @@ rmarkdown::paged_table(h_alldat)
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # Read data in
-death_dat <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/number-of-deaths-by-risk-factor.csv')
+death_dat <- read_csv('/Volumes/Programming/AndyLeeProjects.github.io/Happiness_Data/number-of-deaths-by-risk-factor.csv')
 
 death_dat <- death_dat %>%
   filter(Year >= 2015) %>%
@@ -253,7 +253,7 @@ rmarkdown::paged_table(data.frame(colnames(death_dat)))
 ## Country Profile UN Data
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
-country_profile <- read_csv('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Happiness_Data/kiva_country_profile_variables.csv')
+country_profile <- read_csv('/Volumes/Programming/AndyLeeProjects.github.io/Happiness_Data/kiva_country_profile_variables.csv')
 
 country_profile <- country_profile %>%
   select(-c(`GDP per capita (current US$)`)) %>%
@@ -300,7 +300,7 @@ rmarkdown::paged_table(data.frame(colnames(country_profile)))
 
 # Merge: Happiness & Country Infrastructure Data
 h_p_dat <- merge(h_alldat, country_profile, by = "Country")
-save(h_p_dat, file = '/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Shiny_Happiness/h_p_dat.RData')
+save(h_p_dat, file = '/Volumes/Programming/AndyLeeProjects.github.io/Shiny_Happiness/h_p_dat.RData')
 
 # Merge: Happiness & Death/ Risk factors Data
 h_d_dat <- merge(h_alldat, death_dat, by = c("Country","Year"))

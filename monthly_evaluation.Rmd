@@ -45,7 +45,7 @@ cur_year_str = paste0(cur_year, '-')
 
 <br>  
 
-![](`r paste0('/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/monthly_eval_images/', month.name[previous_month], cur_year)`.jpg)
+![](`r paste0('/Volumes/Programming/AndyLeeProjects.github.io/monthly_eval_images/', month.name[previous_month], cur_year)`.jpg)
 
 <br>  
 
@@ -70,8 +70,8 @@ src="https://anddylee.shinyapps.io/Grading_Scale/">
 <br>
 
 ```{r, include=FALSE}
-all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
-morning_rt = read.csv('/Volumes/Programming/Spring 2022/Project/morning_routine.csv')
+all_dat = read.csv('/Volumes/Programming/AndyLeeProjects.github.io/Evaluation Data/all_dat.csv')
+morning_rt = read.csv('/Volumes/Programming/AndyLeeProjects.github.io/Evaluation Data/morning_routine.csv')
 
 colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
                        'Screen_time','Date','Drink',
@@ -224,7 +224,7 @@ month_dat <- all_dat %>%
          Social = as.factor(Social)) 
 
 # Save it as RData for Shiny App
-save(month_dat, file = '/Volumes/Programming/Spring 2022/DANL 310/my_website/aLin-96.github.io/Grading_Scale/month_dat.RData')
+save(month_dat, file = '/Volumes/Programming/AndyLeeProjects.github.io/Grading_Scale/month_dat.RData')
 
 # merge morning_rt with all_dat
 month_dat <- merge(month_dat, morning_rt,by="Date", all.x=T) %>%

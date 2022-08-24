@@ -40,9 +40,9 @@ theme_set(theme_classic())
 
 ```{r, echo=FALSE}
 
-all_dat = read.csv('/Volumes/Programming/Spring 2022/project/all_dat.csv')
+all_dat = read.csv('/Volumes/Programming/AndyLeeProjects.github.io/Evaluation Data/all_dat.csv')
 # all_dat = read.csv('D:/Spring 2022/Project/all_dat.csv')
-morning_rt = read.csv('/Volumes/Programming/Spring 2022/Project/morning_routine.csv')
+morning_rt = read.csv('/Volumes/Programming/AndyLeeProjects.github.io/Evaluation Data/morning_routine.csv')
 
 
 colnames(all_dat) <- c('X', 'Name','Finished','Multiple','Phone_pickups',
