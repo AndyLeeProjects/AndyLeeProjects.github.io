@@ -569,7 +569,7 @@ correlation_plot <- month_dat %>%
            Reading, Rise_time, Multiple, work_finished,
            night_phone, morning_phone))
 
-pairs.panels(correlation_plot, lm = TRUE)
+#pairs.panels(correlation_plot, lm = TRUE)
 
 ```
 

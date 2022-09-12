@@ -426,6 +426,11 @@ library(grid)
 library(forecast)
 library(papeR)
 library(tidyverse)
+library(reticulate)
+py_install(&quot;pandas&quot;)
+py_install(&quot;numpy&quot;)
+py_install(&quot;statsmodels&quot;)
+py_install(&quot;matplotlib&quot;)
 theme_set(theme_classic())</code></pre>
 <p><br></p>
 </div>
@@ -701,6 +706,22 @@ class="math inline">\(y\)</span></font></li>
 </ul></li>
 </ol></li>
 </ul>
+<div id="handle-outliers" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Handle
+Outliers</h3>
+<p><br></p>
+<pre class="r"><code>quartiles &lt;- quantile(all_dat$Meditation, probs=c(.25, .75), na.rm = TRUE)
+IQR &lt;- IQR(all_dat$Meditation)
+
+Lower &lt;- quartiles[1] - 1.5*IQR
+Upper &lt;- quartiles[2] + 1.5*IQR 
+
+data_no_outlier &lt;- subset(all_dat, all_dat$Meditation &gt; Lower &amp; all_dat$Meditation &lt; Upper)
+
+
+ggplot(data = data_no_outlier) + 
+  geom_point(aes(x = Date, y = Meditation))</code></pre>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p><br></p>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Meditation, data = all_dat)
 pretty_lm &lt;- prettify(summary(model))
@@ -717,7 +738,7 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
        subtitle = &quot;y = Total to-do lists finished (%) \nx = Meditation in minutes&quot;,
        y = &quot;Total to-do lists finished (%)&quot;, x = &quot;Meditation in minutes&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
 <pre class="r"><code>model &lt;- lm(work_finished ~ Screen_time, data = all_dat)
 pretty_lm &lt;- prettify(summary(model))
 rmarkdown::paged_table(pretty_lm)</code></pre>
@@ -733,10 +754,11 @@ rmarkdown::paged_table(pretty_lm)</code></pre>
        subtitle = &quot;y = The number of Phone pickups\nx = Rise time&quot;,
        y = &quot;Number of Phone pickups\n&quot;, x = &quot;\nRise time&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-14-1.png" width="576" /></p>
 <p><br><br />
 <br><br />
 <br></p>
+</div>
 </div>
 <div id="multiple-regressions" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Multiple
@@ -785,7 +807,7 @@ ggplot(data = all_dat, aes(x = pred_work_finished, y = work_finished)) +
        subtitle = &quot;Actual Tasks Finished (%) vs Predicted Values of Task Finished (%)&quot;,
        y = &quot;Tasks Finshed (y)&quot;, x = expression(hat(y)))+
   theme(plot.title = element_text(face = &quot;bold&quot;))</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 <br></p>
 <ul>
 <li>Systematic Error can be observed
@@ -818,7 +840,7 @@ ggplot(data = all_dat) +
                      labels=c(&quot;09/20&quot;, &quot;01/21&quot;, &quot;04/21&quot;, &quot;07/21&quot;, 
                                 &quot;10/21&quot;, &quot;01/22&quot;,&quot;04/22&quot;))+
   labs(title = &quot;Time Seires&quot;, subtitle = &quot;Total (%)&quot;)</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <pre class="r"><code>  theme(legend.position = &quot;None&quot;)</code></pre>
 <pre><code>## List of 1
 ##  $ legend.position: chr &quot;None&quot;
@@ -828,7 +850,52 @@ ggplot(data = all_dat) +
 <pre class="r"><code>myts &lt;- ts(all_dat$Total, start=c(2020, 9,1), end=c(2022, 3, 31), frequency=365)
 fit = ets(myts)
 plot(fit)</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><br></p>
+<div id="test-stationarity" class="section level3" number="5.0.1">
+<h3><span class="header-section-number">5.0.1</span> Test
+Stationarity</h3>
+<pre class="python"><code>import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter
+import matplotlib.dates as mdates
+
+all_dat = r.all_dat
+
+fig, ax = plt.subplots(figsize=(12, 8))
+ax.plot(all_dat[&#39;Date&#39;], all_dat[&#39;work_finished&#39;], label = &quot;Productivity&quot;)
+ax.legend(loc=&#39;best&#39;)
+ax.xaxis.set_major_locator(mdates.WeekdayLocator(interval=10))
+plt.xticks(rotation = 30)</code></pre>
+<pre><code>## (array([  5.,  75., 145., 215., 285., 355., 425., 495., 565.]), [Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;)])</code></pre>
+<pre class="python"><code>ax.set_title(&quot;Productivity 09/2020 ~&quot;)
+plt.show()
+</code></pre>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-21-1.png" width="1152" /></p>
+<p><br></p>
+<pre class="python"><code># https://www.machinelearningplus.com/time-series/augmented-dickey-fuller-test/
+from statsmodels.tsa.stattools import adfuller
+def adf_test(timeseries):
+    print (&#39;Results of Dickey-Fuller Test:&#39;)
+    dftest = adfuller(timeseries, autolag=&#39;AIC&#39;)
+    dfoutput = pd.Series(dftest[0:4], index=[&#39;Test Statistic&#39;,&#39;p-value&#39;,&#39;#Lags Used&#39;,&#39;Number of Observations Used&#39;])
+    for key,value in dftest[4].items():
+        dfoutput[&#39;Critical Value (%s)&#39;%key] = value
+    print (dfoutput)
+
+timeseries = all_dat[&#39;work_finished&#39;].dropna()
+adf_test(timeseries)</code></pre>
+<pre><code>## Results of Dickey-Fuller Test:
+## Test Statistic                  -4.210956
+## p-value                          0.000631
+## #Lags Used                      11.000000
+## Number of Observations Used    589.000000
+## Critical Value (1%)             -3.441501
+## Critical Value (5%)             -2.866460
+## Critical Value (10%)            -2.569390
+## dtype: float64</code></pre>
 <p><br></p>
 <pre class="r"><code>box_dat &lt;- all_dat %&gt;%
   group_by(month) %&gt;%
@@ -853,7 +920,8 @@ ggplot(box_dat) +
   scale_x_date(breaks = dates, labels = dates_lb)+
   scale_fill_gradient(low = &quot;white&quot;, high = &quot;#C03B3B&quot;)+
   theme(plot.title = element_text(face = &quot;bold&quot;), legend.position = &quot;bottom&quot;)</code></pre>
-<p><img src="selfeval_main_files/figure-html/unnamed-chunk-20-1.png" width="960" /></p>
+<p><img src="selfeval_main_files/figure-html/unnamed-chunk-23-3.png" width="960" /></p>
+</div>
 </div>
 
 
